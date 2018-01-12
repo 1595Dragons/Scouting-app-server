@@ -18,8 +18,9 @@ public class server {
 
 		// Create a UUID for SPP
 		UUID uuid = new UUID("1101", true);
+		//UUID uuid = new UUID("00001101-0000-1000-8000-00805F9B34FB", false);
 		// Create the servicve url
-		String connectionString = "btspp://localhost:" + uuid + ";name=Sample SPP Server";
+		String connectionString = "btspp://localhost:" + uuid + ";name=SpudSPPServer";
 		
 		// open server url
 		StreamConnectionNotifier streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);

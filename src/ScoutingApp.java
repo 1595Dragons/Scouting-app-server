@@ -1,5 +1,7 @@
 import java.io.IOException;
 
+import javax.bluetooth.LocalDevice;
+
 public class ScoutingApp {
 
 	public static void main(String args[]) throws IOException {
@@ -13,6 +15,7 @@ public class ScoutingApp {
 			d.feed.setText("File created! Awaiting data...");
 		} else {
 			d.feed.setText("File found! Awaiting data...");
+			d.MACAddress.setText("MAC Address: " + LocalDevice.getLocalDevice().getBluetoothAddress().replace("-", ":").toUpperCase());
 		}
 		
 		blueToothServer.startServer();
