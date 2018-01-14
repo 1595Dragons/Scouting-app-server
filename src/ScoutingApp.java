@@ -5,6 +5,11 @@ import javax.bluetooth.LocalDevice;
 public class ScoutingApp {
 
 	public static void main(String args[]) throws IOException {
+		boolean debug = args[0].equals("debug");
+		
+		if (debug) {
+			System.out.println("Debug mode enabled!");
+		}
 		
 		server blueToothServer = new server();
 		if (selectFile.fileMissing()) {
@@ -16,7 +21,7 @@ public class ScoutingApp {
 		
 		System.out.println("The MAC Address for this device is: " + LocalDevice.getLocalDevice().getBluetoothAddress().replace("-", ":").toUpperCase());
 		System.out.println("Starting Scouting App server...");
-		boolean debug = args[0].equals("debug");
+		
 		blueToothServer.startServer(debug);
 		
 	}
