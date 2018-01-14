@@ -10,6 +10,6 @@ In order for the program to work you will need:
 
 
 ## Installing
-Everything that you *should* need is in the [influded program](https://github.com/1595Dragons/Scouting-app-server/raw/master/1595ScoutingApp.exe), as it has the necesasry runtime, libraries, and classes wrapped in it. Just download it, and then run it. 
+Everything that you *should* need is in the [included program](https://github.com/1595Dragons/Scouting-app-server/raw/master/1595ScoutingApp.exe), as it has the necesasry runtime, libraries, and classes wrapped in it. Just download it, and then run it. 
 
 If the scouting_data csv is missing, then it will make a new one, and print the locaion to the console
