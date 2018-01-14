@@ -1,35 +1,29 @@
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class selectFile {
 
-	static File file = new File(System.getProperty("user.dir") + "scouting_data.csv");
+	File file = new File(System.getProperty("user.dir") + "/scouting_data.csv");
 
 	public static boolean fileMissing() throws IOException {
-		return !file.isFile();
+		selectFile file = new selectFile();
+		return !file.file.isFile();
 	}
 
-	public static void makeFile() {
-		File csv = new File(System.getProperty("user.dir") + "scouting_data.csv");
+	public static void makeFile() throws IOException {
+		selectFile file = new selectFile();
+		File csv = new File(file.file.getAbsolutePath());
 
-		FileWriter write = null;
+		BufferedWriter write = new BufferedWriter(new FileWriter(csv, true));
 
-		try {
-			write = new FileWriter(csv);
-		} catch (IOException e) {
-		}
-
-		try {
-			write.append(
-					"Team number, hasAuto, autoSwitch, autoScale, teleSwitch, teleScale, cubeNumber, endClimb, endClimbAssist\n");
-			write.flush();
-			write.close();
-		} catch (IOException e) {
-
-		}
-		file = csv;
+		write.append(
+				"Team number, hasAuto, autoSwitch, autoScale, teleSwitch, teleScale, cubeNumber, endClimb, endClimbAssist");
+		write.newLine();
+		write.flush();
+		write.close();
 	}
 
 }
