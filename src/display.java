@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+@Deprecated
 public class display {
 
 	public JFrame frame = new JFrame("1595 Scouting App");

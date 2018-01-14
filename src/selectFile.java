@@ -11,6 +11,7 @@ public class selectFile {
 	static JFileChooser fileChooser = new JFileChooser();
 	static File file = new File(System.getProperty("user.dir") + "scouting_data.csv");
 
+	@Deprecated
 	public static void CSV() {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV", "csv");
 		fileChooser.setFileFilter(filter);
