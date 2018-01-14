@@ -11,7 +11,7 @@ public class ScoutingApp {
 			selectFile.makeFile();
 			System.out.println("File is missing, creating new file at: " + selectFile.file.getPath());
 		} else {
-			System.out.println("Scouting data file found!");
+			System.out.println("Scouting data file found at " + selectFile.file.getPath());
 		}
 		
 		System.out.println("The MAC Address for this device is: " + LocalDevice.getLocalDevice().getBluetoothAddress().replace("-", ":").toUpperCase());
