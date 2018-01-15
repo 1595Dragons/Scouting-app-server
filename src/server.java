@@ -15,7 +15,6 @@ import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
 
 public class server {
-	// TODO: Update this to use the window, instead of the console
 	public void startServer(boolean debug) throws IOException {
 		selectFile file = new selectFile();
 
@@ -48,19 +47,23 @@ public class server {
 			BufferedWriter writer= new BufferedWriter(new FileWriter(file.file.getAbsolutePath(), true));
 			writer.newLine();
 			writer.append(lineRead);
+			writer.flush();
 			writer.close();
 			System.out.println("Recieved info on team: " + lineRead.split(",")[0]);
+			bReader.close();
+			inStream.close();
 
 			// send response to spp client
-
 			OutputStream outStream = connection.openOutputStream();
 			PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
-			pWriter.write("Data recieved!");
+			pWriter.write("Data received!");
 			pWriter.flush();
 			pWriter.close();
+			outStream.close();
 
 			// Close URL
 			streamConnNotifier.close();
+			
 		}
 
 	}
