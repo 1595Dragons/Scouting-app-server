@@ -5,7 +5,7 @@ import javax.bluetooth.LocalDevice;
 public class ScoutingApp {
 
 	public static void main(String args[]) throws IOException {
-		System.out.println("1595 Scouting App Server\nVersion 1.2\n\nLooking for scouting data file...");
+		System.out.println("1595 Scouting App Server\nVersion 1.3\n\nLooking for scouting data file...");
 		selectFile file = new selectFile();
 		boolean debug;
 		if (args.length != 0) {
