@@ -10,7 +10,9 @@ In order for the program to work you will need:
 
 
 ## Installing
-Everything that you *should* need is in the [included zip file]https://github.com/1595Dragons/Scouting-app-server/raw/master/1595%20Scouting%20App.zip), as it has the necesasry runtime, libraries, and classes, and the program itself wrapped in it. Just download the zip, extract it, and run the executable. **Do Not Remove The Executable From The Folder**. Otherwise, it will be unable to find the JRE.
+Everything that you *should* need is in the [included zip file](https://github.com/1595Dragons/Scouting-app-server/raw/master/1595%20Scouting%20App.zip), as it has the necesasry runtime, libraries, and classes, and the program itself wrapped in it. Just download the zip, extract it, and run the executable. 
+
+**Do Not Remove The Executable From The Folder**. Otherwise, it will be unable to find the JRE.
 
 If the scouting_data csv is missing, then it will make a new one, and print the locaion to the console
 
