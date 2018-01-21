@@ -4,7 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 
 import javax.bluetooth.UUID;
 import javax.microedition.io.Connector;
@@ -17,7 +16,6 @@ public class server {
 
 		System.out.println("Server started!\n");
 
-		String verificaitonMessage = "Data received!";
 		boolean running = true;
 
 		// Create a UUID for SPP, and then create the URL
@@ -35,9 +33,7 @@ public class server {
 				System.out.println("\nReady to recieve more data! (Press ctrl + c to end)\n");
 				StreamConnection connection = streamConnNotifier.acceptAndOpen();
 
-				// RemoteDevice dev = RemoteDevice.getRemoteDevice(connection);
 				System.out.println("Device connected! Retreiving data...");
-				// System.out.println("Remote device name: " + dev.getFriendlyName(true));
 
 				// read string from spp client
 				InputStream inStream = connection.openInputStream();
@@ -49,18 +45,9 @@ public class server {
 				writer.append(lineRead);
 				writer.flush();
 				writer.close();
-				System.out.println("Data written successfully!\nSending verification message");
+				System.out.println("Data written successfully!");
 				bReader.close();
 				inStream.close();
-
-				// send response to spp client
-				OutputStream outStream = connection.openOutputStream();
-				// PrintWriter pWriter = new PrintWriter(new OutputStreamWriter(outStream));
-				// pWriter.write("Data received!");
-				// pWriter.flush();
-				// pWriter.close();
-				outStream.write(verificaitonMessage.getBytes(), 0, verificaitonMessage.getBytes().length);
-				outStream.close();
 
 				// Close connection
 				connection.close();
