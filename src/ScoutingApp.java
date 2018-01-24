@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.PrintStream;
 
 import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.LocalDevice;
@@ -10,44 +11,42 @@ import javax.microedition.io.StreamConnectionNotifier;
 public class ScoutingApp {
 
 	public static StreamConnection currentConnection;
+	public static StreamConnectionNotifier streamConnNotifier;
 
 	public static void main(String args[]) {
-		System.out.println("1595 Scouting App Server\nVersion 1.5\n\nLooking for scouting data file...");
+		// Header
+		System.out.println("1595 Scouting App Server\nVersion 1.5\n");
+		PrintStream printStream = System.out;
+		printStream.print("Looking for scouting data file...");
+		
+		
+		// Begin searching for the file to write data to
+		// If no file is give, vreate one
 		selectFile file = new selectFile();
-		boolean debug;
-		if (args.length != 0) {
-			debug = (boolean) args[0].equals("debug");
-		} else {
-			debug = false;
-		}
-
-		if (debug) {
-			System.out.println("Debug mode enabled!");
-		}
-
 		if (selectFile.fileMissing()) {
 			selectFile.makeFile();
-			System.out.println("File is missing, creating new file at: " + file.file.getPath() + "\n");
+			// System.out.println("File is missing, creating new file at: " + file.file.getPath() + "\n");
+			printStream.append("file missing, creating new file at: " + file.file.getPath() + "\n");
 		} else {
-			System.out.println("Scouting data file found at " + file.file.getPath() + "\n");
+			// System.out.println("Scouting data file found at " + file.file.getPath() + "\n");
+			printStream.append("found at: " + file.file.getPath() + "\n");
 		}
-
+		
+		// Display the MAC Address, and then start searching...
+		// TODO: On newer phones, gets error, but can still retrieve device name... hmm...
 		try {
 			System.out.println("\n\nThe MAC Address for this device is: "
-					+ LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase());
+					+ LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase() + "\n\n");
 		} catch (BluetoothStateException e) {
 			System.out.println("Cannot get device MAC address: " + e.getMessage());
 		}
-		boolean running = true;
 
 		// Create a UUID for SPP, and then create the URL
 		UUID uuid = new UUID("1101", true);
 		String connectionString = "btspp://localhost:" + uuid + ";name=SpudSPPServer";
-		if (debug) {
-			System.out.println("Connection URL: " + connectionString);
-		}
-		// open server url
-		StreamConnectionNotifier streamConnNotifier = null;
+		
+		// open server url using the created URL
+		streamConnNotifier = null;
 		try {
 			 streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
 		} catch (IOException e1) {
@@ -55,14 +54,18 @@ public class ScoutingApp {
 			e1.printStackTrace();
 		}
 		System.out.println("Ready to recieve more data! (Press ctrl + c to end)\n");
-		while (running) {
-			// Check if recieving a connectio
+		while (true) {
+			
+			
+			// Check if recieving a connection
+			// On connecion, open it, and pass it to a newly created thread
 			try {
 				currentConnection = streamConnNotifier.acceptAndOpen();
 				if (currentConnection != null) {
 					new Thread(new server()).start();
 				}
 			} catch (IOException e) {
+				System.out.println("Error creating a new thread: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}

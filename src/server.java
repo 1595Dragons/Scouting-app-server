@@ -1,6 +1,6 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -14,32 +14,61 @@ public class server extends Thread {
 	public void run() {
 		if (connection != null) {
 			synchronized (connection) {
-				try {
-					// StreamConnection connection = scoutingapp.streamConnNotifier.acceptAndOpen();
-					System.out.println("Device connected! Retreiving data...");
+				System.out.print("Device connected! Retreiving data...");
 
-					// read string from spp client
-					InputStream inStream = connection.openInputStream();
-					BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
-					String lineRead = bReader.readLine();
-					System.out.println("Writing to file...");
-					BufferedWriter writer = new BufferedWriter(new FileWriter(file.file.getAbsolutePath(), true));
-					writer.newLine();
-					writer.append(lineRead);
-					writer.flush();
-					System.out.println("Finishing data for team: " + lineRead.split(",")[0]);
-					writer.close();
-					System.out.println("Data written successfully!");
+				// read string from spp client
+				InputStream inStream = null;
+				try {
+					inStream = connection.openInputStream();
+				} catch (IOException e1) {
+					System.out.println("Error, cannot open stream: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+				BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
+				String lineRead = null;
+				try {
+					lineRead = bReader.readLine();
+					if (lineRead == null) {
+						throw new java.lang.Error("Team data incomplete, missing number!");
+					}
+				} catch (IOException e1) {
+					System.out.println("Error, cannot read stream: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+				System.out.print("writing to file...");
+				FileWriter fw = null;
+				try {
+					fw = new FileWriter(file.file.getAbsolutePath(), true);
+				} catch (IOException e1) {
+					System.out.println("Error, cannot edit file: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+				try {
+					fw.append(System.getProperty("line.separator")+lineRead);
+					fw.flush();
+				} catch (IOException e1) {
+					System.out.println("Error, cannot write to file: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+
+				System.out.print("finishing data for team: " + lineRead.split(",")[0] + "\n");
+				try {
+					fw.close();
 					bReader.close();
 					inStream.close();
-
-					// Close connection
+				} catch (IOException e1) {
+					System.out.println("Error, cannot close streams: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+				System.out.println("Data written successfully!");
+				try {
 					connection.close();
 					System.out.println("\nReady to recieve more data! (Press ctrl + c to end)\n");
-				} catch (Exception e) {
-					System.out.println("Encountered an error! Error details: " + e.getMessage());
+				} catch (IOException e) {
+					System.out.println("Error closing connection: " + e.getMessage());
 					e.printStackTrace();
 				}
+
 			}
 		} else {
 			System.out.println("Connection is null!");
