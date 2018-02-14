@@ -1,5 +1,5 @@
-import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -13,13 +13,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
-import javax.swing.JTextArea;
 
 public class takeData {
 
 	JFrame window;
-
-	JTextArea teamNumber;
 
 	JLabel teamHeader, autoHeader, teleHeader;
 
@@ -31,13 +28,14 @@ public class takeData {
 
 	GridBagConstraints layout;
 
+	int teamNumber;
+
 	public void init() {
 		window = new JFrame("Data Collector");
 		layout = new GridBagConstraints();
 		teamHeader = new JLabel("Team to scout: ");
 		autoHeader = new JLabel("\nAutonomous");
 		teleHeader = new JLabel("\nTeleOp");
-		teamNumber = new JTextArea("Enter team number");
 		cubeNumber = new JSlider(0, 50, 0);
 		hasAuto = new JCheckBox("This team has an auto");
 		autoSwitch = new JCheckBox("Can place cube on switch during auto");
@@ -48,28 +46,38 @@ public class takeData {
 		endClimbAssist = new JCheckBox("This team can help others climb");
 		submit = new JButton("Submit");
 		cancel = new JButton("Cancel");
-		addComponents();
+		try {
+			addComponents(Integer.parseInt(JOptionPane.showInputDialog("Enter team number", "")));
+		} catch (NumberFormatException e) {
+			if (e.getLocalizedMessage() == "null") {
+				System.exit(0);
+			} else {
+				JOptionPane.showMessageDialog(null, "That is not a valid team number", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				init();
+			}
+		}
 	}
 
-	public void addComponents() {
+	public void addComponents(int number) {
 		this.window.setLayout(new GridBagLayout());
+		this.layout.weighty = 1;
+		this.layout.anchor = GridBagConstraints.NORTH;
+
+		this.teamNumber = number;
 
 		this.cubeNumber.setMajorTickSpacing(10);
 		this.cubeNumber.setMinorTickSpacing(1);
 		this.cubeNumber.setPaintTicks(true);
 		this.cubeNumber.setPaintLabels(true);
 
+		this.teamHeader.setText(teamHeader.getText() + number);
 		this.layout.gridheight = 1;
-		this.layout.gridwidth = 1;
+		this.layout.gridwidth = 2;
 		this.layout.gridx = 0;
 		this.layout.gridy = 0;
+		this.teamHeader.setFont(new Font(null, Font.BOLD, 40));
 		this.window.add(this.teamHeader, this.layout);
-
-		this.layout.gridheight = 1;
-		this.layout.gridwidth = 1;
-		this.layout.gridx = 1;
-		this.layout.gridy = 0;
-		this.window.add(this.teamNumber, this.layout);
 
 		JComponent[] objects = { this.autoHeader, this.hasAuto, this.autoSwitch, this.autoScale, this.teleHeader,
 				this.teleSwitch, this.teleScale, this.cubeNumber, this.endClimb, this.endClimbAssist };
@@ -79,7 +87,7 @@ public class takeData {
 			this.layout.gridwidth = 2;
 			this.layout.gridx = 0;
 			this.layout.gridy = i;
-			objects[i - 1].setSize(objects[i - 1].getSize().width * 2, objects[i - 1].getSize().height * 2);
+			objects[i - 1].setFont(new Font(null, Font.BOLD, 25));
 			this.window.add(objects[i - 1], this.layout);
 		}
 
@@ -87,18 +95,23 @@ public class takeData {
 		this.layout.gridwidth = 1;
 		this.layout.gridx = 0;
 		this.layout.gridy = 14;
+		this.cancel.setFont(new Font(null, Font.BOLD, 25));
 		this.window.add(cancel, this.layout);
 
 		this.layout.gridheight = 1;
 		this.layout.gridwidth = 1;
 		this.layout.gridx = 1;
 		this.layout.gridy = 14;
-		this.window.add(submit, this.layout);
+		this.submit.setFont(new Font(null, Font.BOLD, 25));
+		this.window.add(submit, this.layout, JButton.EAST);
+
+		startGUI();
 
 	}
 
 	public void startGUI() {
-		this.window.pack();
+		// this.window.pack();
+		this.window.setSize(778, 1058);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		this.window.setLocation(d.width / 2 - this.window.getSize().width / 2,
 				d.height / 2 - this.window.getSize().height / 2);
@@ -108,11 +121,11 @@ public class takeData {
 	}
 
 	public void reset() {
-		// TODO: Reset everyghing (Submit/Cancel was clicked)
+		takeData.this.window.setVisible(false);
+		init();
 	}
 
 	public void readyListeners() {
-		// TODO: Action listneners
 		this.cancel.addActionListener(new ActionListener() {
 
 			@Override
@@ -131,21 +144,14 @@ public class takeData {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO: Check if a team number is entered, then write the data to the file
 				String data = "";
-				if (!takeData.this.teamNumber.getText().isEmpty()) {
-					try {
-						data = data + Integer.parseInt(takeData.this.teamNumber.getText());
-						System.out.print(data);
-					} catch (Exception e) {
-						takeData.this.teamHeader.setForeground(Color.RED);
-						return;
-					}
-				} else {
-					takeData.this.teamHeader.setForeground(Color.RED);
-					return;
-				}
-
+				data = String.format("%s, %s, %s, %s, %s, %s, %s, %s", takeData.this.teamNumber,
+						takeData.this.hasAuto.isSelected(), takeData.this.autoSwitch.isSelected(),
+						takeData.this.teleSwitch.isSelected(), takeData.this.teleScale.isSelected(),
+						takeData.this.cubeNumber.getValue(), takeData.this.endClimb.isSelected(),
+						takeData.this.endClimbAssist.isSelected()).toUpperCase();
+				System.out.println(data);
+				reset();
 			}
 
 		});
