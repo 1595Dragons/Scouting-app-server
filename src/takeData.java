@@ -5,6 +5,8 @@ import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -13,6 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
+import javax.swing.JToolTip;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class takeData {
 
@@ -29,6 +34,7 @@ public class takeData {
 	GridBagConstraints layout;
 
 	int teamNumber;
+	int cube = 0;
 
 	public void init() {
 		window = new JFrame("Data Collector");
@@ -70,6 +76,8 @@ public class takeData {
 		this.cubeNumber.setMinorTickSpacing(1);
 		this.cubeNumber.setPaintTicks(true);
 		this.cubeNumber.setPaintLabels(true);
+		//this.cubeNumber.setToolTipText(String.valueOf(this.cube));
+		
 
 		this.teamHeader.setText(teamHeader.getText() + number);
 		this.layout.gridheight = 1;
@@ -155,6 +163,44 @@ public class takeData {
 			}
 
 		});
+		
+		this.cubeNumber.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				takeData.this.cube = takeData.this.cubeNumber.getValue();
+				
+			}
+		});
+		
+		
+	}
+	
+	public void writeToFile(String data) {
+		selectFile file = new selectFile();
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(file.file.getAbsolutePath(), true);
+		} catch (IOException e1) {
+			System.out.println("Error, cannot edit file: " + e1.getMessage());
+			e1.printStackTrace();
+		}
+		try {
+			fw.append(System.getProperty("line.separator")+data);
+			fw.flush();
+		} catch (IOException e1) {
+			System.out.println("Error, cannot write to file: " + e1.getMessage());
+			e1.printStackTrace();
+		}
+
+		System.out.print("finishing data for team: " + data.split(",")[0] + "\n");
+		try {
+			fw.close();
+		} catch (IOException e1) {
+			System.out.println("Error, cannot close streams: " + e1.getMessage());
+			e1.printStackTrace();
+		}
+		System.out.println("Data written successfully!");
 	}
 
 }

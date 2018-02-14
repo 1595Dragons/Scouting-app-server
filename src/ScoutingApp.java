@@ -14,6 +14,9 @@ public class ScoutingApp {
 	public static StreamConnectionNotifier streamConnNotifier;
 
 	public static void main(String args[]) {
+		// TODO: check if device has bluetooth
+		// Todo: GUI
+		
 		// Header
 		System.out.println("1595 Scouting App Server\nVersion 1.5\n");
 		PrintStream printStream = System.out;
