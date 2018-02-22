@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -16,7 +19,14 @@ public class ScoutingApp {
 	public static void main(String args[]) {
 		// TODO: check if device has bluetooth
 		// Todo: GUI
-		
+		Info infoWindow = new Info();
+		try {
+			infoWindow.init();
+		} catch (BluetoothStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*
 		// Header
 		System.out.println("1595 Scouting App Server\nVersion 1.5\n");
 		PrintStream printStream = System.out;
@@ -25,14 +35,34 @@ public class ScoutingApp {
 		
 		// Begin searching for the file to write data to
 		// If no file is give, vreate one
-		selectFile file = new selectFile();
-		if (selectFile.fileMissing()) {
-			selectFile.makeFile();
+		//File file = new File(System.getProperty("user.dir") + "/scouting_data.csv");
+		if (!(new File(System.getProperty("user.dir") + "/scouting_data.csv")).exists()) {
+		//selectFile.makeFile();
+			String csv = new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath();
+
+			BufferedWriter write = null;
+			try {
+				write = new BufferedWriter(new FileWriter(csv, true));
+			} catch (IOException e) {
+				System.out.println("Error creating file writer: " + e.getMessage());
+			}
+
+			try {
+				write.append(
+						"Team number, hasAuto, autoSwitch, autoScale, teleSwitch, teleScale, cubeNumber, endClimb, endClimbAssist");
+				write.newLine();
+				write.flush();
+				write.close();
+			} catch (IOException e) {
+				System.out.println("Error writing to file: " + e.getMessage());
+			}
+			
+		
 			// System.out.println("File is missing, creating new file at: " + file.file.getPath() + "\n");
-			printStream.append("file missing, creating new file at: " + file.file.getPath() + "\n");
+			printStream.append("file missing, creating new file at: " + new File(System.getProperty("user.dir") + "/scouting_data.csv").getPath() + "\n");
 		} else {
 			// System.out.println("Scouting data file found at " + file.file.getPath() + "\n");
-			printStream.append("found at: " + file.file.getPath() + "\n");
+			printStream.append("found at: " + new File(System.getProperty("user.dir") + "/scouting_data.csv").getPath() + "\n");
 		}
 		
 		// Display the MAC Address, and then start searching...
@@ -65,12 +95,13 @@ public class ScoutingApp {
 			try {
 				currentConnection = streamConnNotifier.acceptAndOpen();
 				if (currentConnection != null) {
-					new Thread(new server()).start();
+					new Thread(new SPPserver()).start();
 				}
 			} catch (IOException e) {
 				System.out.println("Error creating a new thread: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
+		*/
 	}
 }

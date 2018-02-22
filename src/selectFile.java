@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+@Deprecated
 public class selectFile {
 
 	File file = new File(System.getProperty("user.dir") + "/scouting_data.csv");

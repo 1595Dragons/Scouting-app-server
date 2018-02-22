@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 import javax.microedition.io.StreamConnection;
 
-public class server extends Thread {
+public class SPPserver extends Thread {
 	selectFile file = new selectFile();
 	StreamConnection connection = ScoutingApp.currentConnection;
 
