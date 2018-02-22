@@ -177,7 +177,6 @@ public class takeData {
 	}
 	
 	public void writeToFile(String data) {
-		selectFile file = new selectFile();
 		FileWriter fw = null;
 		try {
 			fw = new FileWriter(file.file.getAbsolutePath(), true);

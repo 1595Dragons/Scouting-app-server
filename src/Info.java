@@ -17,23 +17,28 @@ public class Info {
 
 	JFrame window;
 
-	JLabel mac, output, fileLocaion, devices;
+	JLabel mac, output, outputText, fileLocaion, devices;
 
 	int deviceHeight;
 
 	GridBagConstraints layout;
 
 	public boolean checkBT() {
-		return true;
+		return LocalDevice.isPowerOn();
 	}
 
 	public void init() throws BluetoothStateException {
 		if (checkBT()) {
 			window = new JFrame("1595 Scouting App Version 1.6");
 			layout = new GridBagConstraints();
-			mac = new JLabel(String.format("Device MAC address: %s", LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase()));
-			output = new JLabel();
-			fileLocaion = new JLabel(new File(System.getProperty("user.dir") + "/scouting_data.csv").getPath());
+			mac = new JLabel(String.format("Device MAC address: %s",
+					LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase()));
+			output = new JLabel("<html><br ><center>Output:</center></html>");
+			// Border border = (BorderFactory.createLineBorder(Color.GRAY, 2));
+			outputText = new JLabel(" ");
+			// outputText.setBorder(border);
+			fileLocaion = new JLabel(String.format("<html><br ><center>CSV file locaion: <br >%s</center></html>",
+					new File(System.getProperty("user.dir") + "/scouting_data.csv").getPath()));
 			devices = new JLabel();
 			getDevices();
 			addComponents();
@@ -69,7 +74,8 @@ public class Info {
 					e.printStackTrace();
 				}
 			}
-			this.devices.setText(String.format("<html><br ><center>List of devices:<br > %s</center></html>", Arrays.toString(device).replace("[", "").replace("]", "")));
+			this.devices.setText(String.format("<html><br ><center>List of devices:<br > %s<br ></center></html>",
+					Arrays.toString(device).replace("[", "").replace("]", "")));
 		} else {
 			this.devices.setText(Arrays.toString(device).replace("[", "").replace("]", ""));
 		}
@@ -100,20 +106,34 @@ public class Info {
 		this.layout.gridx = 0;
 		this.layout.gridy = 3;
 		this.layout.gridwidth = 1;
+		this.layout.gridheight = 1;
+		this.output.setFont(new Font(null, Font.BOLD, 25));
+		this.window.add(this.output, this.layout);
+
+		this.layout.gridx = 0;
+		this.layout.gridy = 4;
+		this.layout.gridwidth = 1;
+		this.layout.gridheight = 1;
+		this.outputText.setFont(new Font(null, Font.BOLD, 25));
+		this.window.add(this.outputText, this.layout);
+
+		this.layout.gridx = 0;
+		this.layout.gridy = 5;
+		this.layout.gridwidth = 1;
 		this.layout.gridheight = this.deviceHeight + 1;
 		this.devices.setFont(new Font(null, Font.BOLD, 25));
 		this.window.add(this.devices, this.layout);
 
 		startGUI();
-		
+
 	}
 
 	public void startGUI() {
 		this.window.pack();
 
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		this.window.setLocation((d.width / 2 - this.window.getSize().width / 2) - 250,
-				d.height / 2 - this.window.getSize().height / 2);
+		this.window.setLocation((d.width / 2 - this.window.getSize().width / 2) - 500,
+				(d.height / 2 - this.window.getSize().height / 2) - 300);
 
 		this.window.setVisible(true);
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
