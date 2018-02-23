@@ -1,3 +1,5 @@
+package application;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -5,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -15,9 +18,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
-import javax.swing.JToolTip;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import 
 
 public class takeData {
 
@@ -35,7 +39,7 @@ public class takeData {
 
 	int teamNumber;
 	int cube = 0;
-
+	
 	public void init() {
 		window = new JFrame("Data Collector");
 		layout = new GridBagConstraints();
@@ -76,8 +80,7 @@ public class takeData {
 		this.cubeNumber.setMinorTickSpacing(1);
 		this.cubeNumber.setPaintTicks(true);
 		this.cubeNumber.setPaintLabels(true);
-		//this.cubeNumber.setToolTipText(String.valueOf(this.cube));
-		
+		// this.cubeNumber.setToolTipText(String.valueOf(this.cube));
 
 		this.teamHeader.setText(teamHeader.getText() + number);
 		this.layout.gridheight = 1;
@@ -158,48 +161,60 @@ public class takeData {
 						takeData.this.teleSwitch.isSelected(), takeData.this.teleScale.isSelected(),
 						takeData.this.cubeNumber.getValue(), takeData.this.endClimb.isSelected(),
 						takeData.this.endClimbAssist.isSelected()).toUpperCase();
-				System.out.println(data);
+				// System.out.println(data);
+				writeToFile(data);
 				reset();
 			}
 
 		});
-		
+
 		this.cubeNumber.addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				takeData.this.cube = takeData.this.cubeNumber.getValue();
-				
+
 			}
 		});
-		
-		
+
 	}
-	
+
 	public void writeToFile(String data) {
 		FileWriter fw = null;
+		
 		try {
-			fw = new FileWriter(file.file.getAbsolutePath(), true);
+			fw = new FileWriter(new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath(),
+					true);
 		} catch (IOException e1) {
-			System.out.println("Error, cannot edit file: " + e1.getMessage());
+			// System.out.println("Error, cannot edit file: " + e1.getMessage());
+			Info.this.outputText.setText(String.format("Error, cannot edit file: %s", e1.getMessage()));
+			Info.this.outputText.setForeground(Color.RED);
 			e1.printStackTrace();
 		}
 		try {
-			fw.append(System.getProperty("line.separator")+data);
+			fw.append(System.getProperty("line.separator") + data);
 			fw.flush();
 		} catch (IOException e1) {
-			System.out.println("Error, cannot write to file: " + e1.getMessage());
+			// System.out.println("Error, cannot write to file: " + e1.getMessage());
+			Info.this.outputText.setText(String.format("Error, cannot write to file: %s", e1.getMessage()));
+			Info.this.outputText.setForeground(Color.RED);
 			e1.printStackTrace();
 		}
 
-		System.out.print("finishing data for team: " + data.split(",")[0] + "\n");
+		// System.out.print("finishing data for team: " + data.split(",")[0] + "\n");
+		Info.this.outputText.setText("Writing data...");
+		Info.this.outputText.setForeground(Color.BLACK);
 		try {
 			fw.close();
 		} catch (IOException e1) {
-			System.out.println("Error, cannot close streams: " + e1.getMessage());
+			//System.out.println("Error, cannot close streams: " + e1.getMessage());
+			Info.this.outputText.setText(String.format("Error, close stream: %s", e1.getMessage()));
+			Info.this.outputText.setForeground(Color.RED);
 			e1.printStackTrace();
 		}
-		System.out.println("Data written successfully!");
+		Info.this.outputText.setText(String.format("Data written successfully for team: %s!", data.split(",")[0]));
+		Info.this.outputText.setForeground(Color.BLACK);
+		//System.out.println("Data written successfully!");
 	}
 
 }

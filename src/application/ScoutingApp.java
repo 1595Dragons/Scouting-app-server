@@ -1,3 +1,5 @@
+package application;
+import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -15,8 +17,8 @@ public class ScoutingApp {
 	public static StreamConnectionNotifier streamConnNotifier;
 
 	public static void main(String args[]) {
-		// TODO: check if device has bluetooth
-		// Todo: GUI
+
+		// Create the info GUI
 		Info infoWindow = new Info();
 		try {
 			infoWindow.init();
@@ -43,7 +45,9 @@ public class ScoutingApp {
 			try {
 				write = new BufferedWriter(new FileWriter(csv, true));
 			} catch (IOException e) {
-				System.out.println("Error creating file writer: " + e.getMessage());
+				// System.out.println("Error creating file writer: " + e.getMessage());
+				infoWindow.outputText.setText(String.format("Error creating file writer: %s", e.getMessage()));
+				infoWindow.outputText.setForeground(Color.RED);
 			}
 
 			try {
@@ -53,7 +57,9 @@ public class ScoutingApp {
 				write.flush();
 				write.close();
 			} catch (IOException e) {
-				System.out.println("Error writing to file: " + e.getMessage());
+				// System.out.println("Error writing to file: " + e.getMessage());
+				infoWindow.outputText.setText(String.format("Error writing to file: %s", e.getMessage()));
+				infoWindow.outputText.setForeground(Color.RED);
 			}
 
 			// System.out.println("File is missing, creating new file at: " +
@@ -62,12 +68,14 @@ public class ScoutingApp {
 			// File(System.getProperty("user.dir") + "/scouting_data.csv").getPath() +
 			// "\n");
 			infoWindow.outputText.setText("File missing, creating new file...");
+			infoWindow.outputText.setForeground(Color.BLACK);
 		} else {
 			// System.out.println("Scouting data file found at " + file.file.getPath() +
 			// "\n");
 			// printStream.append("found at: " + new File(System.getProperty("user.dir") +
 			// "/scouting_data.csv").getPath() + "\n");
 			infoWindow.outputText.setText("File successfully found");
+			infoWindow.outputText.setForeground(Color.BLACK);
 		}
 		/*
 		 * // Display the MAC Address, and then start searching... // TODO: On newer
@@ -87,11 +95,16 @@ public class ScoutingApp {
 		try {
 			streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
 		} catch (IOException e1) {
-			System.out.println("Error, cannot open URL: " + e1.getMessage());
+			// System.out.println("Error, cannot open URL: " + e1.getMessage());
+			infoWindow.outputText.setText(String.format("Error, cannot open URL: %s", e1.getMessage()));
+			infoWindow.outputText.setForeground(Color.RED);
 			e1.printStackTrace();
 		}
+
+		// Ready to start receieving data!
 		// System.out.println("Ready to recieve more data! (Press ctrl + c to end)\n");
 		infoWindow.outputText.setText("Ready to recieve data!");
+		infoWindow.outputText.setForeground(Color.BLACK);
 		takeData ServerClient = new takeData();
 		ServerClient.init();
 		while (true) {
@@ -103,7 +116,9 @@ public class ScoutingApp {
 					new Thread(new SPPserver()).start();
 				}
 			} catch (IOException e) {
-				System.out.println("Error creating a new thread: " + e.getMessage());
+				// System.out.println("Error creating a new thread: " + e.getMessage());
+				infoWindow.outputText.setText(String.format("Error creating a new thread: %s", e.getMessage()));
+				infoWindow.outputText.setForeground(Color.RED);
 				e.printStackTrace();
 			}
 		}

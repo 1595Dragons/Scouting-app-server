@@ -1,3 +1,4 @@
+package application;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -17,7 +18,8 @@ public class Info {
 
 	JFrame window;
 
-	JLabel mac, output, outputText, fileLocaion, devices;
+	JLabel mac, output, fileLocaion, devices;
+	JLabel outputText = new JLabel("");
 
 	int deviceHeight;
 
@@ -35,7 +37,7 @@ public class Info {
 					LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase()));
 			output = new JLabel("<html><br ><center>Output:</center></html>");
 			// Border border = (BorderFactory.createLineBorder(Color.GRAY, 2));
-			outputText = new JLabel(" ");
+			// this.outputText = new JLabel(" ");
 			// outputText.setBorder(border);
 			fileLocaion = new JLabel(String.format("<html><br ><center>CSV file locaion: <br >%s</center></html>",
 					new File(System.getProperty("user.dir") + "/scouting_data.csv").getPath()));
