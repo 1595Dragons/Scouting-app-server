@@ -1,11 +1,9 @@
 package application;
-import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.UUID;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
@@ -17,7 +15,9 @@ public class ScoutingApp {
 	public static StreamConnectionNotifier streamConnNotifier;
 
 	public static void main(String args[]) {
-
+		// TODO: Until beta branch, use old console!
+		
+		/*
 		// Create the info GUI
 		Info infoWindow = new Info();
 		try {
@@ -26,17 +26,12 @@ public class ScoutingApp {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 
-		// Header
-		/*
-		 * System.out.println("1595 Scouting App Server\nVersion 1.5\n"); PrintStream
-		 * printStream = System.out;
-		 * printStream.print("Looking for scouting data file...");
-		 */
+		
 
 		// Begin searching for the file to write data to
 		// If no file is give, vreate one
-		// File file = new File(System.getProperty("user.dir") + "/scouting_data.csv");
 		if (!(new File(System.getProperty("user.dir") + "/scouting_data.csv")).exists()) {
 			// selectFile.makeFile();
 			String csv = new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath();
@@ -45,9 +40,9 @@ public class ScoutingApp {
 			try {
 				write = new BufferedWriter(new FileWriter(csv, true));
 			} catch (IOException e) {
-				// System.out.println("Error creating file writer: " + e.getMessage());
-				infoWindow.outputText.setText(String.format("Error creating file writer: %s", e.getMessage()));
-				infoWindow.outputText.setForeground(Color.RED);
+				System.out.println("Error creating file writer: " + e.getMessage());
+				//infoWindow.outputText.setText(String.format("Error creating file writer: %s", e.getMessage()));
+				//infoWindow.outputText.setForeground(Color.RED);
 			}
 
 			try {
@@ -57,34 +52,21 @@ public class ScoutingApp {
 				write.flush();
 				write.close();
 			} catch (IOException e) {
-				// System.out.println("Error writing to file: " + e.getMessage());
-				infoWindow.outputText.setText(String.format("Error writing to file: %s", e.getMessage()));
-				infoWindow.outputText.setForeground(Color.RED);
+				System.out.println(String.format("Error writing to file: %s", e.getMessage()));
+				//infoWindow.outputText.setText(String.format("Error writing to file: %s", e.getMessage()));
+				//infoWindow.outputText.setForeground(Color.RED);
 			}
 
-			// System.out.println("File is missing, creating new file at: " +
-			// file.file.getPath() + "\n");
-			// printStream.append("file missing, creating new file at: " + new
-			// File(System.getProperty("user.dir") + "/scouting_data.csv").getPath() +
-			// "\n");
-			infoWindow.outputText.setText("File missing, creating new file...");
-			infoWindow.outputText.setForeground(Color.BLACK);
+			System.out.println("File missing, creating new file....");
+			//infoWindow.outputText.setText("File missing, creating new file...");
+			//infoWindow.outputText.setForeground(Color.BLACK);
 		} else {
-			// System.out.println("Scouting data file found at " + file.file.getPath() +
-			// "\n");
-			// printStream.append("found at: " + new File(System.getProperty("user.dir") +
-			// "/scouting_data.csv").getPath() + "\n");
-			infoWindow.outputText.setText("File successfully found");
-			infoWindow.outputText.setForeground(Color.BLACK);
+			System.out.println("File successfully found");
+			//infoWindow.outputText.setText("File successfully found");
+			//infoWindow.outputText.setForeground(Color.BLACK);
 		}
-		/*
-		 * // Display the MAC Address, and then start searching... // TODO: On newer
-		 * phones, gets error, but can still retrieve device name... hmm... try {
-		 * System.out.println("\n\nThe MAC Address for this device is: " +
-		 * LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)",
-		 * "$0:").toUpperCase() + "\n\n"); } catch (BluetoothStateException e) {
-		 * System.out.println("Cannot get device MAC address: " + e.getMessage()); }
-		 */
+		
+		
 
 		// Create a UUID for SPP, and then create the URL
 		UUID uuid = new UUID("1101", true);
@@ -95,18 +77,19 @@ public class ScoutingApp {
 		try {
 			streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
 		} catch (IOException e1) {
-			// System.out.println("Error, cannot open URL: " + e1.getMessage());
-			infoWindow.outputText.setText(String.format("Error, cannot open URL: %s", e1.getMessage()));
-			infoWindow.outputText.setForeground(Color.RED);
+			System.out.println("Error, cannot open URL: " + e1.getMessage());
+			//infoWindow.outputText.setText(String.format("Error, cannot open URL: %s", e1.getMessage()));
+			//infoWindow.outputText.setForeground(Color.RED);
 			e1.printStackTrace();
 		}
+		
+		
 
 		// Ready to start receieving data!
-		// System.out.println("Ready to recieve more data! (Press ctrl + c to end)\n");
-		infoWindow.outputText.setText("Ready to recieve data!");
-		infoWindow.outputText.setForeground(Color.BLACK);
-		takeData ServerClient = new takeData();
-		ServerClient.init();
+		System.out.println("Ready to recieve data!");
+		//infoWindow.outputText.setText("Ready to recieve data!");
+		//infoWindow.outputText.setForeground(Color.BLACK);
+		new Thread(new takeData()).start();
 		while (true) {
 			// Check if recieving a connection
 			// On connecion, open it, and pass it to a newly created thread
@@ -116,9 +99,9 @@ public class ScoutingApp {
 					new Thread(new SPPserver()).start();
 				}
 			} catch (IOException e) {
-				// System.out.println("Error creating a new thread: " + e.getMessage());
-				infoWindow.outputText.setText(String.format("Error creating a new thread: %s", e.getMessage()));
-				infoWindow.outputText.setForeground(Color.RED);
+				System.out.println(String.format("Error creating a new thread: %s", e.getMessage()));
+				//infoWindow.outputText.setText(String.format("Error creating a new thread: %s", e.getMessage()));
+				//infoWindow.outputText.setForeground(Color.RED);
 				e.printStackTrace();
 			}
 		}

@@ -36,9 +36,6 @@ public class Info {
 			mac = new JLabel(String.format("Device MAC address: %s",
 					LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase()));
 			output = new JLabel("<html><br ><center>Output:</center></html>");
-			// Border border = (BorderFactory.createLineBorder(Color.GRAY, 2));
-			// this.outputText = new JLabel(" ");
-			// outputText.setBorder(border);
 			fileLocaion = new JLabel(String.format("<html><br ><center>CSV file locaion: <br >%s</center></html>",
 					new File(System.getProperty("user.dir") + "/scouting_data.csv").getPath()));
 			devices = new JLabel();

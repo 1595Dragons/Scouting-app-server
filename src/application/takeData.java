@@ -1,5 +1,5 @@
 package application;
-import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -21,9 +21,8 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import 
 
-public class takeData {
+public class takeData extends Thread {
 
 	JFrame window;
 
@@ -39,6 +38,10 @@ public class takeData {
 
 	int teamNumber;
 	int cube = 0;
+
+	public void run () {
+		init();
+	}
 	
 	public void init() {
 		window = new JFrame("Data Collector");
@@ -163,6 +166,7 @@ public class takeData {
 						takeData.this.endClimbAssist.isSelected()).toUpperCase();
 				// System.out.println(data);
 				writeToFile(data);
+
 				reset();
 			}
 
@@ -179,42 +183,51 @@ public class takeData {
 
 	}
 
-	public void writeToFile(String data) {
+	public static void writeToFile(String data) {
 		FileWriter fw = null;
 		
+		// Info infoWindow = new Info();
+
 		try {
 			fw = new FileWriter(new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath(),
 					true);
 		} catch (IOException e1) {
-			// System.out.println("Error, cannot edit file: " + e1.getMessage());
-			Info.this.outputText.setText(String.format("Error, cannot edit file: %s", e1.getMessage()));
-			Info.this.outputText.setForeground(Color.RED);
+			System.out.println("Error, cannot edit file: " + e1.getMessage());
+			//infoWindow.outputText.setText(String.format("Error, cannot edit file: %s", e1.getMessage()));
+			//infoWindow.outputText.setForeground(Color.RED);
 			e1.printStackTrace();
 		}
 		try {
 			fw.append(System.getProperty("line.separator") + data);
 			fw.flush();
 		} catch (IOException e1) {
-			// System.out.println("Error, cannot write to file: " + e1.getMessage());
-			Info.this.outputText.setText(String.format("Error, cannot write to file: %s", e1.getMessage()));
-			Info.this.outputText.setForeground(Color.RED);
+			System.out.println("Error, cannot write to file: " + e1.getMessage());
+			// infoWindow.outputText.setText(String.format("Error, cannot write to file: %s", e1.getMessage()));
+			// infoWindow.outputText.setForeground(Color.RED);
 			e1.printStackTrace();
 		}
 
-		// System.out.print("finishing data for team: " + data.split(",")[0] + "\n");
-		Info.this.outputText.setText("Writing data...");
-		Info.this.outputText.setForeground(Color.BLACK);
+		System.out.print("finishing data for team: " + data.split(",")[0] + "\n");
+		// infoWindow.outputText.setText("Writing data...");
+		// infoWindow.outputText.setForeground(Color.BLACK);
 		try {
 			fw.close();
 		} catch (IOException e1) {
-			//System.out.println("Error, cannot close streams: " + e1.getMessage());
-			Info.this.outputText.setText(String.format("Error, close stream: %s", e1.getMessage()));
-			Info.this.outputText.setForeground(Color.RED);
+			System.out.println("Error, cannot close streams: " + e1.getMessage());
+			// infoWindow.outputText.setText(String.format("Error, close stream: %s", e1.getMessage()));
+			// infoWindow.outputText.setForeground(Color.RED);
 			e1.printStackTrace();
 		}
-		Info.this.outputText.setText(String.format("Data written successfully for team: %s!", data.split(",")[0]));
-		Info.this.outputText.setForeground(Color.BLACK);
-		//System.out.println("Data written successfully!");
+		
+		//infoWindow.outputText.setText(String.format("Data written successfully for team: %s!", data.split(",")[0]));
+		//infoWindow.outputText.setForeground(Color.BLACK);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Data written successfully!");
 	}
 
 }
