@@ -1,13 +1,16 @@
 package application;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.UUID;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
+
 
 public class ScoutingApp {
 
@@ -15,9 +18,7 @@ public class ScoutingApp {
 	public static StreamConnectionNotifier streamConnNotifier;
 
 	public static void main(String args[]) {
-		// TODO: Until beta branch, use old console!
-		
-		/*
+
 		// Create the info GUI
 		Info infoWindow = new Info();
 		try {
@@ -26,9 +27,6 @@ public class ScoutingApp {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
-
-		
 
 		// Begin searching for the file to write data to
 		// If no file is give, vreate one
@@ -40,33 +38,37 @@ public class ScoutingApp {
 			try {
 				write = new BufferedWriter(new FileWriter(csv, true));
 			} catch (IOException e) {
-				System.out.println("Error creating file writer: " + e.getMessage());
+				// System.out.println("Error creating file writer: " + e.getMessage());
 				//infoWindow.outputText.setText(String.format("Error creating file writer: %s", e.getMessage()));
 				//infoWindow.outputText.setForeground(Color.RED);
+				Info.log(String.format("Error creating file writer: %s", e.getMessage()), true);
+				
 			}
 
 			try {
 				write.append(
-						"Team number, hasAuto, autoSwitch, autoScale, teleSwitch, teleScale, cubeNumber, endClimb, endClimbAssist");
+						"Team number, Has an auto, Can place on switch during auto, Can place on scale during auto, Can place on switch during teleOp, Can place on scale during teleOP, Number of cubes placed, Climb value");
 				write.newLine();
 				write.flush();
 				write.close();
 			} catch (IOException e) {
-				System.out.println(String.format("Error writing to file: %s", e.getMessage()));
+				// System.out.println(String.format("Error writing to file: %s",
+				// e.getMessage()));
 				//infoWindow.outputText.setText(String.format("Error writing to file: %s", e.getMessage()));
 				//infoWindow.outputText.setForeground(Color.RED);
+				Info.log(String.format("Error writing to file: %s", e.getMessage()), true);
 			}
 
-			System.out.println("File missing, creating new file....");
+			// System.out.println("File missing, creating new file....");
 			//infoWindow.outputText.setText("File missing, creating new file...");
 			//infoWindow.outputText.setForeground(Color.BLACK);
+			Info.log("File missing, creating new file", false);
 		} else {
-			System.out.println("File successfully found");
+			// System.out.println("File successfully found");
 			//infoWindow.outputText.setText("File successfully found");
 			//infoWindow.outputText.setForeground(Color.BLACK);
+			Info.log("File successfully found", false);
 		}
-		
-		
 
 		// Create a UUID for SPP, and then create the URL
 		UUID uuid = new UUID("1101", true);
@@ -77,18 +79,18 @@ public class ScoutingApp {
 		try {
 			streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
 		} catch (IOException e1) {
-			System.out.println("Error, cannot open URL: " + e1.getMessage());
+			// System.out.println("Error, cannot open URL: " + e1.getMessage());
 			//infoWindow.outputText.setText(String.format("Error, cannot open URL: %s", e1.getMessage()));
 			//infoWindow.outputText.setForeground(Color.RED);
+			Info.log(String.format("Error, cannot open URL: %s", e1.getMessage()), true);
 			e1.printStackTrace();
 		}
-		
-		
 
 		// Ready to start receieving data!
-		System.out.println("Ready to recieve data!");
+		// System.out.println("Ready to recieve data!");
 		//infoWindow.outputText.setText("Ready to recieve data!");
 		//infoWindow.outputText.setForeground(Color.BLACK);
+		Info.log("Ready to recieve data!", false);
 		new Thread(new takeData()).start();
 		while (true) {
 			// Check if recieving a connection
@@ -99,9 +101,11 @@ public class ScoutingApp {
 					new Thread(new SPPserver()).start();
 				}
 			} catch (IOException e) {
-				System.out.println(String.format("Error creating a new thread: %s", e.getMessage()));
+				// System.out.println(String.format("Error creating a new thread: %s",
+				// e.getMessage()));
 				//infoWindow.outputText.setText(String.format("Error creating a new thread: %s", e.getMessage()));
 				//infoWindow.outputText.setForeground(Color.RED);
+				Info.log(String.format("Error creating a new thread: %s", e.getMessage()), true);
 				e.printStackTrace();
 			}
 		}
