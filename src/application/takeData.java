@@ -19,15 +19,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
-import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 
 public class takeData extends Thread {
 
 	JFrame window;
 
-	JLabel teamHeader, autoHeader, teleHeader, climbHeader;
+	JLabel teamHeader, autoHeader, teleHeader, cubeHeader, climbHeader;
 
 	JCheckBox hasAuto, autoSwitch, autoScale, teleSwitch, teleScale;
 	
@@ -35,12 +35,9 @@ public class takeData extends Thread {
 	
 	JRadioButton didntClimb, oneClimb, twoClimb, threeClimb;
 	
-	/*
-	@Deprecated
-	JCheckBox endClimb, endClimbAssist;
-	*/
-
-	JSlider cubeNumber;
+	JSpinner cubeNumber;
+	
+	//JSlider cubeNumber;
 
 	JButton submit, cancel;
 
@@ -52,8 +49,6 @@ public class takeData extends Thread {
 	public void run() {
 		init();
 	}
-	// TODO: List of climber types: Ramp climb, Tripple climber, Double climber, Sharing is careing :) (Dosnt take up entire bar/has external bar),
-	// TODO: PIT SCOUTING: Type of climnber ^ 
 	// TODO: Did not climb: 0, Only them: 1, PLus 1 climb: 2, All climb (Not achieveable by ramp bots): 3
 	
 	public void init() {
@@ -62,7 +57,10 @@ public class takeData extends Thread {
 		teamHeader = new JLabel("Team to scout: ");
 		autoHeader = new JLabel("<html><center><u>Autonomous</u></center></html>");
 		teleHeader = new JLabel("<html><center><u>TeleOp</u></center></html>");
-		cubeNumber = new JSlider(0, 25, 0);
+		//cubeNumber = new JSlider(0, 25, 0);
+		SpinnerModel model = new SpinnerNumberModel(0, 0, 25, 1);
+		cubeNumber = new JSpinner(model);
+		cubeHeader = new JLabel("Number of cubes placed: ");
 		hasAuto = new JCheckBox("This team has an auto");
 		autoSwitch = new JCheckBox("Can place cube on switch during auto");
 		autoScale = new JCheckBox("Can place cube on scale during auto");
@@ -96,11 +94,6 @@ public class takeData extends Thread {
 
 		this.teamNumber = number;
 
-		this.cubeNumber.setMajorTickSpacing(5);
-		this.cubeNumber.setMinorTickSpacing(1);
-		this.cubeNumber.setPaintTicks(true);
-		this.cubeNumber.setPaintLabels(true);
-		// this.cubeNumber.setToolTipText(String.valueOf(this.cube));
 
 		this.teamHeader.setText(teamHeader.getText() + number);
 		this.layout.gridheight = 1;
@@ -117,7 +110,7 @@ public class takeData extends Thread {
 		climbers.add(this.threeClimb);
 
 		JComponent[] objects = { this.autoHeader, this.hasAuto, this.autoSwitch, this.autoScale, this.teleHeader,
-				this.teleSwitch, this.teleScale, this.cubeNumber, this.climbHeader, this.didntClimb, this.oneClimb, this.twoClimb, this.threeClimb };
+				this.teleSwitch, this.teleScale, this.cubeHeader, this.cubeNumber, this.climbHeader, this.didntClimb, this.oneClimb, this.twoClimb, this.threeClimb };
 
 		for (int i = 1; i <= objects.length; i++) {
 			this.layout.gridheight = 1;
@@ -127,18 +120,18 @@ public class takeData extends Thread {
 			objects[i - 1].setFont(new Font(null, Font.BOLD, 25));
 			this.window.add(objects[i - 1], this.layout);
 		}
-
+		
 		this.layout.gridheight = 1;
 		this.layout.gridwidth = 1;
 		this.layout.gridx = 0;
-		this.layout.gridy = 14;
+		this.layout.gridy = 15;
 		this.cancel.setFont(new Font(null, Font.BOLD, 25));
 		this.window.add(cancel, this.layout);
 
 		this.layout.gridheight = 1;
 		this.layout.gridwidth = 1;
 		this.layout.gridx = 1;
-		this.layout.gridy = 14;
+		this.layout.gridy = 15;
 		this.submit.setFont(new Font(null, Font.BOLD, 25));
 		this.window.add(submit, this.layout, JButton.EAST);
 
@@ -148,7 +141,7 @@ public class takeData extends Thread {
 
 	public void startGUI() {
 		// this.window.pack();
-		this.window.setSize(780, 1200);
+		this.window.setSize(780, 1400);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		this.window.setLocation(d.width / 2 - this.window.getSize().width / 2,
 				d.height / 2 - this.window.getSize().height / 2);
@@ -191,6 +184,7 @@ public class takeData extends Thread {
 				} else if (takeData.this.threeClimb.isSelected()) {
 					climbValue = 3;
 				}
+				takeData.this.cube = (int) takeData.this.cubeNumber.getValue();
 				String data = "";
 				data = String
 						.format("%s, %s, %s, %s, %s, %s, %s, %s", takeData.this.teamNumber,
@@ -206,14 +200,6 @@ public class takeData extends Thread {
 
 		});
 
-		this.cubeNumber.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				takeData.this.cube = takeData.this.cubeNumber.getValue();
-
-			}
-		});
 
 	}
 
