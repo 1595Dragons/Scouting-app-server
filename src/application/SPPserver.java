@@ -44,6 +44,7 @@ public class SPPserver extends Thread {
 						//infoWindow.outputText.setText(String.format("Error: %s", "Data recieved is either incomplete or corrupt"));
 						//infoWindow.outputText.setForeground(Color.RED);
 						Info.log("Error: Data recieved is either incomplete or corrupt", true);
+						return;
 					}
 				} catch (IOException e1) {
 					//System.out.println("Error, cannot read stream: " + e1.getMessage());
