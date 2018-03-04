@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -32,7 +33,7 @@ public class Info {
 
 	public void init() throws BluetoothStateException {
 		if (checkBT()) {
-			window = new JFrame("1595 Scouting App Version 1.6");
+			window = new JFrame("1595 Scouting App");
 			layout = new GridBagConstraints();
 			mac = new JLabel(String.format("Device MAC address: %s",
 					LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase()));
@@ -139,11 +140,12 @@ public class Info {
 		//this.window.pack();
 		this.window.setSize(1058, 450); // 778, 1058
 
+		this.window.setVisible(true);
+		
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		this.window.setLocation((d.width / 2 - this.window.getSize().width / 2) - 500,
 				(d.height / 2 - this.window.getSize().height / 2) - 300);
 
-		this.window.setVisible(true);
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	}
@@ -160,4 +162,46 @@ public class Info {
 		}
 	}
 
+	public static void writeToFile(String data) {
+		// Write the data to a CSV file
+		log("Writing data to file", false);
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(
+					new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath(), true);
+		} catch (IOException e1) {
+			log(String.format("Error, cannot edit file: %s", e1.getMessage()), true);
+			e1.printStackTrace();
+			return;
+		}
+		boolean success = false;
+		try {
+			fw.append(System.getProperty("line.separator") + data);
+			fw.flush();
+			success = true;
+		} catch (IOException e1) {
+			log(String.format("Error, cannot write to file: %s", e1.getMessage()), true);
+			e1.printStackTrace();
+			success = false;
+		}
+
+		// Try closing the writer
+		try {
+			fw.close();
+		} catch (IOException e1) {
+			log(String.format("Error, cannot close stream: %s", e1.getMessage()), true);
+			e1.printStackTrace();
+			return;
+		}
+		
+		
+		// Report success!
+		if (success) {
+			log(String.format("Successfully written data for team: %s", data.split(",")[0]), false);
+		} else {
+			return;
+		}
+		
+	}
+	
 }

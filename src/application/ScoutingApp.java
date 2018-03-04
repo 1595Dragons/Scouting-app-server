@@ -28,12 +28,17 @@ public class ScoutingApp {
 			e.printStackTrace();
 		}
 
+		
+		
 		// Begin searching for the file to write data to
 		// If no file is give, create one
 		if (!(new File(System.getProperty("user.dir") + "/scouting_data.csv")).exists()) {
-			// selectFile.makeFile();
+			
+			// This is the string of the CSV's file path.
 			String csv = new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath();
 
+			
+			// Create a writer in order to write to the file
 			BufferedWriter write = null;
 			try {
 				write = new BufferedWriter(new FileWriter(csv, true));
@@ -41,9 +46,21 @@ public class ScoutingApp {
 				Info.log(String.format("Error creating file writer: %s", e.getMessage()), true);
 				
 			}
+			
+			
+			
+			// Try writing to said file, but report if anything is wrong!
 			try {
-				write.append(
-						"Team number, Has an auto, Can place on switch during auto, Can place on scale during auto, Can place on switch during teleOp, Can place on scale during teleOP, Number of cubes placed, Climb value");
+				write.append(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
+						"Team number",
+						"Has an auto",
+						"Can place on switch during auto",
+						"Can place on scale during auto",
+						"Can place on switch during teleOp",
+						"Can place on scale during teleOP",
+						"Number of cubes placed",
+						"Climb value",
+						"Comments"));
 				write.newLine();
 				write.flush();
 				write.close();
@@ -52,7 +69,11 @@ public class ScoutingApp {
 			}
 
 			Info.log("File missing, creating new file", false);
+			
+			
+			
 		} else {
+			// File was found, all is good.
 			Info.log("File successfully found", false);
 		}
 
@@ -62,6 +83,8 @@ public class ScoutingApp {
 		UUID uuid = new UUID("1101", true);
 		String connectionString = "btspp://localhost:" + uuid + ";name=SpudSPPServer";
 
+		
+		
 		// open server url using the created URL
 		streamConnNotifier = null;
 		try {
@@ -71,6 +94,8 @@ public class ScoutingApp {
 			e1.printStackTrace();
 		}
 
+		
+		
 		Info.log("Ready to recieve data!", false);
 		new Thread(new takeData()).start();
 		while (true) {
