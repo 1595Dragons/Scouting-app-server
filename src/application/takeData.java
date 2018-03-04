@@ -36,8 +36,6 @@ public class takeData extends Thread {
 	JRadioButton didntClimb, oneClimb, twoClimb, threeClimb;
 	
 	JSpinner cubeNumber;
-	
-	//JSlider cubeNumber;
 
 	JButton submit, cancel;
 
@@ -57,7 +55,6 @@ public class takeData extends Thread {
 		teamHeader = new JLabel("Team to scout: ");
 		autoHeader = new JLabel("<html><center><u>Autonomous</u></center></html>");
 		teleHeader = new JLabel("<html><center><u>TeleOp</u></center></html>");
-		//cubeNumber = new JSlider(0, 25, 0);
 		SpinnerModel model = new SpinnerNumberModel(0, 0, 25, 1);
 		cubeNumber = new JSpinner(model);
 		cubeHeader = new JLabel("Number of cubes placed: ");
@@ -187,7 +184,7 @@ public class takeData extends Thread {
 				takeData.this.cube = (int) takeData.this.cubeNumber.getValue();
 				String data = "";
 				data = String
-						.format("%s, %s, %s, %s, %s, %s, %s, %s", takeData.this.teamNumber,
+						.format("%s,%s,%s,%s,%s,%s,%s,%s", takeData.this.teamNumber,
 								takeData.this.hasAuto.isSelected(), takeData.this.autoSwitch.isSelected(),
 								takeData.this.autoScale.isSelected(), takeData.this.teleSwitch.isSelected(),
 								takeData.this.teleScale.isSelected(), takeData.this.cubeNumber.getValue(), climbValue)
@@ -206,15 +203,10 @@ public class takeData extends Thread {
 	public static void writeToFile(String data) {
 		FileWriter fw = null;
 
-		//Info infoWindow = new Info();
-
 		try {
 			fw = new FileWriter(new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath(),
 					true);
 		} catch (IOException e1) {
-			//System.out.println("Error, cannot edit file: " + e1.getMessage());
-			//infoWindow.outputText.setText(String.format("Error, cannot edit file: %s", e1.getMessage()));
-			//infoWindow.outputText.setForeground(Color.RED);
 			Info.log(String.format("Error, cannot edit file: %s", e1.getMessage()), true);
 			e1.printStackTrace();
 		}
@@ -222,31 +214,18 @@ public class takeData extends Thread {
 			fw.append(System.getProperty("line.separator") + data);
 			fw.flush();
 		} catch (IOException e1) {
-			//System.out.println("Error, cannot write to file: " + e1.getMessage());
-			//infoWindow.outputText.setText(String.format("Error, cannot write to file: %s", e1.getMessage()));
-			//infoWindow.outputText.setForeground(Color.RED);
 			Info.log(String.format("Error, cannot write to file: %s", e1.getMessage()), true);
 			e1.printStackTrace();
 		}
-
-		//System.out.print("finishing data for team: " + data.split(",")[0] + "\n");
-		//infoWindow.outputText.setText("Writing data...");
-		//infoWindow.outputText.setForeground(Color.BLACK);
 		Info.log("Writing data...", false);
 		try {
 			fw.close();
 		} catch (IOException e1) {
-			//System.out.println("Error, cannot close streams: " + e1.getMessage());
-			//infoWindow.outputText.setText(String.format("Error, close stream: %s", e1.getMessage()));
-			//infoWindow.outputText.setForeground(Color.RED);
 			Info.log("Error, cannot close streams: " + e1.getMessage(), true);
 			e1.printStackTrace();
 		}
 
-		//infoWindow.outputText.setText(String.format("Data written successfully for team: %s!", data.split(",")[0]));
-		//infoWindow.outputText.setForeground(Color.BLACK);
 		Info.log(String.format("Data written successfully for team: %s!", data.split(",")[0]), false);
-		//System.out.println("Data written successfully!");
 	}
 
 }

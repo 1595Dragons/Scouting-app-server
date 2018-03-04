@@ -148,7 +148,6 @@ public class Info {
 
 	}
 	
-	
 	public static void log(String message, boolean error) {
 		//Info infoWindow = new Info();
 		if (error) {
