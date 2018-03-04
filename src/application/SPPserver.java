@@ -1,7 +1,5 @@
 package application;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,6 +39,7 @@ public class SPPserver extends Thread {
 					e1.printStackTrace();
 				}
 
+				/*
 				// Write the data to a CSV file
 				Info.log("Writing data to file", false);
 				FileWriter fw = null;
@@ -58,10 +57,13 @@ public class SPPserver extends Thread {
 					Info.log(String.format("Error, cannot write to file: %s", e1.getMessage()), true);
 					e1.printStackTrace();
 				}
+				*/
+				Info.writeToFile(lineRead);
+				
 
 				// Try closing the writer and stream
 				try {
-					fw.close();
+					//fw.close();
 					bReader.close();
 					inStream.close();
 				} catch (IOException e1) {
@@ -70,7 +72,7 @@ public class SPPserver extends Thread {
 				}
 
 				// Success!
-				Info.log(String.format("Data written for team: %s!", lineRead.split(",")[0]), false);
+				//Info.log(String.format("Data written for team: %s!", lineRead.split(",")[0]), false);
 				try {
 					connection.close();
 				} catch (IOException e) {

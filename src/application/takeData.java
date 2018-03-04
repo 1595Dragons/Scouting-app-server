@@ -7,9 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -47,7 +44,6 @@ public class takeData extends Thread {
 	public void run() {
 		init();
 	}
-	// TODO: Did not climb: 0, Only them: 1, PLus 1 climb: 2, All climb (Not achieveable by ramp bots): 3
 	
 	public void init() {
 		window = new JFrame("Data Collector");
@@ -139,11 +135,11 @@ public class takeData extends Thread {
 	public void startGUI() {
 		// this.window.pack();
 		this.window.setSize(780, 1400);
+		this.window.setVisible(true);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		this.window.setLocation(d.width / 2 - this.window.getSize().width / 2,
 				d.height / 2 - this.window.getSize().height / 2);
 		readyListeners();
-		this.window.setVisible(true);
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -190,7 +186,7 @@ public class takeData extends Thread {
 								takeData.this.teleScale.isSelected(), takeData.this.cubeNumber.getValue(), climbValue)
 						.toUpperCase();
 				//System.out.println(data);
-				writeToFile(data);
+				Info.writeToFile(data);
 
 				reset();
 			}
@@ -198,34 +194,6 @@ public class takeData extends Thread {
 		});
 
 
-	}
-
-	public static void writeToFile(String data) {
-		FileWriter fw = null;
-
-		try {
-			fw = new FileWriter(new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath(),
-					true);
-		} catch (IOException e1) {
-			Info.log(String.format("Error, cannot edit file: %s", e1.getMessage()), true);
-			e1.printStackTrace();
-		}
-		try {
-			fw.append(System.getProperty("line.separator") + data);
-			fw.flush();
-		} catch (IOException e1) {
-			Info.log(String.format("Error, cannot write to file: %s", e1.getMessage()), true);
-			e1.printStackTrace();
-		}
-		Info.log("Writing data...", false);
-		try {
-			fw.close();
-		} catch (IOException e1) {
-			Info.log("Error, cannot close streams: " + e1.getMessage(), true);
-			e1.printStackTrace();
-		}
-
-		Info.log(String.format("Data written successfully for team: %s!", data.split(",")[0]), false);
 	}
 
 }
