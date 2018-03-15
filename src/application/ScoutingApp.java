@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.bluetooth.BluetoothStateException;
+import javax.bluetooth.RemoteDevice;
 import javax.bluetooth.UUID;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
@@ -56,9 +57,9 @@ public class ScoutingApp {
 						"Has an auto",
 						"Can place on switch during auto",
 						"Can place on scale during auto",
-						"Can place on switch during teleOp",
-						"Can place on scale during teleOP",
-						"Number of cubes placed",
+						"Number of cubes placed on switch",
+						"Number of cubes placed on scale",
+						"Number of cubes placed in exchange",
 						"Climb value",
 						"Comments"));
 				write.newLine();
@@ -72,9 +73,26 @@ public class ScoutingApp {
 			
 			
 			
-		} else {
+		} 
+		else {
 			// File was found, all is good.
-			Info.log("File successfully found", false);
+			Info.log("Files successfully found", false);
+		}
+		
+		if (!(new File(System.getProperty("user.dir") + "/pit_data.csv")).exists()) {
+			String csv = new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath();
+		
+			
+			BufferedWriter write = null;
+			try {
+				write = new BufferedWriter(new FileWriter(csv, true));
+			} catch (IOException e) {
+				Info.log(String.format("Error creating file writer: %s", e.getMessage()), true);
+				
+			}
+			
+			
+			
 		}
 
 		
@@ -104,6 +122,7 @@ public class ScoutingApp {
 			try {
 				currentConnection = streamConnNotifier.acceptAndOpen();
 				if (currentConnection != null) {
+					Info.deviceConnect(RemoteDevice.getRemoteDevice(currentConnection).getFriendlyName(false));
 					new Thread(new SPPserver()).start();
 				}
 			} catch (IOException e) {

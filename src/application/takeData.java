@@ -186,7 +186,7 @@ public class takeData extends Thread {
 								takeData.this.teleScale.isSelected(), takeData.this.cubeNumber.getValue(), climbValue)
 						.toUpperCase();
 				//System.out.println(data);
-				Info.writeToFile(data);
+				Info.writeToFileStandScouting(data);
 
 				reset();
 			}

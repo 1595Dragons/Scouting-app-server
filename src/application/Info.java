@@ -8,10 +8,8 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.bluetooth.BluetoothStateException;
-import javax.bluetooth.DiscoveryAgent;
 import javax.bluetooth.LocalDevice;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,10 +18,11 @@ public class Info {
 
 	JFrame window;
 
-	JLabel mac, output, fileLocaion, devices, deviceListT;
+	JLabel mac, output, fileLocaion, devices;
 	static JLabel outputText = new JLabel("");
-
-	int deviceHeight;
+	static JLabel devicesList = new JLabel("None");
+	
+	static int deviceNumber = 0;
 
 	GridBagConstraints layout;
 
@@ -41,47 +40,10 @@ public class Info {
 			fileLocaion = new JLabel(String.format("<html><br ><center>CSV file locaion: <br >%s</center></html>",
 					new File(System.getProperty("user.dir") + "/scouting_data.csv").getPath()));
 			devices = new JLabel();
-			deviceListT = new JLabel();
-			getDevices();
 			addComponents();
 		} else {
 			System.exit(0);
 		}
-	}
-
-	public void getDevices() {
-		String[] device;
-		boolean canGetDevices = false;
-		try {
-			this.deviceHeight = LocalDevice.getLocalDevice().getDiscoveryAgent()
-					.retrieveDevices(DiscoveryAgent.PREKNOWN).length;
-			device = new String[this.deviceHeight];
-			canGetDevices = true;
-		} catch (BluetoothStateException e) {
-			device = new String[2];
-			device[0] = "Error: Cannot get devices!";
-			device[1] = e.getMessage();
-			canGetDevices = false;
-		}
-		if (canGetDevices) {
-			for (int i = 0; i < this.deviceHeight; i++) {
-				try {
-					device[i] = (LocalDevice.getLocalDevice().getDiscoveryAgent()
-							.retrieveDevices(DiscoveryAgent.PREKNOWN))[i].getFriendlyName(false);
-				} catch (BluetoothStateException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			this.devices.setText("<html><br ><center>List of devices:<br ></html>");
-			this.deviceListT.setText(Arrays.toString(device).replace("[", "").replace("]", ""));
-		} else {
-			this.devices.setText(String.format("<html><center>%s</center></html>", Arrays.toString(device).replace("[", "").replace("]", "")));
-		}
-
 	}
 
 	public void addComponents() {
@@ -127,10 +89,10 @@ public class Info {
 		
 		this.layout.gridx = 0;
 		this.layout.gridy = 6;
-		this.layout.gridwidth = this.deviceHeight;
+		this.layout.gridwidth = 6;
 		this.layout.gridheight = 1;
-		this.deviceListT.setFont(new Font(null, Font.BOLD, 25));
-		this.window.add(this.deviceListT, this.layout);
+		devicesList.setFont(new Font(null, Font.BOLD, 25));
+		this.window.add(devicesList, this.layout);
 
 		startGUI();
 
@@ -161,8 +123,30 @@ public class Info {
 			
 		}
 	}
-
-	public static void writeToFile(String data) {
+	
+	public static void deviceConnect (String deviceName) {
+		devicesList.setText(devicesList.getText().replace("None", ""));
+		deviceNumber++;
+		if (deviceNumber == 1) {
+			devicesList.setText(deviceName);
+		} else {
+			devicesList.setText(String.format("%s, %s", devicesList.getText(), deviceName));
+		}
+		
+	}
+	
+	public static void deviceDisconnect(String deviceName) {
+		devicesList.setText(devicesList.getText().replace(deviceName, ""));
+		if (devicesList.getText().startsWith(", ")) {
+			devicesList.setText(devicesList.getText().replaceFirst(", ", ""));
+		}
+		deviceNumber--;
+		if (deviceNumber == 0) {
+			devicesList.setText("None");
+		}
+	}
+	
+	public static void writeToFileStandScouting(String data) {
 		// Write the data to a CSV file
 		log("Writing data to file", false);
 		FileWriter fw = null;
@@ -203,5 +187,7 @@ public class Info {
 		}
 		
 	}
+	
+	
 	
 }

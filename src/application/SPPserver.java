@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.bluetooth.RemoteDevice;
 import javax.microedition.io.StreamConnection;
 
 public class SPPserver extends Thread {
@@ -14,8 +15,8 @@ public class SPPserver extends Thread {
 		if (connection != null) {
 			synchronized (connection) {
 				
-				Info.log("Retreving data...", false);
-
+				Info.log("Phone connected", false);
+				
 				// Get the stream from the bluetooth connection
 				InputStream inStream = null;
 				try {
@@ -38,32 +39,16 @@ public class SPPserver extends Thread {
 					Info.log(String.format("Error, cannot read stream: %s", e1.getMessage()), true);
 					e1.printStackTrace();
 				}
+				System.out.println(lineRead);
 
-				/*
-				// Write the data to a CSV file
-				Info.log("Writing data to file", false);
-				FileWriter fw = null;
-				try {
-					fw = new FileWriter(
-							new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath(), true);
-				} catch (IOException e1) {
-					Info.log(String.format("Error, cannot edit file: %s", e1.getMessage()), true);
-					e1.printStackTrace();
-				}
-				try {
-					fw.append(System.getProperty("line.separator") + lineRead);
-					fw.flush();
-				} catch (IOException e1) {
-					Info.log(String.format("Error, cannot write to file: %s", e1.getMessage()), true);
-					e1.printStackTrace();
-				}
-				*/
-				Info.writeToFile(lineRead);
+				Info.writeToFileStandScouting(lineRead);
 				
 
 				// Try closing the writer and stream
+				
 				try {
 					//fw.close();
+					Info.deviceDisconnect(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
 					bReader.close();
 					inStream.close();
 				} catch (IOException e1) {
@@ -72,13 +57,14 @@ public class SPPserver extends Thread {
 				}
 
 				// Success!
-				//Info.log(String.format("Data written for team: %s!", lineRead.split(",")[0]), false);
+				
 				try {
 					connection.close();
 				} catch (IOException e) {
 					Info.log(String.format("Error closing connections: %s", e.getMessage()), true);
 					e.printStackTrace();
 				}
+				
 
 			}
 		} else {
