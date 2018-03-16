@@ -55,13 +55,10 @@ public class Info {
 	public void init() throws BluetoothStateException {
 		if (checkBT()) {
 			window = new JFrame("1595 Scouting App");
-			layout = new GridBagConstraints();
-			mac = new JLabel(String.format("Device MAC address: %s",
-					LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase()));
-			output = new JLabel("<html><br ><center>Output:</center></html>");
-			fileLocaion = new JLabel(String.format("<html><br ><center>CSV file locaion: <br >%s</center></html>",
-					new File(System.getProperty("user.dir") + "/scouting_data.csv").getPath()));
-			devices = new JLabel();
+			this.MacAddressText.setText(LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase());
+			this.FileLocationText.setText(new File(System.getProperty("user.dir") + "/").getAbsolutePath());
+			// layout = new GridBagConstraints();
+
 			addComponents();
 		} else {
 			System.exit(0);
