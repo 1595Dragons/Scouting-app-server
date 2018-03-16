@@ -39,7 +39,7 @@ public class SPPserver extends Thread {
 					Info.log(String.format("Error, cannot read stream: %s", e1.getMessage()), true);
 					e1.printStackTrace();
 				}
-				System.out.println(lineRead);
+				//System.out.println(lineRead);
 				if (lineRead.startsWith("pit")) {
 					lineRead = lineRead.replace("pit,", "");
 					Info.writeToFilePitScouting(lineRead);
