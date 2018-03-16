@@ -40,9 +40,12 @@ public class SPPserver extends Thread {
 					e1.printStackTrace();
 				}
 				System.out.println(lineRead);
-
-				Info.writeToFileStandScouting(lineRead);
-				
+				if (lineRead.startsWith("pit")) {
+					lineRead = lineRead.replace("pit,", "");
+					Info.writeToFilePitScouting(lineRead);
+				} else {
+					Info.writeToFileStandScouting(lineRead);
+				}
 
 				// Try closing the writer and stream
 				

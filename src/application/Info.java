@@ -1,4 +1,5 @@
 package application;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -21,7 +22,7 @@ public class Info {
 	JLabel mac, output, fileLocaion, devices;
 	static JLabel outputText = new JLabel("");
 	static JLabel devicesList = new JLabel("None");
-	
+
 	static int deviceNumber = 0;
 
 	GridBagConstraints layout;
@@ -86,7 +87,7 @@ public class Info {
 		this.layout.gridheight = 1;
 		this.devices.setFont(new Font(null, Font.BOLD, 25));
 		this.window.add(this.devices, this.layout);
-		
+
 		this.layout.gridx = 0;
 		this.layout.gridy = 6;
 		this.layout.gridwidth = 6;
@@ -99,11 +100,11 @@ public class Info {
 	}
 
 	public void startGUI() {
-		//this.window.pack();
+		// this.window.pack();
 		this.window.setSize(1058, 450); // 778, 1058
 
 		this.window.setVisible(true);
-		
+
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		this.window.setLocation((d.width / 2 - this.window.getSize().width / 2) - 500,
 				(d.height / 2 - this.window.getSize().height / 2) - 300);
@@ -111,20 +112,20 @@ public class Info {
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	}
-	
+
 	public static void log(String message, boolean error) {
-		//Info infoWindow = new Info();
+		// Info infoWindow = new Info();
 		if (error) {
 			outputText.setText(message);
 			outputText.setForeground(Color.RED);
 		} else {
 			outputText.setText(message);
 			outputText.setForeground(Color.BLACK);
-			
+
 		}
 	}
-	
-	public static void deviceConnect (String deviceName) {
+
+	public static void deviceConnect(String deviceName) {
 		devicesList.setText(devicesList.getText().replace("None", ""));
 		deviceNumber++;
 		if (deviceNumber == 1) {
@@ -132,9 +133,9 @@ public class Info {
 		} else {
 			devicesList.setText(String.format("%s, %s", devicesList.getText(), deviceName));
 		}
-		
+
 	}
-	
+
 	public static void deviceDisconnect(String deviceName) {
 		devicesList.setText(devicesList.getText().replace(deviceName, ""));
 		if (devicesList.getText().startsWith(", ")) {
@@ -145,14 +146,14 @@ public class Info {
 			devicesList.setText("None");
 		}
 	}
-	
+
 	public static void writeToFileStandScouting(String data) {
 		// Write the data to a CSV file
 		log("Writing data to file", false);
 		FileWriter fw = null;
 		try {
-			fw = new FileWriter(
-					new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath(), true);
+			fw = new FileWriter(new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath(),
+					true);
 		} catch (IOException e1) {
 			log(String.format("Error, cannot edit file: %s", e1.getMessage()), true);
 			e1.printStackTrace();
@@ -177,17 +178,53 @@ public class Info {
 			e1.printStackTrace();
 			return;
 		}
-		
-		
+
 		// Report success!
 		if (success) {
 			log(String.format("Successfully written data for team: %s", data.split(",")[0]), false);
 		} else {
 			return;
 		}
-		
+
 	}
-	
-	
-	
+
+	public static void writeToFilePitScouting(String data) {
+		log("Writing data to file", false);
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(new File(System.getProperty("user.dir") + "/pit_data.csv").getAbsolutePath(), true);
+		} catch (IOException e1) {
+			log(String.format("Error, cannot edit file: %s", e1.getMessage()), true);
+			e1.printStackTrace();
+			return;
+		}
+		boolean success = false;
+		try {
+			fw.append(System.getProperty("line.separator") + data);
+			fw.flush();
+			success = true;
+		} catch (IOException e1) {
+			log(String.format("Error, cannot write to file: %s", e1.getMessage()), true);
+			e1.printStackTrace();
+			success = false;
+		}
+
+		// Try closing the writer
+		try {
+			fw.close();
+		} catch (IOException e1) {
+			log(String.format("Error, cannot close stream: %s", e1.getMessage()), true);
+			e1.printStackTrace();
+			return;
+		}
+
+		// Report success!
+		if (success) {
+			log(String.format("Successfully written data for team: %s", data.split(",")[0]), false);
+		} else {
+			return;
+		}
+
+	}
+
 }
