@@ -1,10 +1,12 @@
 package application;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileWriter;
@@ -12,20 +14,39 @@ import java.io.IOException;
 
 import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.LocalDevice;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 public class Info {
 
 	JFrame window;
 
-	JLabel mac, output, fileLocaion, devices;
-	static JLabel outputText = new JLabel("");
-	static JLabel devicesList = new JLabel("None");
+	JPanel contentPane;
 
-	static int deviceNumber = 0;
+	JLabel MacAddressHeader = new JLabel("MAC Address: "), MacAddressText = new JLabel("----"),
+			FileLocationHeader = new JLabel("File location: "), FileLocationText = new JLabel("~/"),
+			outputHeader = new JLabel("Output:"), ConnectedDevicesHeader = new JLabel("Connected devices:");
 
-	GridBagConstraints layout;
+	static JLabel output = new JLabel("-"), Device1 = new JLabel("None"), Device2 = new JLabel("None"),
+			Device3 = new JLabel("None"), Device4 = new JLabel("None"), Device5 = new JLabel("None"),
+			Device6 = new JLabel("None");
+
+	// JLabel mac, fileLocaion, deviceHeader, device1, device2, device3, device4,
+	// device5, device6;
+
+	ImageIcon connected1, connected2, connected3, connnected4, connected5, connected6, disconnected1, disconneted2,
+			disconnected3, disconnected4, disconnected5, disconnected6;
+
+	// static JLabel outputText = new JLabel("");
+	// static JLabel devicesList = new JLabel("None");
+
+	static int connectedDevices = 0;
+
+	// GridBagConstraints layout;
 
 	public boolean checkBT() {
 		return LocalDevice.isPowerOn();
@@ -48,52 +69,171 @@ public class Info {
 	}
 
 	public void addComponents() {
-		this.window.setLayout(new GridBagLayout());
-		this.layout.weighty = 1;
-		this.layout.anchor = GridBagConstraints.NORTH;
-		this.layout.ipady = 5;
+		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.window.setBounds(100, 100, 1309, 650);
+		this.contentPane = new JPanel();
+		this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		this.window.setContentPane(contentPane);
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[] { 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70,
+				70, 0 };
+		gbl_contentPane.rowHeights = new int[] { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 0 };
+		gbl_contentPane.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				Double.MIN_VALUE };
+		this.contentPane.setLayout(gbl_contentPane);
 
-		this.layout.gridx = 0;
-		this.layout.gridy = 0;
-		this.layout.gridwidth = 1;
-		this.layout.gridheight = 1;
-		this.mac.setFont(new Font(null, Font.BOLD, 25));
-		this.window.add(this.mac, this.layout);
+		this.MacAddressHeader.setFont(new Font("Verdana", Font.PLAIN, 25));
+		GridBagConstraints gbc_MacAddressHeader = new GridBagConstraints();
+		gbc_MacAddressHeader.anchor = GridBagConstraints.EAST;
+		gbc_MacAddressHeader.gridwidth = 9;
+		gbc_MacAddressHeader.insets = new Insets(0, 0, 5, 5);
+		gbc_MacAddressHeader.gridx = 0;
+		gbc_MacAddressHeader.gridy = 0;
+		this.contentPane.add(MacAddressHeader, gbc_MacAddressHeader);
 
-		this.layout.gridx = 0;
-		this.layout.gridy = 1;
-		this.layout.gridwidth = 1;
-		this.layout.gridheight = 2;
-		this.fileLocaion.setFont(new Font(null, Font.BOLD, 25));
-		this.window.add(this.fileLocaion, this.layout);
+		this.MacAddressText.setFont(new Font("Verdana", Font.BOLD, 22));
+		GridBagConstraints gbc_MacAddressText = new GridBagConstraints();
+		gbc_MacAddressText.anchor = GridBagConstraints.WEST;
+		gbc_MacAddressText.gridwidth = 9;
+		gbc_MacAddressText.insets = new Insets(0, 0, 5, 0);
+		gbc_MacAddressText.gridx = 9;
+		gbc_MacAddressText.gridy = 0;
+		this.contentPane.add(MacAddressText, gbc_MacAddressText);
 
-		this.layout.gridx = 0;
-		this.layout.gridy = 3;
-		this.layout.gridwidth = 1;
-		this.layout.gridheight = 1;
-		this.output.setFont(new Font(null, Font.BOLD, 25));
-		this.window.add(this.output, this.layout);
+		Component verticalStrut = Box.createVerticalStrut(20);
+		GridBagConstraints gbc_verticalStrut = new GridBagConstraints();
+		gbc_verticalStrut.gridwidth = 18;
+		gbc_verticalStrut.fill = GridBagConstraints.HORIZONTAL;
+		gbc_verticalStrut.insets = new Insets(0, 0, 5, 0);
+		gbc_verticalStrut.gridx = 0;
+		gbc_verticalStrut.gridy = 1;
+		this.contentPane.add(verticalStrut, gbc_verticalStrut);
 
-		this.layout.gridx = 0;
-		this.layout.gridy = 4;
-		this.layout.gridwidth = 1;
-		this.layout.gridheight = 1;
-		outputText.setFont(new Font(null, Font.BOLD, 25));
-		this.window.add(outputText, this.layout);
+		this.FileLocationHeader.setFont(new Font("Verdana", Font.PLAIN, 25));
+		GridBagConstraints gbc_FileLocationHeader = new GridBagConstraints();
+		gbc_FileLocationHeader.anchor = GridBagConstraints.EAST;
+		gbc_FileLocationHeader.gridwidth = 4;
+		gbc_FileLocationHeader.insets = new Insets(0, 0, 5, 5);
+		gbc_FileLocationHeader.gridx = 0;
+		gbc_FileLocationHeader.gridy = 2;
+		this.contentPane.add(FileLocationHeader, gbc_FileLocationHeader);
 
-		this.layout.gridx = 0;
-		this.layout.gridy = 5;
-		this.layout.gridwidth = 1;
-		this.layout.gridheight = 1;
-		this.devices.setFont(new Font(null, Font.BOLD, 25));
-		this.window.add(this.devices, this.layout);
+		this.FileLocationText.setFont(new Font("Verdana", Font.BOLD, 22));
+		GridBagConstraints gbc_FileLocationText = new GridBagConstraints();
+		gbc_FileLocationText.anchor = GridBagConstraints.WEST;
+		gbc_FileLocationText.gridwidth = 14;
+		gbc_FileLocationText.insets = new Insets(0, 0, 5, 0);
+		gbc_FileLocationText.gridx = 4;
+		gbc_FileLocationText.gridy = 2;
+		this.contentPane.add(FileLocationText, gbc_FileLocationText);
 
-		this.layout.gridx = 0;
-		this.layout.gridy = 6;
-		this.layout.gridwidth = 6;
-		this.layout.gridheight = 1;
-		devicesList.setFont(new Font(null, Font.BOLD, 25));
-		this.window.add(devicesList, this.layout);
+		Component verticalStrut_2 = Box.createVerticalStrut(20);
+		GridBagConstraints gbc_verticalStrut_2 = new GridBagConstraints();
+		gbc_verticalStrut_2.gridheight = 2;
+		gbc_verticalStrut_2.gridwidth = 18;
+		gbc_verticalStrut_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_verticalStrut_2.insets = new Insets(0, 0, 5, 0);
+		gbc_verticalStrut_2.gridx = 0;
+		gbc_verticalStrut_2.gridy = 3;
+		this.contentPane.add(verticalStrut_2, gbc_verticalStrut_2);
+
+		this.outputHeader.setFont(new Font("Verdana", Font.PLAIN, 25));
+		GridBagConstraints gbc_outputHeader = new GridBagConstraints();
+		gbc_outputHeader.gridwidth = 18;
+		gbc_outputHeader.insets = new Insets(0, 0, 5, 0);
+		gbc_outputHeader.gridx = 0;
+		gbc_outputHeader.gridy = 5;
+		this.contentPane.add(outputHeader, gbc_outputHeader);
+
+		
+		output.setFont(new Font("Verdana", Font.PLAIN, 22));
+		GridBagConstraints gbc_output = new GridBagConstraints();
+		gbc_output.gridheight = 2;
+		gbc_output.gridwidth = 18;
+		gbc_output.insets = new Insets(0, 0, 5, 0);
+		gbc_output.gridx = 0;
+		gbc_output.gridy = 6;
+		this.contentPane.add(output, gbc_output);
+
+		Component verticalStrut_4 = Box.createVerticalStrut(20);
+		GridBagConstraints gbc_verticalStrut_4 = new GridBagConstraints();
+		gbc_verticalStrut_4.gridwidth = 18;
+		gbc_verticalStrut_4.fill = GridBagConstraints.HORIZONTAL;
+		gbc_verticalStrut_4.insets = new Insets(0, 0, 5, 0);
+		gbc_verticalStrut_4.gridx = 0;
+		gbc_verticalStrut_4.gridy = 8;
+		this.contentPane.add(verticalStrut_4, gbc_verticalStrut_4);
+
+		this.ConnectedDevicesHeader.setFont(new Font("Verdana", Font.PLAIN, 25));
+		GridBagConstraints gbc_ConnectedDevicesHeader = new GridBagConstraints();
+		gbc_ConnectedDevicesHeader.gridwidth = 18;
+		gbc_ConnectedDevicesHeader.insets = new Insets(0, 0, 5, 0);
+		gbc_ConnectedDevicesHeader.gridx = 0;
+		gbc_ConnectedDevicesHeader.gridy = 9;
+		this.contentPane.add(ConnectedDevicesHeader, gbc_ConnectedDevicesHeader);
+
+		Component verticalStrut_5 = Box.createVerticalStrut(20);
+		GridBagConstraints gbc_verticalStrut_5 = new GridBagConstraints();
+		gbc_verticalStrut_5.insets = new Insets(0, 0, 5, 5);
+		gbc_verticalStrut_5.gridx = 2;
+		gbc_verticalStrut_5.gridy = 10;
+		this.contentPane.add(verticalStrut_5, gbc_verticalStrut_5);
+
+		Device1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		GridBagConstraints gbc_Device1 = new GridBagConstraints();
+		gbc_Device1.gridheight = 2;
+		gbc_Device1.gridwidth = 3;
+		gbc_Device1.insets = new Insets(0, 0, 0, 5);
+		gbc_Device1.gridx = 0;
+		gbc_Device1.gridy = 11;
+		this.contentPane.add(Device1, gbc_Device1);
+
+		
+		Device2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		GridBagConstraints gbc_Device2 = new GridBagConstraints();
+		gbc_Device2.gridheight = 2;
+		gbc_Device2.gridwidth = 3;
+		gbc_Device2.insets = new Insets(0, 0, 0, 5);
+		gbc_Device2.gridx = 3;
+		gbc_Device2.gridy = 11;
+		this.contentPane.add(Device2, gbc_Device2);
+
+		Device3.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		GridBagConstraints gbc_Device3 = new GridBagConstraints();
+		gbc_Device3.gridheight = 2;
+		gbc_Device3.gridwidth = 3;
+		gbc_Device3.insets = new Insets(0, 0, 0, 5);
+		gbc_Device3.gridx = 6;
+		gbc_Device3.gridy = 11;
+		this.contentPane.add(Device3, gbc_Device3);
+
+		Device4.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		GridBagConstraints gbc_Device4 = new GridBagConstraints();
+		gbc_Device4.gridheight = 2;
+		gbc_Device4.gridwidth = 3;
+		gbc_Device4.insets = new Insets(0, 0, 0, 5);
+		gbc_Device4.gridx = 9;
+		gbc_Device4.gridy = 11;
+		this.contentPane.add(Device4, gbc_Device4);
+
+		Device5.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		GridBagConstraints gbc_Device5 = new GridBagConstraints();
+		gbc_Device5.gridheight = 2;
+		gbc_Device5.gridwidth = 3;
+		gbc_Device5.insets = new Insets(0, 0, 0, 5);
+		gbc_Device5.gridx = 12;
+		gbc_Device5.gridy = 11;
+		this.contentPane.add(Device5, gbc_Device5);
+
+		Device6.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		GridBagConstraints gbc_Device6 = new GridBagConstraints();
+		gbc_Device6.gridheight = 2;
+		gbc_Device6.gridwidth = 3;
+		gbc_Device6.gridx = 15;
+		gbc_Device6.gridy = 11;
+		this.contentPane.add(Device6, gbc_Device6);
 
 		startGUI();
 
@@ -101,7 +241,7 @@ public class Info {
 
 	public void startGUI() {
 		// this.window.pack();
-		this.window.setSize(1058, 450); // 778, 1058
+		// this.window.setSize(1058, 450); // 778, 1058
 
 		this.window.setVisible(true);
 
@@ -116,35 +256,38 @@ public class Info {
 	public static void log(String message, boolean error) {
 		// Info infoWindow = new Info();
 		if (error) {
-			outputText.setText(message);
-			outputText.setForeground(Color.RED);
+			output.setText(message);
+			output.setForeground(Color.RED);
 		} else {
-			outputText.setText(message);
-			outputText.setForeground(Color.BLACK);
+			output.setText(message);
+			output.setForeground(Color.BLACK);
 
 		}
 	}
 
+	// TODO: Figure out newish device management
 	public static void deviceConnect(String deviceName) {
-		devicesList.setText(devicesList.getText().replace("None", ""));
-		deviceNumber++;
-		if (deviceNumber == 1) {
+		//devicesList.setText(devicesList.getText().replace("None", ""));
+		connectedDevices++;
+		/*
+		if (connectedDevices == 1) {
 			devicesList.setText(deviceName);
 		} else {
 			devicesList.setText(String.format("%s, %s", devicesList.getText(), deviceName));
 		}
+		*/
 
 	}
 
 	public static void deviceDisconnect(String deviceName) {
-		devicesList.setText(devicesList.getText().replace(deviceName, ""));
-		if (devicesList.getText().startsWith(", ")) {
-			devicesList.setText(devicesList.getText().replaceFirst(", ", ""));
-		}
-		deviceNumber--;
-		if (deviceNumber == 0) {
-			devicesList.setText("None");
-		}
+		//devicesList.setText(devicesList.getText().replace(deviceName, ""));
+		//if (devicesList.getText().startsWith(", ")) {
+			//devicesList.setText(devicesList.getText().replaceFirst(", ", ""));
+		//}
+		connectedDevices--;
+		//if (connectedDevices == 0) {
+			//devicesList.setText("None");
+		//}
 	}
 
 	public static void writeToFileStandScouting(String data) {

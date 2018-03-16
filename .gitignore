@@ -25,3 +25,4 @@ hs_err_pid*
 .project
 scouting_data.csv
 pit_data.csv
+src/application/testWindow.java
