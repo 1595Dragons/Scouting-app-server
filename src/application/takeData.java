@@ -425,12 +425,15 @@ public class takeData extends Thread {
 				} else if (allClimb.isSelected()) {
 					climbValue = 3;
 				}
-				data = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", takeData.this.teamNumber,
-						(byte) (hasAuto.isSelected() ? 1 : 0), (byte) (switchAuto.isSelected() ? 1 : 0),
+				data = String.format("%s,%s,%s,%s,%s,%s,%s,%s", 
+						takeData.this.teamNumber,
+						(byte) (hasAuto.isSelected() ? 1 : 0),
+						(byte) (switchAuto.isSelected() ? 1 : 0),
 						(byte) (scaleAuto.isSelected() ? 1 : 0),
-						(byte) teleSwitchValue.getValue() + (byte) (switchAuto.isSelected() ? 1 : 0),
-						(byte) teleScaleValue.getValue() + (byte) (scaleAuto.isSelected() ? 1 : 0),
-						(byte) teleExchangeValue.getValue(), climbValue);
+						Byte.parseByte(teleSwitchValue.getValue().toString()) + (byte) (switchAuto.isSelected() ? 1 : 0),
+						Byte.parseByte(teleScaleValue.getValue().toString()) + (byte) (scaleAuto.isSelected() ? 1 : 0),
+						Byte.parseByte(teleExchangeValue.getValue().toString()), 
+						climbValue);
 
 				Info.writeToFileStandScouting(data);
 
