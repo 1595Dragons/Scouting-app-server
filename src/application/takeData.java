@@ -2,6 +2,7 @@ package application;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -18,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 public class takeData extends Thread {
@@ -239,8 +241,13 @@ public class takeData extends Thread {
 		gbc_teleSwitchTele.gridy = 12;
 		this.window.getContentPane().add(teleSwitchTele, gbc_teleSwitchTele);
 
-		JSpinner teleSwitchValue = new JSpinner();
+		SpinnerNumberModel mod1 = new SpinnerNumberModel(0, 0, 25, 1);
+		
+		JSpinner teleSwitchValue = new JSpinner(mod1);
 		teleSwitchValue.setFont(new Font("Verdana", Font.PLAIN, 30));
+		Dimension d = teleSwitchValue.getPreferredSize();
+		d.width = 100;
+		teleSwitchValue.setPreferredSize(d);
 		GridBagConstraints gbc_teleSwitchValue = new GridBagConstraints();
 		gbc_teleSwitchValue.gridwidth = 2;
 		gbc_teleSwitchValue.insets = new Insets(0, 0, 5, 0);
@@ -265,9 +272,11 @@ public class takeData extends Thread {
 		gbc_teleScaleTele.gridy = 15;
 		this.window.getContentPane().add(teleScaleTele, gbc_teleScaleTele);
 
-		JSpinner teleScaleValue = new JSpinner();
+		SpinnerNumberModel mod2 = new SpinnerNumberModel(0, 0, 25, 1);
+		JSpinner teleScaleValue = new JSpinner(mod2);
 		teleScaleValue.setFont(new Font("Verdana", Font.PLAIN, 30));
 		GridBagConstraints gbc_teleScaleValue = new GridBagConstraints();
+		teleScaleValue.setPreferredSize(d);
 		gbc_teleScaleValue.gridwidth = 2;
 		gbc_teleScaleValue.insets = new Insets(0, 0, 5, 0);
 		gbc_teleScaleValue.gridx = 0;
@@ -291,10 +300,12 @@ public class takeData extends Thread {
 		gbc_teleExchangeHeader.gridy = 18;
 		this.window.getContentPane().add(teleExchangeHeader, gbc_teleExchangeHeader);
 
-		JSpinner teleExchangeValue = new JSpinner();
+		SpinnerNumberModel mod3 = new SpinnerNumberModel(0, 0, 25, 1);
+		JSpinner teleExchangeValue = new JSpinner(mod3);
 		teleExchangeValue.setFont(new Font("Verdana", Font.PLAIN, 30));
 		GridBagConstraints gbc_teleExchangeValue = new GridBagConstraints();
 		gbc_teleExchangeValue.gridwidth = 2;
+		teleExchangeValue.setPreferredSize(d);
 		gbc_teleExchangeValue.insets = new Insets(0, 0, 5, 0);
 		gbc_teleExchangeValue.gridx = 0;
 		gbc_teleExchangeValue.gridy = 19;
@@ -393,6 +404,35 @@ public class takeData extends Thread {
 		climberType.add(oneClimb);
 		climberType.add(twoClimb);
 		climberType.add(allClimb);
+		
+		switchAuto.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (switchAuto.isSelected()) {
+					teleSwitchTele.setText(teleSwitchTele.getText() + " (+1)");
+				} else if (!switchAuto.isSelected()) {
+					teleSwitchTele.setText(teleSwitchTele.getText().replace(" (+1)", ""));
+				}
+				
+			}
+			
+		});
+		
+		scaleAuto.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (scaleAuto.isSelected()) {
+					teleScaleTele.setText(teleScaleTele.getText() + " (+1)");
+				} else if (!scaleAuto.isSelected()) {
+					teleScaleTele.setText(teleScaleTele.getText().replace(" (+1)", ""));
+				}
+			}
+			
+		});
+
+		
 
 		Cancel.addActionListener(new ActionListener() {
 
@@ -445,6 +485,8 @@ public class takeData extends Thread {
 				teleSwitchValue.setValue(0);
 				teleScaleValue.setValue(0);
 				teleExchangeValue.setValue(0);
+				teleSwitchTele.setText(teleSwitchTele.getText().replace(" (+1)", ""));
+				teleScaleTele.setText(teleScaleTele.getText().replace(" (+1)", ""));
 				climberType.clearSelection();
 				takeData.this.showPrompt();
 
@@ -456,6 +498,7 @@ public class takeData extends Thread {
 
 	public void showPrompt() {
 		this.teamNumber = 0;
+		this.teamNumberText.requestFocusInWindow();
 		this.promptWindow.setVisible(true);
 	}
 
