@@ -32,7 +32,8 @@ public class SPPserver extends Thread {
 				try {
 					lineRead = bReader.readLine();
 					if (lineRead == null) {
-						Info.log("Error: Data recieved is either incomplete or corrupt", true);
+						Info.log("Device disconnected", false);
+						Info.deviceDisconnect(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
 						return;
 					}
 				} catch (IOException e1) {

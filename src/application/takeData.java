@@ -25,6 +25,8 @@ public class takeData extends Thread {
 	JFrame window = new JFrame("1595 Scouting App"), promptWindow = new JFrame("1595 Scouting App");
 
 	JTextField teamNumberText;
+	
+	JLabel teamToScoutText;
 
 	int teamNumber = 0;
 
@@ -105,6 +107,7 @@ public class takeData extends Thread {
 				try {
 					takeData.this.teamNumber = Integer.parseInt(takeData.this.teamNumberText.getText());
 					takeData.this.promptWindow.setVisible(false);
+					takeData.this.teamToScoutText.setText(String.valueOf(takeData.this.teamNumber));
 					takeData.this.showWindow();
 					takeData.this.teamNumberText.setText("");
 					teamToScoutHeader.setForeground(Color.BLACK);
@@ -138,7 +141,7 @@ public class takeData extends Thread {
 		gbc_ScoutingTeamHeader.gridy = 0;
 		this.window.getContentPane().add(ScoutingTeamHeader, gbc_ScoutingTeamHeader);
 
-		JLabel teamToScoutText = new JLabel("0000");
+		teamToScoutText = new JLabel();
 		teamToScoutText.setHorizontalAlignment(SwingConstants.CENTER);
 		teamToScoutText.setFont(new Font("Verdana", Font.BOLD, 45));
 		GridBagConstraints gbc_teamToScoutText = new GridBagConstraints();
@@ -147,7 +150,6 @@ public class takeData extends Thread {
 		gbc_teamToScoutText.gridx = 1;
 		gbc_teamToScoutText.gridy = 0;
 		this.window.getContentPane().add(teamToScoutText, gbc_teamToScoutText);
-		teamToScoutText.setText(String.valueOf(this.teamNumber));
 
 		Component verticalStrut = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut = new GridBagConstraints();

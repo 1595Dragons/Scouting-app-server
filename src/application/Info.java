@@ -35,18 +35,10 @@ public class Info {
 			Device3 = new JLabel("None"), Device4 = new JLabel("None"), Device5 = new JLabel("None"),
 			Device6 = new JLabel("None");
 
-	// JLabel mac, fileLocaion, deviceHeader, device1, device2, device3, device4,
-	// device5, device6;
-
 	ImageIcon connected1, connected2, connected3, connnected4, connected5, connected6, disconnected1, disconneted2,
 			disconnected3, disconnected4, disconnected5, disconnected6;
 
-	// static JLabel outputText = new JLabel("");
-	// static JLabel devicesList = new JLabel("None");
-
-	static int connectedDevices = 0;
-
-	// GridBagConstraints layout;
+	static String[] connectedDevices = new String[6];
 
 	public boolean checkBT() {
 		return LocalDevice.isPowerOn();
@@ -55,8 +47,12 @@ public class Info {
 	public void init() throws BluetoothStateException {
 		if (checkBT()) {
 			window = new JFrame("1595 Scouting App");
-			this.MacAddressText.setText(LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase());
+			this.MacAddressText.setText(
+					LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase());
 			this.FileLocationText.setText(new File(System.getProperty("user.dir") + "/").getAbsolutePath());
+			for (int i = 0; i < 6; i++) {
+				connectedDevices[i] = "None";
+			}
 			// layout = new GridBagConstraints();
 
 			addComponents();
@@ -144,7 +140,6 @@ public class Info {
 		gbc_outputHeader.gridy = 5;
 		this.contentPane.add(outputHeader, gbc_outputHeader);
 
-		
 		output.setFont(new Font("Verdana", Font.PLAIN, 22));
 		GridBagConstraints gbc_output = new GridBagConstraints();
 		gbc_output.gridheight = 2;
@@ -187,7 +182,6 @@ public class Info {
 		gbc_Device1.gridy = 11;
 		this.contentPane.add(Device1, gbc_Device1);
 
-		
 		Device2.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		GridBagConstraints gbc_Device2 = new GridBagConstraints();
 		gbc_Device2.gridheight = 2;
@@ -262,29 +256,37 @@ public class Info {
 		}
 	}
 
-	// TODO: Figure out newish device management
+	// TODO: Icons?
 	public static void deviceConnect(String deviceName) {
-		//devicesList.setText(devicesList.getText().replace("None", ""));
-		connectedDevices++;
-		/*
-		if (connectedDevices == 1) {
-			devicesList.setText(deviceName);
-		} else {
-			devicesList.setText(String.format("%s, %s", devicesList.getText(), deviceName));
+
+		for (int i = 0; i < 6; i++) {
+			if (connectedDevices[i].equals("None")) {
+				connectedDevices[i] = deviceName;
+				break;
+			}
 		}
-		*/
+		Device1.setText(connectedDevices[0]);
+		Device2.setText(connectedDevices[1]);
+		Device3.setText(connectedDevices[2]);
+		Device4.setText(connectedDevices[3]);
+		Device5.setText(connectedDevices[4]);
+		Device6.setText(connectedDevices[5]);
 
 	}
 
 	public static void deviceDisconnect(String deviceName) {
-		//devicesList.setText(devicesList.getText().replace(deviceName, ""));
-		//if (devicesList.getText().startsWith(", ")) {
-			//devicesList.setText(devicesList.getText().replaceFirst(", ", ""));
-		//}
-		connectedDevices--;
-		//if (connectedDevices == 0) {
-			//devicesList.setText("None");
-		//}
+		for (int i = 0; i < 6; i++) {
+			if (connectedDevices[i].equals(deviceName)) {
+				connectedDevices[i] = "None";
+				break;
+			}
+		}
+		Device1.setText(connectedDevices[0]);
+		Device2.setText(connectedDevices[1]);
+		Device3.setText(connectedDevices[2]);
+		Device4.setText(connectedDevices[3]);
+		Device5.setText(connectedDevices[4]);
+		Device6.setText(connectedDevices[5]);
 	}
 
 	public static void writeToFileStandScouting(String data) {
