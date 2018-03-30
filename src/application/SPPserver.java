@@ -1,4 +1,5 @@
 package application;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,9 +15,7 @@ public class SPPserver extends Thread {
 	public void run() {
 		if (connection != null) {
 			synchronized (connection) {
-				
-				Info.log("Phone connected", false);
-				
+
 				// Get the stream from the bluetooth connection
 				InputStream inStream = null;
 				try {
@@ -40,7 +39,7 @@ public class SPPserver extends Thread {
 					Info.log(String.format("Error, cannot read stream: %s", e1.getMessage()), true);
 					e1.printStackTrace();
 				}
-				//System.out.println(lineRead);
+				// System.out.println(lineRead);
 				if (lineRead.startsWith("pit")) {
 					lineRead = lineRead.replace("pit,", "");
 					Info.writeToFilePitScouting(lineRead);
@@ -49,9 +48,9 @@ public class SPPserver extends Thread {
 				}
 
 				// Try closing the writer and stream
-				
+
 				try {
-					//fw.close();
+					// fw.close();
 					Info.deviceDisconnect(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
 					bReader.close();
 					inStream.close();
@@ -61,14 +60,13 @@ public class SPPserver extends Thread {
 				}
 
 				// Success!
-				
+
 				try {
 					connection.close();
 				} catch (IOException e) {
 					Info.log(String.format("Error closing connections: %s", e.getMessage()), true);
 					e.printStackTrace();
 				}
-				
 
 			}
 		} else {

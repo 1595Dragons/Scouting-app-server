@@ -51,10 +51,11 @@ public class ScoutingApp {
 
 				// Try writing to said file, but report if anything is wrong!
 				try {
-					write.append(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", "Team number", "Has an auto",
-							"Can place on switch during auto", "Can place on scale during auto",
-							"Number of cubes placed on switch", "Number of cubes placed on scale",
-							"Number of cubes placed in exchange", "Climb value", "Comments"));
+					write.append(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", "Team #", "Basic auto",
+							"Switch auto", "Scale auto", "Switch cube", "Scale cube", "Exchange cube",
+							"Side climb (Single)", "Center climb (Single)", "Side climb (Double)",
+							"Center climb (Double)", "Side climb (Tripple)", "Center climb (Tripple)", "Ramp climb",
+							"Comments"));
 					write.newLine();
 					write.flush();
 					write.close();
@@ -78,7 +79,7 @@ public class ScoutingApp {
 				}
 
 				try {
-					write.append(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", "Team number", "Team name (Optional)",
+					write.append(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", "Team #", "Team name (Optional)",
 							"Drive train configuration", "Wheel size (Inches)", "Wheel spaceing (Inches)",
 							"Ground clearance (Inches)", "Auto", "TeleOp", "Climber", "Comments (Optional)"));
 					write.newLine();

@@ -53,7 +53,6 @@ public class Info {
 			for (int i = 0; i < 6; i++) {
 				connectedDevices[i] = "None";
 			}
-			// layout = new GridBagConstraints();
 
 			addComponents();
 		} else {
@@ -231,9 +230,6 @@ public class Info {
 	}
 
 	public void startGUI() {
-		// this.window.pack();
-		// this.window.setSize(1058, 450); // 778, 1058
-
 		this.window.setVisible(true);
 
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -256,7 +252,6 @@ public class Info {
 		}
 	}
 
-	// TODO: Icons?
 	public static void deviceConnect(String deviceName) {
 
 		for (int i = 0; i < 6; i++) {
