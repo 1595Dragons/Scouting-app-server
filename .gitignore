@@ -26,3 +26,7 @@ hs_err_pid*
 scouting_data.csv
 pit_data.csv
 src/application/testWindow.java
+src/application/IntoTest.java
+src/application/displayDialogTest.java
+src/application/InfoTest.java
+src/application/takeDataTest.java
