@@ -20,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+//TODO: If bluetooth is not available, just leave the pit scouting button available, don't just exit
+
 public class Info {
 
 	JFrame window;
