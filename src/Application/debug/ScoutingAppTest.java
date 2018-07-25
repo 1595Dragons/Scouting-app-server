@@ -14,14 +14,14 @@ public class ScoutingAppTest {
 		Debugger.d(ScoutingAppTest.class, "Showing the main info window");
 		infoWindow.showWindow();
 		Debugger.d(ScoutingAppTest.class, "Does file exist?");
-		if (!ScoutingFile.FileExists()) {
+		if (!ScoutingFileTest.FileExists()) {
 			Debugger.d(ScoutingAppTest.class, "Creating file");
-			ScoutingFile.makeFile();
+			ScoutingFileTest.makeFile();
 		}
 		Debugger.d(ScoutingAppTest.class, "Updating file info");
-		ScoutingFile.setFileText();
+		ScoutingFileTest.setFileText();
 		Debugger.d(ScoutingAppTest.class, "Enabling goto button");
-		ScoutingFile.setupButton();
+		ScoutingFileTest.setupButton();
 		
 	}
 
