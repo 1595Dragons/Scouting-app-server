@@ -14,6 +14,8 @@ import javax.microedition.io.StreamConnectionNotifier;
 
 public class ScoutingApp {
 
+	public static boolean debug = false;
+	
 	public static StreamConnection currentConnection;
 	public static StreamConnectionNotifier streamConnNotifier;
 
