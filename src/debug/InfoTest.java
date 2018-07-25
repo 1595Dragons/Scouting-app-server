@@ -1,4 +1,4 @@
-package application;
+package debug;
 
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -12,7 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class InfoDesigner {
+public class InfoTest {
 
 	private JFrame ScoutingAppWindow;
 
@@ -28,7 +28,7 @@ public class InfoDesigner {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InfoDesigner window = new InfoDesigner();
+					InfoTest window = new InfoTest();
 					window.ScoutingAppWindow.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,7 +40,7 @@ public class InfoDesigner {
 	/**
 	 * Create the application.
 	 */
-	public InfoDesigner() {
+	public InfoTest() {
 		initialize();
 	}
 

@@ -1,4 +1,4 @@
-package application;
+package release;
 
 import java.io.BufferedWriter;
 import java.io.File;

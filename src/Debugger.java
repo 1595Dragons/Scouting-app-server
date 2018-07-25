@@ -1,4 +1,6 @@
-package application;
+
+import debug.ScoutingAppTest;
+import release.ScoutingApp;
 
 public class Debugger {
 
