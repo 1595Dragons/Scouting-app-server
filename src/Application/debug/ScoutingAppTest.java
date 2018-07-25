@@ -13,6 +13,15 @@ public class ScoutingAppTest {
 		InfoTest infoWindow = new InfoTest();
 		Debugger.d(ScoutingAppTest.class, "Showing the main info window");
 		infoWindow.showWindow();
+		Debugger.d(ScoutingAppTest.class, "Does file exist?");
+		if (!ScoutingFile.FileExists()) {
+			Debugger.d(ScoutingAppTest.class, "Creating file");
+			ScoutingFile.makeFile();
+		}
+		Debugger.d(ScoutingAppTest.class, "Updating file info");
+		ScoutingFile.setFileText();
+		Debugger.d(ScoutingAppTest.class, "Enabling goto button");
+		ScoutingFile.setupButton();
 		
 	}
 

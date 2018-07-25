@@ -50,8 +50,7 @@ public class InfoTest {
 	public void showWindow() {
 		this.ScoutingAppWindow.setVisible(true);
 	}
-	
-	
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -251,6 +250,7 @@ public class InfoTest {
 		gbc_StartScoutingButton.gridx = 0;
 		gbc_StartScoutingButton.gridy = 12;
 		ScoutingAppWindow.getContentPane().add(StartScoutingButton, gbc_StartScoutingButton);
+
 	}
 
 }
