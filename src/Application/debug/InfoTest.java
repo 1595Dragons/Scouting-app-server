@@ -1,4 +1,4 @@
-package debug;
+package Application.debug;
 
 import java.awt.Component;
 import java.awt.EventQueue;

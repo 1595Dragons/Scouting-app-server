@@ -1,4 +1,4 @@
-package release;
+package Application.release;
 
 import java.awt.Color;
 import java.awt.Component;
