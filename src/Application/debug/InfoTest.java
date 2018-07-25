@@ -45,6 +45,14 @@ public class InfoTest {
 	}
 
 	/**
+	 * Show the application.
+	 */
+	public void showWindow() {
+		this.ScoutingAppWindow.setVisible(true);
+	}
+	
+	
+	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {

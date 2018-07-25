@@ -5,9 +5,9 @@ import Application.release.ScoutingApp;
 
 public class Debugger {
 
-	public static void d(String message) {
+	public static void d(Class<?> name, String message) {
 		if (ScoutingApp.debug || ScoutingAppTest.debug) {
-			System.out.print(message);
+			System.out.println(String.format("%s: %s", name.getName(), message));
 		}
 	}
 }
