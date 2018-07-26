@@ -1,11 +1,14 @@
 package Application.debug;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -14,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 
 import Application.Debugger;
-import java.awt.Color;
 
 public class InfoTest {
 
@@ -24,6 +26,8 @@ public class InfoTest {
 			Device6;
 
 	public static JButton GoToFileButton;
+	
+	private EnterTeamNumberTest enterTeamPrompt;
 
 	/**
 	 * Launch the application.
@@ -46,6 +50,8 @@ public class InfoTest {
 	 */
 	public InfoTest() {
 		initialize();
+		Debugger.d(InfoTest.class, "Creating the prompt window");
+		enterTeamPrompt = new EnterTeamNumberTest();
 	}
 
 	/**
@@ -279,6 +285,13 @@ public class InfoTest {
 		gbc_StartScoutingButton.gridy = 12;
 		ScoutingAppWindow.getContentPane().add(StartScoutingButton, gbc_StartScoutingButton);
 
+		StartScoutingButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				enterTeamPrompt.showPromptWindow();
+			}
+		});
+		
 	}
 
 }
