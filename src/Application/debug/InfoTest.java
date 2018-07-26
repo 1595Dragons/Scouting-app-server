@@ -11,6 +11,10 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.UIManager;
+
+import Application.Debugger;
+import java.awt.Color;
 
 public class InfoTest {
 
@@ -55,7 +59,16 @@ public class InfoTest {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (Exception e) {
+			Debugger.d(InfoTest.class, e.getMessage());
+			e.printStackTrace();
+		}
+		
 		ScoutingAppWindow = new JFrame();
+		ScoutingAppWindow.getContentPane().setBackground(Color.BLACK);
 		ScoutingAppWindow.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		ScoutingAppWindow.setResizable(false);
 		ScoutingAppWindow.setTitle("1595 Scouting App");
@@ -79,6 +92,8 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(verticalStrut, gbc_verticalStrut);
 
 		JLabel MACAddressHeader = new JLabel("MAC Address: ");
+		MACAddressHeader.setForeground(Color.WHITE);
+		MACAddressHeader.setBackground(Color.BLACK);
 		MACAddressHeader.setFont(new Font("Arial", Font.PLAIN, 24));
 		GridBagConstraints gbc_MACAddressHeader = new GridBagConstraints();
 		gbc_MACAddressHeader.anchor = GridBagConstraints.EAST;
@@ -89,6 +104,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(MACAddressHeader, gbc_MACAddressHeader);
 
 		MACAddressText = new JLabel("<html><b>--:--:--:--:--:--</b></html>");
+		MACAddressText.setForeground(Color.WHITE);
 		MACAddressText.setFont(new Font("Arial Black", Font.PLAIN, 25));
 		GridBagConstraints gbc_MACAddressText = new GridBagConstraints();
 		gbc_MACAddressText.insets = new Insets(0, 0, 5, 0);
@@ -107,6 +123,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(verticalStrut_1, gbc_verticalStrut_1);
 
 		JLabel FileLoacitonHeader = new JLabel("Data Location: ");
+		FileLoacitonHeader.setForeground(Color.WHITE);
 		FileLoacitonHeader.setFont(new Font("Arial", Font.PLAIN, 20));
 		GridBagConstraints gbc_FileLoacitonHeader = new GridBagConstraints();
 		gbc_FileLoacitonHeader.anchor = GridBagConstraints.EAST;
@@ -117,6 +134,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(FileLoacitonHeader, gbc_FileLoacitonHeader);
 
 		FileLocationText = new JLabel("-");
+		FileLocationText.setForeground(Color.WHITE);
 		FileLocationText.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		GridBagConstraints gbc_FileLocationText = new GridBagConstraints();
 		gbc_FileLocationText.anchor = GridBagConstraints.WEST;
@@ -146,6 +164,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(verticalStrut_2, gbc_verticalStrut_2);
 
 		JLabel ConsoleHeader = new JLabel("Console");
+		ConsoleHeader.setForeground(Color.WHITE);
 		ConsoleHeader.setFont(new Font("Arial Black", Font.PLAIN, 25));
 		GridBagConstraints gbc_ConsoleHeader = new GridBagConstraints();
 		gbc_ConsoleHeader.insets = new Insets(0, 0, 5, 0);
@@ -155,6 +174,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(ConsoleHeader, gbc_ConsoleHeader);
 
 		ConsoleText = new JLabel("-");
+		ConsoleText.setForeground(Color.LIGHT_GRAY);
 		ConsoleText.setFont(new Font("Arial", Font.PLAIN, 20));
 		GridBagConstraints gbc_ConsoleText = new GridBagConstraints();
 		gbc_ConsoleText.anchor = GridBagConstraints.NORTH;
@@ -173,6 +193,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(verticalStrut_3, gbc_verticalStrut_3);
 
 		JLabel ConnectedDevicesHeader = new JLabel("Connected Devices");
+		ConnectedDevicesHeader.setForeground(Color.WHITE);
 		ConnectedDevicesHeader.setFont(new Font("Arial Black", Font.PLAIN, 25));
 		GridBagConstraints gbc_ConnectedDevicesHeader = new GridBagConstraints();
 		gbc_ConnectedDevicesHeader.insets = new Insets(0, 0, 5, 0);
@@ -182,6 +203,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(ConnectedDevicesHeader, gbc_ConnectedDevicesHeader);
 
 		Device1 = new JLabel("None");
+		Device1.setForeground(Color.WHITE);
 		Device1.setFont(new Font("Arial", Font.PLAIN, 20));
 		GridBagConstraints gbc_Device1 = new GridBagConstraints();
 		gbc_Device1.gridwidth = 2;
@@ -191,6 +213,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(Device1, gbc_Device1);
 
 		Device2 = new JLabel("None");
+		Device2.setForeground(Color.WHITE);
 		Device2.setFont(new Font("Arial", Font.PLAIN, 20));
 		GridBagConstraints gbc_Device2 = new GridBagConstraints();
 		gbc_Device2.gridwidth = 2;
@@ -200,6 +223,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(Device2, gbc_Device2);
 
 		Device3 = new JLabel("None");
+		Device3.setForeground(Color.WHITE);
 		Device3.setFont(new Font("Arial", Font.PLAIN, 20));
 		GridBagConstraints gbc_Device3 = new GridBagConstraints();
 		gbc_Device3.gridwidth = 2;
@@ -209,6 +233,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(Device3, gbc_Device3);
 
 		Device4 = new JLabel("None");
+		Device4.setForeground(Color.WHITE);
 		Device4.setFont(new Font("Arial", Font.PLAIN, 20));
 		GridBagConstraints gbc_Device4 = new GridBagConstraints();
 		gbc_Device4.gridwidth = 2;
@@ -218,6 +243,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(Device4, gbc_Device4);
 
 		Device5 = new JLabel("None");
+		Device5.setForeground(Color.WHITE);
 		Device5.setFont(new Font("Arial", Font.PLAIN, 20));
 		GridBagConstraints gbc_Device5 = new GridBagConstraints();
 		gbc_Device5.gridwidth = 2;
@@ -227,6 +253,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(Device5, gbc_Device5);
 
 		Device6 = new JLabel("None");
+		Device6.setForeground(Color.WHITE);
 		Device6.setFont(new Font("Arial", Font.PLAIN, 20));
 		GridBagConstraints gbc_Device6 = new GridBagConstraints();
 		gbc_Device6.gridwidth = 2;
@@ -244,6 +271,7 @@ public class InfoTest {
 		ScoutingAppWindow.getContentPane().add(verticalStrut_4, gbc_verticalStrut_4);
 
 		JButton StartScoutingButton = new JButton("Start Scouting");
+		this.ScoutingAppWindow.getRootPane().setDefaultButton(StartScoutingButton);
 		StartScoutingButton.setFont(new Font("Arial", Font.PLAIN, 25));
 		GridBagConstraints gbc_StartScoutingButton = new GridBagConstraints();
 		gbc_StartScoutingButton.gridwidth = 12;

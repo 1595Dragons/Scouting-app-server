@@ -8,6 +8,7 @@ import Application.Debugger;
 public class BluetoothTest {
 
 	public static boolean isEnabled() {
+		Debugger.d(BluetoothTest.class, Boolean.toString(LocalDevice.isPowerOn()));
 		return LocalDevice.isPowerOn();
 	}
 	
