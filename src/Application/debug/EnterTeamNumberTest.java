@@ -23,9 +23,7 @@ public class EnterTeamNumberTest extends Thread {
 
 	private JFrame frame;
 
-	public static JTextField teamNumberInput;
-
-	public static JLabel teamToScoutText;
+	private JTextField teamNumberInput;
 
 	public static int teamNumber = 0;
 
@@ -136,6 +134,24 @@ public class EnterTeamNumberTest extends Thread {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.setVisible(false);
 				teamNumberInput.setText("");
+			}
+		});
+		
+		Start.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				frame.setVisible(false);
+				try {
+					teamNumber = Integer.parseInt(teamNumberInput.getText());
+					teamNumberInput.setText("");
+					AutoScoutingTest autoScouting = new AutoScoutingTest();
+					autoScouting.showAutonomous();
+				} catch (NumberFormatException InvalidNumber) {
+					// Not a valid number (do nothing)
+					frame.setVisible(true);
+					Toolkit.getDefaultToolkit().beep();
+					return;
+				}
 			}
 		});
 

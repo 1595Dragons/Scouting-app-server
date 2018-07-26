@@ -9,8 +9,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,7 +21,6 @@ import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 
 import Application.Debugger;
-import javax.swing.JButton;
 
 public class AutoScoutingTest {
 
@@ -38,6 +40,13 @@ public class AutoScoutingTest {
 				}
 			}
 		});
+	}
+	
+	/**
+	 * Show the application.
+	 */
+	public void showAutonomous() {
+		ScoutingWindow.setVisible(true);
 	}
 
 	/**
@@ -68,7 +77,7 @@ public class AutoScoutingTest {
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
 		
-		JLabel ScoutingTeamText = new JLabel("Scouting team: 0000");
+		JLabel ScoutingTeamText = new JLabel("Scouting team: " + EnterTeamNumberTest.teamNumber);
 		ScoutingTeamText.setForeground(Color.WHITE);
 		ScoutingTeamText.setFont(new Font("Arial Black", Font.PLAIN, 40));
 		GridBagConstraints gbc_ScoutingTeamText = new GridBagConstraints();
@@ -128,7 +137,7 @@ public class AutoScoutingTest {
 		gbc_AutonomousHeader.gridy = 5;
 		ScoutingWindow.getContentPane().add(AutonomousHeader, gbc_AutonomousHeader);
 		
-		JCheckBox BasicAuto = new JCheckBox("This team has an autonomous");
+		JCheckBox BasicAuto = new JCheckBox("This team can cross the baseline");
 		BasicAuto.setBackground(Color.BLACK);
 		BasicAuto.setForeground(Color.WHITE);
 		BasicAuto.setFont(new Font("Arial", Font.PLAIN, 25));
@@ -178,6 +187,12 @@ public class AutoScoutingTest {
 		gbc_Cancel.gridx = 0;
 		gbc_Cancel.gridy = 11;
 		ScoutingWindow.getContentPane().add(Cancel, gbc_Cancel);
+		Cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO: Add reset for all ScoutingWindows
+			}
+		});
 		
 		JButton Next = new JButton("Next");
 		Next.setFont(new Font("Arial", Font.PLAIN, 25));
@@ -187,10 +202,20 @@ public class AutoScoutingTest {
 		gbc_Next.gridx = 6;
 		gbc_Next.gridy = 11;
 		ScoutingWindow.getContentPane().add(Next, gbc_Next);
+		Next.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO: Add transition to next window
+			}
+		});
+		
+		
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
 		ScoutingWindow.setBounds(100, 100, 566, 630);
-		ScoutingWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		ScoutingWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		ScoutingWindow.getRootPane().setDefaultButton(Next);
 		
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		ScoutingWindow.setLocation((d.width / 2 - ScoutingWindow.getSize().width / 2), (d.height / 2 - ScoutingWindow.getSize().height / 2));
