@@ -22,7 +22,7 @@ public class ScoutingAppTest {
 		Debugger.d(ScoutingAppTest.class, "Enabling goto button");
 		ScoutingFileTest.setupButton();
 		Debugger.d(ScoutingAppTest.class, "Resetting devices");
-		DeviceManagement.reset();
+		DeviceManagementTest.reset();
 		Debugger.d(ScoutingAppTest.class, "Is bluetooth enabled?");
 		if (!BluetoothTest.isEnabled()) {
 			Debugger.logTest("Bluetooth is not enabled on this device.", true);

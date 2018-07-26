@@ -1,6 +1,6 @@
 package Application.debug;
 
-public class DeviceManagement {
+public class DeviceManagementTest {
 
 	public static String[] connectedDevices = new String[6];
 	

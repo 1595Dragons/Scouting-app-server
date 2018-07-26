@@ -8,23 +8,22 @@ import java.io.InputStreamReader;
 import javax.bluetooth.RemoteDevice;
 import javax.microedition.io.StreamConnection;
 
-import Application.release.Info;
-import Application.release.ScoutingApp;
+import Application.Debugger;
 
 public class SSPserverTest extends Thread {
-	StreamConnection connection = ScoutingApp.currentConnection;
+	StreamConnection connection = null; // ScoutingAppTest.currentConnection;
 
 	// Wait for client connection
 	public void run() {
 		if (connection != null) {
 			synchronized (connection) {
 
-				// Get the stream from the bluetooth connection
 				InputStream inStream = null;
 				try {
 					inStream = connection.openInputStream();
 				} catch (IOException e1) {
-					Info.log(String.format("Error, cannot open stream: %s", e1.getMessage()), true);
+					Debugger.logTest(String.format("Error, cannot open stream: %s", e1.getMessage()), true);
+					Debugger.d(this.getClass(), "Error: " + e1.getMessage());
 					e1.printStackTrace();
 				}
 
@@ -34,31 +33,32 @@ public class SSPserverTest extends Thread {
 				try {
 					lineRead = bReader.readLine();
 					if (lineRead == null) {
-						Info.log("Device disconnected", false);
-						Info.deviceDisconnect(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
+						Debugger.logTest("Device disconnected", false);
+						Debugger.d(this.getClass(),
+								String.format("Device disconnected: %s (%s)",
+										RemoteDevice.getRemoteDevice(connection).getFriendlyName(false),
+										RemoteDevice.getRemoteDevice(connection).getBluetoothAddress()));
+						DeviceManagementTest
+								.deviceDisconnected(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
 						return;
 					}
 				} catch (IOException e1) {
-					Info.log(String.format("Error, cannot read stream: %s", e1.getMessage()), true);
+					Debugger.logTest(String.format("Error, cannot read stream: %s", e1.getMessage()), true);
+					Debugger.d(this.getClass(), "Error: " + e1.getMessage());
 					e1.printStackTrace();
 				}
-				// System.out.println(lineRead);
-				if (lineRead.startsWith("pit")) {
-					lineRead = lineRead.replace("pit,", "");
-					Info.writeToFilePitScouting(lineRead);
-				} else {
-					Info.writeToFileStandScouting(lineRead);
-				}
+
+				ScoutingFileTest.writeToFile(lineRead);
 
 				// Try closing the writer and stream
 
 				try {
-					// fw.close();
-					Info.deviceDisconnect(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
+					DeviceManagementTest
+							.deviceDisconnected(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
 					bReader.close();
 					inStream.close();
 				} catch (IOException e1) {
-					Info.log(String.format("Error, cannot close stream: %s", e1.getMessage()), true);
+					Debugger.logTest(String.format("Error, cannot close stream: %s", e1.getMessage()), true);
 					e1.printStackTrace();
 				}
 
@@ -67,13 +67,15 @@ public class SSPserverTest extends Thread {
 				try {
 					connection.close();
 				} catch (IOException e) {
-					Info.log(String.format("Error closing connections: %s", e.getMessage()), true);
+					Debugger.log(String.format("Error closing connections: %s", e.getMessage()), true);
+					Debugger.d(this.getClass(), "Error: " + e.getMessage());
 					e.printStackTrace();
 				}
 
 			}
 		} else {
-			Info.log("Connection is null!", true);
+			Debugger.logTest("Connection is null!", true);
+			Debugger.d(this.getClass(), "Connection is null!");
 		}
 	}
 }
