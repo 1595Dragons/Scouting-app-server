@@ -1,11 +1,13 @@
 package Application.debug;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.Window.Type;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -136,6 +138,9 @@ public class EnterTeamNumberTest extends Thread {
 				teamNumberInput.setText("");
 			}
 		});
+
+		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setLocation((d.width / 2 - frame.getSize().width / 2), (d.height / 2 - frame.getSize().height / 2));
 	}
 
 }

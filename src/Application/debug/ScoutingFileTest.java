@@ -26,11 +26,7 @@ public class ScoutingFileTest {
 			Debugger.d(ScoutingFileTest.class, "Error: " + e.getMessage());
 			e.printStackTrace();
 		}
-	}
 
-	public static void setFileText() {
-		InfoTest.FileLocationText.setText(ScoutingFile.getPath().replace(System.getProperty("user.home") + "\\", "")
-				.replace("\\scouting_data.csv", ""));
 		// Create a writer in order to write to the file
 		BufferedWriter write = null;
 		try {
@@ -55,6 +51,11 @@ public class ScoutingFileTest {
 			e.printStackTrace();
 		}
 
+	}
+
+	public static void setFileText() {
+		InfoTest.FileLocation.setText(
+				"Data location: " + ScoutingFile.getPath().replace(System.getProperty("user.home") + "\\", ""));
 	}
 
 	public static void setupButton() {

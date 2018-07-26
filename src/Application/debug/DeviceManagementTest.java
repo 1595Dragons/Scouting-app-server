@@ -3,7 +3,7 @@ package Application.debug;
 public class DeviceManagementTest {
 
 	public static String[] connectedDevices = new String[6];
-	
+
 	public static void deviceConnected(String deviceName) {
 
 		for (int i = 0; i < connectedDevices.length; i++) {
@@ -18,7 +18,6 @@ public class DeviceManagementTest {
 		InfoTest.Device4.setText(connectedDevices[3]);
 		InfoTest.Device5.setText(connectedDevices[4]);
 		InfoTest.Device6.setText(connectedDevices[5]);
-
 	}
 
 	public static void deviceDisconnected(String deviceName) {
@@ -35,7 +34,7 @@ public class DeviceManagementTest {
 		InfoTest.Device5.setText(connectedDevices[4]);
 		InfoTest.Device6.setText(connectedDevices[5]);
 	}
-	
+
 	public static void reset() {
 		for (int i = 0; i < connectedDevices.length; i++) {
 			connectedDevices[i] = "None";
@@ -47,5 +46,5 @@ public class DeviceManagementTest {
 		InfoTest.Device5.setText(connectedDevices[4]);
 		InfoTest.Device6.setText(connectedDevices[5]);
 	}
-	
+
 }
