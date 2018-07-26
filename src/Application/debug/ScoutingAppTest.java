@@ -12,6 +12,8 @@ import Application.Debugger;
 
 public class ScoutingAppTest {
 
+	// TODO: Add a function to check for updates
+	
 	public static boolean debug = false;
 
 	public static StreamConnection currentConnection;
