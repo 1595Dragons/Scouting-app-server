@@ -72,9 +72,9 @@ public class AutoScoutingTest {
 		ScoutingWindow.getContentPane().setBackground(Color.BLACK);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 70, 70, 70, 70, 70, 70, 70, 70, 0 };
-		gridBagLayout.rowHeights = new int[] { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 0 };
+		gridBagLayout.rowHeights = new int[] { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
 
@@ -173,20 +173,30 @@ public class AutoScoutingTest {
 
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_2 = new GridBagConstraints();
-		gbc_verticalStrut_2.gridheight = 2;
+		gbc_verticalStrut_2.gridheight = 4;
 		gbc_verticalStrut_2.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut_2.gridwidth = 8;
 		gbc_verticalStrut_2.gridx = 0;
 		gbc_verticalStrut_2.gridy = 9;
 		ScoutingWindow.getContentPane().add(verticalStrut_2, gbc_verticalStrut_2);
 
+		JButton fakeBack = new JButton("Back");
+		fakeBack.setFont(new Font("Arial", Font.PLAIN, 25));
+		fakeBack.setEnabled(false);
+		GridBagConstraints gbc_fakeBack = new GridBagConstraints();
+		gbc_fakeBack.gridwidth = 2;
+		gbc_fakeBack.insets = new Insets(0, 0, 0, 5);
+		gbc_fakeBack.gridx = 0;
+		gbc_fakeBack.gridy = 13;
+		ScoutingWindow.getContentPane().add(fakeBack, gbc_fakeBack);
+
 		JButton Cancel = new JButton("Cancel");
 		Cancel.setFont(new Font("Arial", Font.PLAIN, 25));
 		GridBagConstraints gbc_Cancel = new GridBagConstraints();
 		gbc_Cancel.gridwidth = 2;
 		gbc_Cancel.insets = new Insets(0, 0, 0, 5);
-		gbc_Cancel.gridx = 0;
-		gbc_Cancel.gridy = 11;
+		gbc_Cancel.gridx = 3;
+		gbc_Cancel.gridy = 13;
 		ScoutingWindow.getContentPane().add(Cancel, gbc_Cancel);
 		Cancel.addActionListener(new ActionListener() {
 			@Override
@@ -199,20 +209,21 @@ public class AutoScoutingTest {
 		Next.setFont(new Font("Arial", Font.PLAIN, 25));
 		GridBagConstraints gbc_Next = new GridBagConstraints();
 		gbc_Next.gridwidth = 2;
-		gbc_Next.insets = new Insets(0, 0, 0, 5);
 		gbc_Next.gridx = 6;
-		gbc_Next.gridy = 11;
+		gbc_Next.gridy = 13;
 		ScoutingWindow.getContentPane().add(Next, gbc_Next);
 		Next.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO: Add transition to next window
+				TeleScoutingTest TST = new TeleScoutingTest();
+				ScoutingWindow.setVisible(false);
+				TST.showTeleOp();
 			}
 		});
 
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
-		ScoutingWindow.setBounds(100, 100, 566, 630);
+		ScoutingWindow.setBounds(100, 100, 566, 700);
 
 		ScoutingWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		ScoutingWindow.getRootPane().setDefaultButton(Next);

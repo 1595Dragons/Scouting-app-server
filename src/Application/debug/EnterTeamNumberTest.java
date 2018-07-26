@@ -8,7 +8,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.awt.Window.Type;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -70,7 +69,6 @@ public class EnterTeamNumberTest extends Thread {
 		}
 
 		frame = new JFrame();
-		frame.setType(Type.UTILITY);
 
 		frame.setTitle("Enter team to scout");
 		frame.setResizable(false);
