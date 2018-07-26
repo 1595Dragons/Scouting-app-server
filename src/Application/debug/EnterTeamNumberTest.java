@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-public class EnterTeamNumberTest {
+public class EnterTeamNumberTest extends Thread {
 
 	private JFrame frame;
 

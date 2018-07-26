@@ -74,7 +74,7 @@ public class ScoutingFileTest {
 
 	public static void writeToFile(String data) {
 		// Write the data to a CSV file
-		Debugger.d(ScoutingFileTest.class, "Writing data to file");
+		Debugger.logTest("Writing data to file", false);
 		FileWriter fw = null;
 		try {
 			fw = new FileWriter(new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath(),
@@ -106,9 +106,10 @@ public class ScoutingFileTest {
 
 		// Report success!
 		if (success) {
-			Debugger.d(ScoutingFileTest.class,
-					String.format("Successfully written data for team: %s", data.split(",")[0]));
+			Debugger.d(ScoutingFileTest.class, "Data: " + data);
+			Debugger.logTest(String.format("Successfully written data for team: %s", data.split(",")[0]), false);
 		} else {
+			Debugger.logTest("Could not write data to file", true);
 			return;
 		}
 	}

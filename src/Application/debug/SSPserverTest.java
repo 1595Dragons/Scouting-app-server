@@ -11,7 +11,7 @@ import javax.microedition.io.StreamConnection;
 import Application.Debugger;
 
 public class SSPserverTest extends Thread {
-	StreamConnection connection = null; // ScoutingAppTest.currentConnection;
+	StreamConnection connection = ScoutingAppTest.currentConnection;
 
 	// Wait for client connection
 	public void run() {
@@ -51,7 +51,6 @@ public class SSPserverTest extends Thread {
 				ScoutingFileTest.writeToFile(lineRead);
 
 				// Try closing the writer and stream
-
 				try {
 					DeviceManagementTest
 							.deviceDisconnected(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
@@ -63,7 +62,6 @@ public class SSPserverTest extends Thread {
 				}
 
 				// Success!
-
 				try {
 					connection.close();
 				} catch (IOException e) {
