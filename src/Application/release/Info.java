@@ -20,8 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-//TODO: If bluetooth is not available, just leave the pit scouting button available, don't just exit
-
 public class Info {
 
 	JFrame window;
@@ -111,7 +109,8 @@ public class Info {
 		contentPane.add(verticalStrut, gbc_verticalStrut);
 		FileLocationHeader.setForeground(Color.WHITE);
 
-		FileLocationHeader.setText(String.format("<html>%s <b>%s</b></html>", FileLocationHeader.getText(), FileLocationText));
+		FileLocationHeader
+				.setText(String.format("<html>%s <b>%s</b></html>", FileLocationHeader.getText(), FileLocationText));
 		FileLocationHeader.setFont(new Font("Verdana", Font.PLAIN, 25));
 		GridBagConstraints gbc_FileLocationHeader = new GridBagConstraints();
 		gbc_FileLocationHeader.gridwidth = 18;

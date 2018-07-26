@@ -2,19 +2,13 @@ package Application.debug;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -22,7 +16,7 @@ import javax.swing.UIManager;
 
 import Application.Debugger;
 
-public class AutoScoutingTest {
+public class TeleScoutingTest {
 
 	private JFrame ScoutingWindow;
 
@@ -33,7 +27,7 @@ public class AutoScoutingTest {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AutoScoutingTest window = new AutoScoutingTest();
+					TeleScoutingTest window = new TeleScoutingTest();
 					window.ScoutingWindow.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,16 +37,9 @@ public class AutoScoutingTest {
 	}
 
 	/**
-	 * Show the application.
-	 */
-	public void showAutonomous() {
-		ScoutingWindow.setVisible(true);
-	}
-
-	/**
 	 * Create the application.
 	 */
-	public AutoScoutingTest() {
+	public TeleScoutingTest() {
 		initialize();
 	}
 
@@ -60,7 +47,6 @@ public class AutoScoutingTest {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) {
@@ -77,7 +63,7 @@ public class AutoScoutingTest {
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
-
+		
 		JLabel ScoutingTeamText = new JLabel("Scouting team: " + EnterTeamNumberTest.teamNumber);
 		ScoutingTeamText.setForeground(Color.WHITE);
 		ScoutingTeamText.setFont(new Font("Arial Black", Font.PLAIN, 40));
@@ -109,7 +95,7 @@ public class AutoScoutingTest {
 		JProgressBar progressBar = new JProgressBar();
 		progressBar.setBackground(Color.WHITE);
 		progressBar.setMaximum(3);
-		progressBar.setValue(1);
+		progressBar.setValue(2);
 		progressBar.setFont(new Font("Arial Black", Font.PLAIN, 35));
 		progressBar.setForeground(Color.RED);
 		GridBagConstraints gbc_progressBar = new GridBagConstraints();
@@ -128,98 +114,23 @@ public class AutoScoutingTest {
 		gbc_verticalStrut.gridy = 4;
 		ScoutingWindow.getContentPane().add(verticalStrut, gbc_verticalStrut);
 
-		JLabel AutonomousHeader = new JLabel("Autonomous");
-		AutonomousHeader.setForeground(Color.WHITE);
-		AutonomousHeader.setFont(new Font("Arial Black", Font.PLAIN, 30));
-		GridBagConstraints gbc_AutonomousHeader = new GridBagConstraints();
-		gbc_AutonomousHeader.insets = new Insets(0, 0, 5, 0);
-		gbc_AutonomousHeader.gridwidth = 8;
-		gbc_AutonomousHeader.gridx = 0;
-		gbc_AutonomousHeader.gridy = 5;
-		ScoutingWindow.getContentPane().add(AutonomousHeader, gbc_AutonomousHeader);
-
-		JCheckBox BasicAuto = new JCheckBox("This team can cross the baseline");
-		BasicAuto.setBackground(Color.BLACK);
-		BasicAuto.setForeground(Color.WHITE);
-		BasicAuto.setFont(new Font("Arial", Font.PLAIN, 25));
-		GridBagConstraints gbc_BasicAuto = new GridBagConstraints();
-		gbc_BasicAuto.insets = new Insets(0, 0, 5, 0);
-		gbc_BasicAuto.gridwidth = 8;
-		gbc_BasicAuto.gridx = 0;
-		gbc_BasicAuto.gridy = 6;
-		ScoutingWindow.getContentPane().add(BasicAuto, gbc_BasicAuto);
-
-		JCheckBox SwitchAuto = new JCheckBox("This team can place on the switch");
-		SwitchAuto.setForeground(Color.WHITE);
-		SwitchAuto.setBackground(Color.BLACK);
-		SwitchAuto.setFont(new Font("Arial", Font.PLAIN, 25));
-		GridBagConstraints gbc_SwitchAuto = new GridBagConstraints();
-		gbc_SwitchAuto.insets = new Insets(0, 0, 5, 0);
-		gbc_SwitchAuto.gridwidth = 8;
-		gbc_SwitchAuto.gridx = 0;
-		gbc_SwitchAuto.gridy = 7;
-		ScoutingWindow.getContentPane().add(SwitchAuto, gbc_SwitchAuto);
-
-		JCheckBox ScaleAuto = new JCheckBox("This team can place on the scale");
-		ScaleAuto.setForeground(Color.WHITE);
-		ScaleAuto.setBackground(Color.BLACK);
-		ScaleAuto.setFont(new Font("Arial", Font.PLAIN, 25));
-		GridBagConstraints gbc_ScaleAuto = new GridBagConstraints();
-		gbc_ScaleAuto.insets = new Insets(0, 0, 5, 0);
-		gbc_ScaleAuto.gridwidth = 8;
-		gbc_ScaleAuto.gridx = 0;
-		gbc_ScaleAuto.gridy = 8;
-		ScoutingWindow.getContentPane().add(ScaleAuto, gbc_ScaleAuto);
-
-		Component verticalStrut_2 = Box.createVerticalStrut(20);
-		GridBagConstraints gbc_verticalStrut_2 = new GridBagConstraints();
-		gbc_verticalStrut_2.gridheight = 2;
-		gbc_verticalStrut_2.insets = new Insets(0, 0, 5, 0);
-		gbc_verticalStrut_2.gridwidth = 8;
-		gbc_verticalStrut_2.gridx = 0;
-		gbc_verticalStrut_2.gridy = 9;
-		ScoutingWindow.getContentPane().add(verticalStrut_2, gbc_verticalStrut_2);
-
-		JButton Cancel = new JButton("Cancel");
-		Cancel.setFont(new Font("Arial", Font.PLAIN, 25));
-		GridBagConstraints gbc_Cancel = new GridBagConstraints();
-		gbc_Cancel.gridwidth = 2;
-		gbc_Cancel.insets = new Insets(0, 0, 0, 5);
-		gbc_Cancel.gridx = 0;
-		gbc_Cancel.gridy = 11;
-		ScoutingWindow.getContentPane().add(Cancel, gbc_Cancel);
-		Cancel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO: Add reset for all ScoutingWindows
-			}
-		});
-
-		JButton Next = new JButton("Next");
-		Next.setFont(new Font("Arial", Font.PLAIN, 25));
-		GridBagConstraints gbc_Next = new GridBagConstraints();
-		gbc_Next.gridwidth = 2;
-		gbc_Next.insets = new Insets(0, 0, 0, 5);
-		gbc_Next.gridx = 6;
-		gbc_Next.gridy = 11;
-		ScoutingWindow.getContentPane().add(Next, gbc_Next);
-		Next.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO: Add transition to next window
-			}
-		});
-
+		JLabel TeleOperatedHeader = new JLabel("TeleOperated");
+		TeleOperatedHeader.setForeground(Color.WHITE);
+		TeleOperatedHeader.setFont(new Font("Arial Black", Font.PLAIN, 30));
+		GridBagConstraints gbc_TeleOperatedHeader = new GridBagConstraints();
+		gbc_TeleOperatedHeader.insets = new Insets(0, 0, 5, 0);
+		gbc_TeleOperatedHeader.gridwidth = 8;
+		gbc_TeleOperatedHeader.gridx = 0;
+		gbc_TeleOperatedHeader.gridy = 5;
+		ScoutingWindow.getContentPane().add(TeleOperatedHeader, gbc_TeleOperatedHeader);
+		
+		
+		
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
 		ScoutingWindow.setBounds(100, 100, 566, 630);
 
 		ScoutingWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		ScoutingWindow.getRootPane().setDefaultButton(Next);
-
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		ScoutingWindow.setLocation((d.width / 2 - ScoutingWindow.getSize().width / 2),
-				(d.height / 2 - ScoutingWindow.getSize().height / 2));
 	}
 
 }
