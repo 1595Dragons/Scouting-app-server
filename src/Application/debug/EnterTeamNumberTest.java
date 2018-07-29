@@ -17,6 +17,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import Application.Debugger;
 
 public class EnterTeamNumberTest extends Thread {
 
@@ -63,9 +66,11 @@ public class EnterTeamNumberTest extends Thread {
 
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-
+		} catch (UnsupportedLookAndFeelException notWindows) {
+			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+				Debugger.d(InfoTest.class, e.getMessage());
+				e.printStackTrace();
 		}
 
 		frame = new JFrame();

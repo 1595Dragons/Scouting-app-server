@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import Application.Debugger;
 
@@ -67,9 +68,11 @@ public class InfoTest {
 
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (UnsupportedLookAndFeelException notWindows) {
+			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-			Debugger.d(InfoTest.class, e.getMessage());
-			e.printStackTrace();
+				Debugger.d(InfoTest.class, e.getMessage());
+				e.printStackTrace();
 		}
 
 		ScoutingAppWindow = new JFrame();

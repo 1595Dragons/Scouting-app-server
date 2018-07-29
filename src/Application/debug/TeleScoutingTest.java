@@ -20,6 +20,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import Application.Debugger;
 
@@ -61,18 +62,21 @@ public class TeleScoutingTest {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (UnsupportedLookAndFeelException notWindows) {
+			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-			Debugger.d(InfoTest.class, e.getMessage());
-			e.printStackTrace();
+				Debugger.d(InfoTest.class, e.getMessage());
+				e.printStackTrace();
 		}
 
 		ScoutingWindow = new JFrame();
 		ScoutingWindow.getContentPane().setBackground(Color.BLACK);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 70, 70, 70, 70, 70, 70, 70, 70, 0 };
-		gridBagLayout.rowHeights = new int[] { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 43, 0 };
+		gridBagLayout.rowHeights = new int[] { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				Double.MIN_VALUE };

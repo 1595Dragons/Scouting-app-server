@@ -21,7 +21,11 @@ public class ScoutingAppTest {
 	public static StreamConnectionNotifier streamConnNotifier;
 
 	public static void main(String args[]) {
-		debug = Boolean.parseBoolean(args[0]);
+		try {
+			debug = Boolean.parseBoolean(args[0]);
+		} catch (ArrayIndexOutOfBoundsException noArgs) {
+			debug = false;
+		}
 		Debugger.d(ScoutingAppTest.class, "Creating the main info window");
 		InfoTest infoWindow = new InfoTest();
 		Debugger.d(ScoutingAppTest.class, "Showing the main info window");
