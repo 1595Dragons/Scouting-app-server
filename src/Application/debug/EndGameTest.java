@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,6 +27,7 @@ import Application.Debugger;
 public class EndGameTest {
 
 	private JFrame ScoutingWindow;
+	private ButtonGroup climb = new ButtonGroup();
 
 	/**
 	 * Launch the application.
@@ -49,26 +51,26 @@ public class EndGameTest {
 	public EndGameTest() {
 		initialize();
 	}
-	
+
 	/**
 	 * Show the application.
 	 */
 	public void showEndGame() {
 		ScoutingWindow.setVisible(true);
 	}
-	
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-	
+
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (UnsupportedLookAndFeelException notWindows) {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-				Debugger.d(InfoTest.class, e.getMessage());
-				e.printStackTrace();
+			Debugger.d(InfoTest.class, e.getMessage());
+			e.printStackTrace();
 		}
 
 		ScoutingWindow = new JFrame();
@@ -77,10 +79,10 @@ public class EndGameTest {
 		gridBagLayout.columnWidths = new int[] { 70, 70, 70, 70, 70, 70, 70, 70, 0 };
 		gridBagLayout.rowHeights = new int[] { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
-		
+
 		JLabel ScoutingTeamText = new JLabel("Scouting team: " + EnterTeamNumberTest.teamNumber);
 		ScoutingTeamText.setForeground(Color.WHITE);
 		ScoutingTeamText.setFont(new Font("Arial Black", Font.PLAIN, 40));
@@ -130,7 +132,7 @@ public class EndGameTest {
 		gbc_verticalStrut.gridx = 0;
 		gbc_verticalStrut.gridy = 4;
 		ScoutingWindow.getContentPane().add(verticalStrut, gbc_verticalStrut);
-		
+
 		JLabel EndGameHeader = new JLabel("End Game");
 		EndGameHeader.setForeground(Color.WHITE);
 		EndGameHeader.setFont(new Font("Arial Black", Font.PLAIN, 30));
@@ -140,10 +142,12 @@ public class EndGameTest {
 		gbc_EndGameHeader.gridx = 0;
 		gbc_EndGameHeader.gridy = 5;
 		ScoutingWindow.getContentPane().add(EndGameHeader, gbc_EndGameHeader);
-		// TODO: Button group
+
 		JRadioButton RampClimb = new JRadioButton("<html>This bot used a ramp to<br>help others climb</html>");
 		RampClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		RampClimb.setForeground(Color.WHITE);
+		climb.add(RampClimb);
+		RampClimb.setSelected(Core.IntToBoolean(Core.RampClimb));
 		GridBagConstraints gbc_RampClimb = new GridBagConstraints();
 		gbc_RampClimb.anchor = GridBagConstraints.WEST;
 		gbc_RampClimb.gridheight = 2;
@@ -152,11 +156,19 @@ public class EndGameTest {
 		gbc_RampClimb.gridx = 4;
 		gbc_RampClimb.gridy = 6;
 		ScoutingWindow.getContentPane().add(RampClimb, gbc_RampClimb);
-		
+
 		JRadioButton DidntClimb = new JRadioButton("This robot failed to climb");
 		DidntClimb.setForeground(Color.WHITE);
 		DidntClimb.setFont(new Font("Arial", Font.PLAIN, 20));
-		DidntClimb.setSelected(true);
+		boolean noClimb = true;
+		if (Core.IntToBoolean(Core.RampClimb) || Core.IntToBoolean(Core.SingleClimbCenter)
+				|| Core.IntToBoolean(Core.SingleClimbSide) || Core.IntToBoolean(Core.DoubleClimbCenter)
+				|| Core.IntToBoolean(Core.DoubleClimbSide) || Core.IntToBoolean(Core.TripleClimbCenter)
+				|| Core.IntToBoolean(Core.TripleClimbSide)) {
+			noClimb = false;
+		}
+		DidntClimb.setSelected(noClimb);
+		climb.add(DidntClimb);
 		GridBagConstraints gbc_DidntClimb = new GridBagConstraints();
 		gbc_DidntClimb.gridheight = 2;
 		gbc_DidntClimb.anchor = GridBagConstraints.WEST;
@@ -165,10 +177,13 @@ public class EndGameTest {
 		gbc_DidntClimb.gridx = 0;
 		gbc_DidntClimb.gridy = 6;
 		ScoutingWindow.getContentPane().add(DidntClimb, gbc_DidntClimb);
-		
-		JRadioButton SingleSideClimb = new JRadioButton("<html>This bot did a single climb\n<br>on the side of the bar</html>");
+
+		JRadioButton SingleSideClimb = new JRadioButton(
+				"<html>This bot did a single climb\n<br>on the side of the bar</html>");
 		SingleSideClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		SingleSideClimb.setForeground(Color.WHITE);
+		climb.add(SingleSideClimb);
+		SingleSideClimb.setSelected(Core.IntToBoolean(Core.SingleClimbSide));
 		GridBagConstraints gbc_SingleSideClimb = new GridBagConstraints();
 		gbc_SingleSideClimb.anchor = GridBagConstraints.WEST;
 		gbc_SingleSideClimb.gridheight = 2;
@@ -177,10 +192,13 @@ public class EndGameTest {
 		gbc_SingleSideClimb.gridx = 0;
 		gbc_SingleSideClimb.gridy = 8;
 		ScoutingWindow.getContentPane().add(SingleSideClimb, gbc_SingleSideClimb);
-		
-		JRadioButton SingleCenterClimb = new JRadioButton("<html>This bot did a single climb<br>on the center of th bar</html>");
+
+		JRadioButton SingleCenterClimb = new JRadioButton(
+				"<html>This bot did a single climb<br>on the center of th bar</html>");
 		SingleCenterClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		SingleCenterClimb.setForeground(Color.WHITE);
+		climb.add(SingleCenterClimb);
+		SingleCenterClimb.setSelected(Core.IntToBoolean(Core.SingleClimbCenter));
 		GridBagConstraints gbc_SingleCenterClimb = new GridBagConstraints();
 		gbc_SingleCenterClimb.anchor = GridBagConstraints.WEST;
 		gbc_SingleCenterClimb.gridheight = 2;
@@ -189,10 +207,13 @@ public class EndGameTest {
 		gbc_SingleCenterClimb.gridx = 4;
 		gbc_SingleCenterClimb.gridy = 8;
 		ScoutingWindow.getContentPane().add(SingleCenterClimb, gbc_SingleCenterClimb);
-		
-		JRadioButton DoubleSideClimb = new JRadioButton("<html>This bot climbed on the<br>side and helped another<br>bot climb</html>");
+
+		JRadioButton DoubleSideClimb = new JRadioButton(
+				"<html>This bot climbed on the<br>side and helped another<br>bot climb</html>");
 		DoubleSideClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		DoubleSideClimb.setForeground(Color.WHITE);
+		climb.add(DoubleSideClimb);
+		DoubleSideClimb.setSelected(Core.IntToBoolean(Core.DoubleClimbSide));
 		GridBagConstraints gbc_DoubleSideClimb = new GridBagConstraints();
 		gbc_DoubleSideClimb.anchor = GridBagConstraints.NORTHWEST;
 		gbc_DoubleSideClimb.gridheight = 2;
@@ -201,10 +222,13 @@ public class EndGameTest {
 		gbc_DoubleSideClimb.gridx = 0;
 		gbc_DoubleSideClimb.gridy = 10;
 		ScoutingWindow.getContentPane().add(DoubleSideClimb, gbc_DoubleSideClimb);
-		
-		JRadioButton DoubleCenterClimb = new JRadioButton("<html>This bot climbed on the<br>center and helped another<br>bot climb</html>");
+
+		JRadioButton DoubleCenterClimb = new JRadioButton(
+				"<html>This bot climbed on the<br>center and helped another<br>bot climb</html>");
 		DoubleCenterClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		DoubleCenterClimb.setForeground(Color.WHITE);
+		climb.add(DoubleCenterClimb);
+		DoubleCenterClimb.setSelected(Core.IntToBoolean(Core.DoubleClimbCenter));
 		GridBagConstraints gbc_DoubleCenterClimb = new GridBagConstraints();
 		gbc_DoubleCenterClimb.anchor = GridBagConstraints.NORTHWEST;
 		gbc_DoubleCenterClimb.gridheight = 2;
@@ -213,10 +237,13 @@ public class EndGameTest {
 		gbc_DoubleCenterClimb.gridx = 4;
 		gbc_DoubleCenterClimb.gridy = 10;
 		ScoutingWindow.getContentPane().add(DoubleCenterClimb, gbc_DoubleCenterClimb);
-		
-		JRadioButton TripleSideClimb = new JRadioButton("<html>This bot climbed on the<br>side and helped two other<br>bots climb</html>");
+
+		JRadioButton TripleSideClimb = new JRadioButton(
+				"<html>This bot climbed on the<br>side and helped two other<br>bots climb</html>");
 		TripleSideClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		TripleSideClimb.setForeground(Color.WHITE);
+		climb.add(TripleSideClimb);
+		TripleSideClimb.setSelected(Core.IntToBoolean(Core.TripleClimbSide));
 		GridBagConstraints gbc_TripleSideClimb = new GridBagConstraints();
 		gbc_TripleSideClimb.gridheight = 2;
 		gbc_TripleSideClimb.anchor = GridBagConstraints.NORTHWEST;
@@ -225,10 +252,13 @@ public class EndGameTest {
 		gbc_TripleSideClimb.gridx = 0;
 		gbc_TripleSideClimb.gridy = 12;
 		ScoutingWindow.getContentPane().add(TripleSideClimb, gbc_TripleSideClimb);
-		
-		JRadioButton TripleCenterClimb = new JRadioButton("<html>This bot climbed on the<br>center and helped two<br>other bots climb</html>");
+
+		JRadioButton TripleCenterClimb = new JRadioButton(
+				"<html>This bot climbed on the<br>center and helped two<br>other bots climb</html>");
 		TripleCenterClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		TripleCenterClimb.setForeground(Color.WHITE);
+		climb.add(TripleCenterClimb);
+		TripleCenterClimb.setSelected(Core.IntToBoolean(Core.TripleClimbCenter));
 		GridBagConstraints gbc_TripleCenterClimb = new GridBagConstraints();
 		gbc_TripleCenterClimb.anchor = GridBagConstraints.NORTHWEST;
 		gbc_TripleCenterClimb.gridheight = 2;
@@ -237,7 +267,7 @@ public class EndGameTest {
 		gbc_TripleCenterClimb.gridx = 4;
 		gbc_TripleCenterClimb.gridy = 12;
 		ScoutingWindow.getContentPane().add(TripleCenterClimb, gbc_TripleCenterClimb);
-		
+
 		JButton Back = new JButton("Back");
 		Back.setFont(new Font("Arial", Font.PLAIN, 25));
 		GridBagConstraints gbc_Back = new GridBagConstraints();
@@ -246,16 +276,16 @@ public class EndGameTest {
 		gbc_Back.gridx = 0;
 		gbc_Back.gridy = 15;
 		ScoutingWindow.getContentPane().add(Back, gbc_Back);
-		
+
 		Back.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				TeleScoutingTest TST = new TeleScoutingTest();
 				ScoutingWindow.setVisible(false);
-				TST.showTeleOp();;
+				TST.showTeleOp();
 			}
 		});
-		
+
 		JButton Cancel = new JButton("Cancel");
 		Cancel.setFont(new Font("Arial", Font.PLAIN, 25));
 		GridBagConstraints gbc_Cancel = new GridBagConstraints();
@@ -264,7 +294,7 @@ public class EndGameTest {
 		gbc_Cancel.gridx = 3;
 		gbc_Cancel.gridy = 15;
 		ScoutingWindow.getContentPane().add(Cancel, gbc_Cancel);
-		
+
 		Cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -272,19 +302,19 @@ public class EndGameTest {
 				ScoutingWindow.setVisible(false);
 			}
 		});
-		
-		JButton Finish = new JButton("Finish");
-		Finish.setFont(new Font("Arial", Font.PLAIN, 25));
-		GridBagConstraints gbc_Finish = new GridBagConstraints();
-		gbc_Finish.gridwidth = 2;
-		gbc_Finish.gridx = 6;
-		gbc_Finish.gridy = 15;
-		ScoutingWindow.getContentPane().add(Finish, gbc_Finish);
-		
-		Finish.addActionListener(new ActionListener() {
+
+		JButton Review = new JButton("Review");
+		Review.setFont(new Font("Arial", Font.PLAIN, 25));
+		GridBagConstraints gbc_Review = new GridBagConstraints();
+		gbc_Review.gridwidth = 2;
+		gbc_Review.gridx = 6;
+		gbc_Review.gridy = 15;
+		ScoutingWindow.getContentPane().add(Review, gbc_Review);
+
+		Review.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO: Add finalize window (For data review, and them commments)
+				FinalizeTest FT = new FinalizeTest();
 				if (!DidntClimb.isSelected()) {
 					Core.SingleClimbSide = Core.BooleanToInt(SingleSideClimb.isSelected());
 					Core.SingleClimbCenter = Core.BooleanToInt(SingleCenterClimb.isSelected());
@@ -294,18 +324,18 @@ public class EndGameTest {
 					Core.TripleClimbCenter = Core.BooleanToInt(TripleCenterClimb.isSelected());
 					Core.RampClimb = Core.BooleanToInt(RampClimb.isSelected());
 				}
+				ScoutingWindow.setVisible(false);
+				FT.showFinalization();
 			}
 		});
-	
-	
+
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
 		ScoutingWindow.setBounds(100, 100, 566, 772);
-		
-		
+
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		ScoutingWindow.setLocation((d.width / 2 - ScoutingWindow.getSize().width / 2),
 				(d.height / 2 - ScoutingWindow.getSize().height / 2));
-		
+
 	}
 }
