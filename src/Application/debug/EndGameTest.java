@@ -9,16 +9,19 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import Application.Debugger;
-import javax.swing.JRadioButton;
 
 public class EndGameTest {
 
@@ -137,7 +140,7 @@ public class EndGameTest {
 		gbc_EndGameHeader.gridx = 0;
 		gbc_EndGameHeader.gridy = 5;
 		ScoutingWindow.getContentPane().add(EndGameHeader, gbc_EndGameHeader);
-		
+		// TODO: Button group
 		JRadioButton RampClimb = new JRadioButton("<html>This bot used a ramp to<br>help others climb</html>");
 		RampClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		RampClimb.setForeground(Color.WHITE);
@@ -223,25 +226,81 @@ public class EndGameTest {
 		gbc_TripleSideClimb.gridy = 12;
 		ScoutingWindow.getContentPane().add(TripleSideClimb, gbc_TripleSideClimb);
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("<html>This bot climbed on the<br>center and helped two<br>other bots climb</html>");
-		rdbtnNewRadioButton.setFont(new Font("Arial", Font.PLAIN, 20));
-		rdbtnNewRadioButton.setForeground(Color.WHITE);
-		GridBagConstraints gbc_rdbtnNewRadioButton = new GridBagConstraints();
-		gbc_rdbtnNewRadioButton.anchor = GridBagConstraints.NORTHWEST;
-		gbc_rdbtnNewRadioButton.gridheight = 2;
-		gbc_rdbtnNewRadioButton.gridwidth = 4;
-		gbc_rdbtnNewRadioButton.insets = new Insets(0, 0, 5, 0);
-		gbc_rdbtnNewRadioButton.gridx = 4;
-		gbc_rdbtnNewRadioButton.gridy = 12;
-		ScoutingWindow.getContentPane().add(rdbtnNewRadioButton, gbc_rdbtnNewRadioButton);
+		JRadioButton TripleCenterClimb = new JRadioButton("<html>This bot climbed on the<br>center and helped two<br>other bots climb</html>");
+		TripleCenterClimb.setFont(new Font("Arial", Font.PLAIN, 20));
+		TripleCenterClimb.setForeground(Color.WHITE);
+		GridBagConstraints gbc_TripleCenterClimb = new GridBagConstraints();
+		gbc_TripleCenterClimb.anchor = GridBagConstraints.NORTHWEST;
+		gbc_TripleCenterClimb.gridheight = 2;
+		gbc_TripleCenterClimb.gridwidth = 4;
+		gbc_TripleCenterClimb.insets = new Insets(0, 0, 5, 0);
+		gbc_TripleCenterClimb.gridx = 4;
+		gbc_TripleCenterClimb.gridy = 12;
+		ScoutingWindow.getContentPane().add(TripleCenterClimb, gbc_TripleCenterClimb);
 		
+		JButton Back = new JButton("Back");
+		Back.setFont(new Font("Arial", Font.PLAIN, 25));
+		GridBagConstraints gbc_Back = new GridBagConstraints();
+		gbc_Back.gridwidth = 2;
+		gbc_Back.insets = new Insets(0, 0, 0, 5);
+		gbc_Back.gridx = 0;
+		gbc_Back.gridy = 15;
+		ScoutingWindow.getContentPane().add(Back, gbc_Back);
 		
+		Back.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				TeleScoutingTest TST = new TeleScoutingTest();
+				ScoutingWindow.setVisible(false);
+				TST.showTeleOp();;
+			}
+		});
 		
+		JButton Cancel = new JButton("Cancel");
+		Cancel.setFont(new Font("Arial", Font.PLAIN, 25));
+		GridBagConstraints gbc_Cancel = new GridBagConstraints();
+		gbc_Cancel.gridwidth = 2;
+		gbc_Cancel.insets = new Insets(0, 0, 0, 5);
+		gbc_Cancel.gridx = 3;
+		gbc_Cancel.gridy = 15;
+		ScoutingWindow.getContentPane().add(Cancel, gbc_Cancel);
+		
+		Cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Core.reset();
+				ScoutingWindow.setVisible(false);
+			}
+		});
+		
+		JButton Finish = new JButton("Finish");
+		Finish.setFont(new Font("Arial", Font.PLAIN, 25));
+		GridBagConstraints gbc_Finish = new GridBagConstraints();
+		gbc_Finish.gridwidth = 2;
+		gbc_Finish.gridx = 6;
+		gbc_Finish.gridy = 15;
+		ScoutingWindow.getContentPane().add(Finish, gbc_Finish);
+		
+		Finish.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO: Add finalize window (For data review, and them commments)
+				if (!DidntClimb.isSelected()) {
+					Core.SingleClimbSide = Core.BooleanToInt(SingleSideClimb.isSelected());
+					Core.SingleClimbCenter = Core.BooleanToInt(SingleCenterClimb.isSelected());
+					Core.DoubleClimbSide = Core.BooleanToInt(DoubleSideClimb.isSelected());
+					Core.DoubleClimbCenter = Core.BooleanToInt(DoubleCenterClimb.isSelected());
+					Core.TripleClimbSide = Core.BooleanToInt(TripleSideClimb.isSelected());
+					Core.TripleClimbCenter = Core.BooleanToInt(TripleCenterClimb.isSelected());
+					Core.RampClimb = Core.BooleanToInt(RampClimb.isSelected());
+				}
+			}
+		});
 	
 	
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
-		ScoutingWindow.setBounds(100, 100, 566, 786);
+		ScoutingWindow.setBounds(100, 100, 566, 772);
 		
 		
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();

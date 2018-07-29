@@ -75,9 +75,9 @@ public class AutoScoutingTest {
 		ScoutingWindow.getContentPane().setBackground(Color.BLACK);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 70, 70, 70, 70, 70, 70, 70, 70, 0 };
-		gridBagLayout.rowHeights = new int[] { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 0 };
+		gridBagLayout.rowHeights = new int[] { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
 
@@ -147,9 +147,10 @@ public class AutoScoutingTest {
 		BasicAuto.setForeground(Color.WHITE);
 		BasicAuto.setFont(new Font("Arial", Font.PLAIN, 25));
 		GridBagConstraints gbc_BasicAuto = new GridBagConstraints();
+		gbc_BasicAuto.anchor = GridBagConstraints.WEST;
 		gbc_BasicAuto.insets = new Insets(0, 0, 5, 0);
-		gbc_BasicAuto.gridwidth = 8;
-		gbc_BasicAuto.gridx = 0;
+		gbc_BasicAuto.gridwidth = 7;
+		gbc_BasicAuto.gridx = 1;
 		gbc_BasicAuto.gridy = 6;
 		ScoutingWindow.getContentPane().add(BasicAuto, gbc_BasicAuto);
 
@@ -159,9 +160,10 @@ public class AutoScoutingTest {
 		SwitchAuto.setBackground(Color.BLACK);
 		SwitchAuto.setFont(new Font("Arial", Font.PLAIN, 25));
 		GridBagConstraints gbc_SwitchAuto = new GridBagConstraints();
+		gbc_SwitchAuto.anchor = GridBagConstraints.WEST;
 		gbc_SwitchAuto.insets = new Insets(0, 0, 5, 0);
-		gbc_SwitchAuto.gridwidth = 8;
-		gbc_SwitchAuto.gridx = 0;
+		gbc_SwitchAuto.gridwidth = 7;
+		gbc_SwitchAuto.gridx = 1;
 		gbc_SwitchAuto.gridy = 7;
 		ScoutingWindow.getContentPane().add(SwitchAuto, gbc_SwitchAuto);
 
@@ -171,15 +173,16 @@ public class AutoScoutingTest {
 		ScaleAuto.setBackground(Color.BLACK);
 		ScaleAuto.setFont(new Font("Arial", Font.PLAIN, 25));
 		GridBagConstraints gbc_ScaleAuto = new GridBagConstraints();
+		gbc_ScaleAuto.anchor = GridBagConstraints.WEST;
 		gbc_ScaleAuto.insets = new Insets(0, 0, 5, 0);
-		gbc_ScaleAuto.gridwidth = 8;
-		gbc_ScaleAuto.gridx = 0;
+		gbc_ScaleAuto.gridwidth = 7;
+		gbc_ScaleAuto.gridx = 1;
 		gbc_ScaleAuto.gridy = 8;
 		ScoutingWindow.getContentPane().add(ScaleAuto, gbc_ScaleAuto);
 
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_2 = new GridBagConstraints();
-		gbc_verticalStrut_2.gridheight = 4;
+		gbc_verticalStrut_2.gridheight = 6;
 		gbc_verticalStrut_2.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut_2.gridwidth = 8;
 		gbc_verticalStrut_2.gridx = 0;
@@ -193,7 +196,7 @@ public class AutoScoutingTest {
 		gbc_fakeBack.gridwidth = 2;
 		gbc_fakeBack.insets = new Insets(0, 0, 0, 5);
 		gbc_fakeBack.gridx = 0;
-		gbc_fakeBack.gridy = 13;
+		gbc_fakeBack.gridy = 15;
 		ScoutingWindow.getContentPane().add(fakeBack, gbc_fakeBack);
 
 		JButton Cancel = new JButton("Cancel");
@@ -202,12 +205,13 @@ public class AutoScoutingTest {
 		gbc_Cancel.gridwidth = 2;
 		gbc_Cancel.insets = new Insets(0, 0, 0, 5);
 		gbc_Cancel.gridx = 3;
-		gbc_Cancel.gridy = 13;
+		gbc_Cancel.gridy = 15;
 		ScoutingWindow.getContentPane().add(Cancel, gbc_Cancel);
 		Cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO: Add reset for all ScoutingWindows
+				Core.reset();
+				ScoutingWindow.setVisible(false);
 			}
 		});
 
@@ -216,7 +220,7 @@ public class AutoScoutingTest {
 		GridBagConstraints gbc_Next = new GridBagConstraints();
 		gbc_Next.gridwidth = 2;
 		gbc_Next.gridx = 6;
-		gbc_Next.gridy = 13;
+		gbc_Next.gridy = 15;
 		ScoutingWindow.getContentPane().add(Next, gbc_Next);
 		Next.addActionListener(new ActionListener() {
 			@Override
@@ -232,7 +236,7 @@ public class AutoScoutingTest {
 
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
-		ScoutingWindow.setBounds(100, 100, 566, 700);
+		ScoutingWindow.setBounds(100, 100, 566, 772);
 
 		ScoutingWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		ScoutingWindow.getRootPane().setDefaultButton(Next);
