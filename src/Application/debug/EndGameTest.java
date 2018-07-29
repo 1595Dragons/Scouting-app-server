@@ -30,7 +30,14 @@ public class EndGameTest {
 	public EndGameTest() {
 		initialize();
 	}
-
+	
+	/**
+	 * Show the application.
+	 */
+	public void showEndGame() {
+		frame.setVisible(true);
+	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */

@@ -233,6 +233,13 @@ public class TeleScoutingTest {
 		gbc_Cancel.gridy = 13;
 		ScoutingWindow.getContentPane().add(Cancel, gbc_Cancel);
 		
+		Cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO: Add cancel actions :P	
+			}
+		});
+		
 		JButton Next = new JButton("Next");
 		Next.setFont(new Font("Arial", Font.PLAIN, 25));
 		GridBagConstraints gbc_Next = new GridBagConstraints();
@@ -241,6 +248,18 @@ public class TeleScoutingTest {
 		gbc_Next.gridx = 6;
 		gbc_Next.gridy = 13;
 		ScoutingWindow.getContentPane().add(Next, gbc_Next);
+		
+		Next.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				EndGameTest EGT = new EndGameTest();
+				Core.SwitchTeleValue = (int) SwitchCube.getValue();
+				Core.ScaleTeleValue = (int) ScaleCube.getValue();
+				Core.ExchangeTeleValue = (int) ExchangeCube.getValue();
+				ScoutingWindow.setVisible(false);
+				EGT.showEndGame();
+			}
+		});
 		
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);

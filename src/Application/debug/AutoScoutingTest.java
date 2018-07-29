@@ -139,6 +139,7 @@ public class AutoScoutingTest {
 		ScoutingWindow.getContentPane().add(AutonomousHeader, gbc_AutonomousHeader);
 
 		JCheckBox BasicAuto = new JCheckBox("This team can cross the baseline");
+		BasicAuto.setSelected(Core.IntToBoolean(Core.BasicAutoValue));
 		BasicAuto.setBackground(Color.BLACK);
 		BasicAuto.setForeground(Color.WHITE);
 		BasicAuto.setFont(new Font("Arial", Font.PLAIN, 25));
@@ -150,6 +151,7 @@ public class AutoScoutingTest {
 		ScoutingWindow.getContentPane().add(BasicAuto, gbc_BasicAuto);
 
 		JCheckBox SwitchAuto = new JCheckBox("This team can place on the switch");
+		SwitchAuto.setSelected(Core.IntToBoolean(Core.SwitchAutoValue));
 		SwitchAuto.setForeground(Color.WHITE);
 		SwitchAuto.setBackground(Color.BLACK);
 		SwitchAuto.setFont(new Font("Arial", Font.PLAIN, 25));
@@ -161,6 +163,7 @@ public class AutoScoutingTest {
 		ScoutingWindow.getContentPane().add(SwitchAuto, gbc_SwitchAuto);
 
 		JCheckBox ScaleAuto = new JCheckBox("This team can place on the scale");
+		ScaleAuto.setSelected(Core.IntToBoolean(Core.ScaleAutoValue));
 		ScaleAuto.setForeground(Color.WHITE);
 		ScaleAuto.setBackground(Color.BLACK);
 		ScaleAuto.setFont(new Font("Arial", Font.PLAIN, 25));
@@ -216,6 +219,9 @@ public class AutoScoutingTest {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				TeleScoutingTest TST = new TeleScoutingTest();
+				Core.BasicAutoValue = Core.BooleanToInt(BasicAuto.isSelected());
+				Core.SwitchAutoValue = Core.BooleanToInt(SwitchAuto.isSelected());
+				Core.ScaleAutoValue =  Core.BooleanToInt(ScaleAuto.isSelected());
 				ScoutingWindow.setVisible(false);
 				TST.showTeleOp();
 			}
