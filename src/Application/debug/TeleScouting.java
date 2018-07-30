@@ -25,7 +25,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import Application.Debugger;
 
 public class TeleScouting {
-
+	// TODO: Make JSpinner buttons larger
+	// TODO: Add (+1 from autonomous)
 	private JFrame ScoutingWindow;
 
 	/**
