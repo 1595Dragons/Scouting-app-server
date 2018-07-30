@@ -7,6 +7,8 @@ public class Core {
 			DoubleClimbCenter = 0, TripleClimbSide = 0, TripleClimbCenter = 0, RampClimb = 0, DidntClimb = 1;
 	public static String comments;
 
+	// TODO: Store team number in core
+	
 	public static void reset() {
 		BasicAutoValue = 0;
 		SwitchAutoValue = 0;

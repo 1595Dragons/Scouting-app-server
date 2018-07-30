@@ -268,6 +268,7 @@ public class MainPanel {
 		StartScoutingButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Core.reset();
 				enterTeamPrompt.showPromptWindow();
 			}
 		});

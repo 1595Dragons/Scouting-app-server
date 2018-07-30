@@ -92,7 +92,7 @@ public class Finalize {
 
 		JLabel CommentsHeader = new JLabel("Comments");
 		CommentsHeader.setForeground(Color.WHITE);
-		CommentsHeader.setFont(new Font("Arial Black", Font.PLAIN, 25));
+		CommentsHeader.setFont(new Font("Arial Black", Font.PLAIN, 30));
 		GridBagConstraints gbc_CommentsHeader = new GridBagConstraints();
 		gbc_CommentsHeader.gridwidth = 8;
 		gbc_CommentsHeader.insets = new Insets(0, 0, 5, 0);
@@ -102,7 +102,7 @@ public class Finalize {
 
 		CommentsField = new JTextField();
 		CommentsField.setForeground(Color.WHITE);
-		CommentsField.setFont(new Font("Arial", Font.PLAIN, 20));
+		CommentsField.setFont(new Font("Arial", Font.PLAIN, 25));
 		CommentsField.setBackground(Color.DARK_GRAY);
 		GridBagConstraints gbc_CommentsField = new GridBagConstraints();
 		gbc_CommentsField.gridheight = 3;
@@ -124,7 +124,7 @@ public class Finalize {
 
 		ReviewHeader = new JLabel("Review");
 		ReviewHeader.setForeground(Color.WHITE);
-		ReviewHeader.setFont(new Font("Arial Black", Font.PLAIN, 25));
+		ReviewHeader.setFont(new Font("Arial Black", Font.PLAIN, 35));
 		GridBagConstraints gbc_ReviewHeader = new GridBagConstraints();
 		gbc_ReviewHeader.gridwidth = 8;
 		gbc_ReviewHeader.insets = new Insets(0, 0, 5, 0);
@@ -133,44 +133,40 @@ public class Finalize {
 		ScoutingWindow.getContentPane().add(ReviewHeader, gbc_ReviewHeader);
 
 		ReviewTeamNumber = new JLabel("Team number: " + EnterTeamNumberPrompt.teamNumber);
-		ReviewTeamNumber.setFont(new Font("Arial", Font.PLAIN, 20));
+		ReviewTeamNumber.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewTeamNumber.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewTeamNumber = new GridBagConstraints();
-		gbc_ReviewTeamNumber.anchor = GridBagConstraints.WEST;
-		gbc_ReviewTeamNumber.gridwidth = 3;
+		gbc_ReviewTeamNumber.gridwidth = 4;
 		gbc_ReviewTeamNumber.insets = new Insets(0, 0, 5, 5);
-		gbc_ReviewTeamNumber.gridx = 1;
+		gbc_ReviewTeamNumber.gridx = 0;
 		gbc_ReviewTeamNumber.gridy = 6;
 		ScoutingWindow.getContentPane().add(ReviewTeamNumber, gbc_ReviewTeamNumber);
 
 		ReviewHasAuto = new JLabel("Has basic auto: " + String.valueOf(Core.IntToBoolean(Core.BasicAutoValue)));
-		ReviewHasAuto.setFont(new Font("Arial", Font.PLAIN, 20));
+		ReviewHasAuto.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewHasAuto.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewHasAuto = new GridBagConstraints();
-		gbc_ReviewHasAuto.anchor = GridBagConstraints.WEST;
-		gbc_ReviewHasAuto.gridwidth = 3;
+		gbc_ReviewHasAuto.gridwidth = 4;
 		gbc_ReviewHasAuto.insets = new Insets(0, 0, 5, 5);
 		gbc_ReviewHasAuto.gridx = 4;
 		gbc_ReviewHasAuto.gridy = 6;
 		ScoutingWindow.getContentPane().add(ReviewHasAuto, gbc_ReviewHasAuto);
 
 		ReviewSwitchAuto = new JLabel("Has switch auto: " + String.valueOf(Core.IntToBoolean(Core.SwitchAutoValue)));
-		ReviewSwitchAuto.setFont(new Font("Arial", Font.PLAIN, 20));
+		ReviewSwitchAuto.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewSwitchAuto.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewSwitchAuto = new GridBagConstraints();
-		gbc_ReviewSwitchAuto.anchor = GridBagConstraints.WEST;
-		gbc_ReviewSwitchAuto.gridwidth = 3;
+		gbc_ReviewSwitchAuto.gridwidth = 4;
 		gbc_ReviewSwitchAuto.insets = new Insets(0, 0, 5, 5);
-		gbc_ReviewSwitchAuto.gridx = 1;
+		gbc_ReviewSwitchAuto.gridx = 0;
 		gbc_ReviewSwitchAuto.gridy = 7;
 		ScoutingWindow.getContentPane().add(ReviewSwitchAuto, gbc_ReviewSwitchAuto);
 
 		ReviewScaleAuto = new JLabel("Has scale auto: " + String.valueOf(Core.IntToBoolean(Core.ScaleAutoValue)));
-		ReviewScaleAuto.setFont(new Font("Arial", Font.PLAIN, 20));
+		ReviewScaleAuto.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewScaleAuto.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewScaleAuto = new GridBagConstraints();
-		gbc_ReviewScaleAuto.anchor = GridBagConstraints.WEST;
-		gbc_ReviewScaleAuto.gridwidth = 3;
+		gbc_ReviewScaleAuto.gridwidth = 4;
 		gbc_ReviewScaleAuto.insets = new Insets(0, 0, 5, 5);
 		gbc_ReviewScaleAuto.gridx = 4;
 		gbc_ReviewScaleAuto.gridy = 7;
@@ -178,25 +174,23 @@ public class Finalize {
 
 		ReviewSwitch = new JLabel(String.format("<html>Total cubes placed<br><center>on switch: %s</center></html>",
 				String.valueOf(Core.SwitchTeleValue)));
-		ReviewSwitch.setFont(new Font("Arial", Font.PLAIN, 20));
+		ReviewSwitch.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewSwitch.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewSwitch = new GridBagConstraints();
 		gbc_ReviewSwitch.gridheight = 2;
-		gbc_ReviewSwitch.anchor = GridBagConstraints.WEST;
-		gbc_ReviewSwitch.gridwidth = 3;
+		gbc_ReviewSwitch.gridwidth = 4;
 		gbc_ReviewSwitch.insets = new Insets(0, 0, 5, 5);
-		gbc_ReviewSwitch.gridx = 1;
+		gbc_ReviewSwitch.gridx = 0;
 		gbc_ReviewSwitch.gridy = 8;
 		ScoutingWindow.getContentPane().add(ReviewSwitch, gbc_ReviewSwitch);
 
 		ReviewScale = new JLabel(String.format("<html>Total cubes placed<br><center>on scale: %s</center></html>",
 				String.valueOf(Core.ScaleTeleValue)));
 		ReviewScale.setForeground(Color.WHITE);
-		ReviewScale.setFont(new Font("Arial", Font.PLAIN, 20));
+		ReviewScale.setFont(new Font("Arial", Font.PLAIN, 25));
 		GridBagConstraints gbc_ReviewScale = new GridBagConstraints();
-		gbc_ReviewScale.anchor = GridBagConstraints.WEST;
 		gbc_ReviewScale.gridheight = 2;
-		gbc_ReviewScale.gridwidth = 3;
+		gbc_ReviewScale.gridwidth = 4;
 		gbc_ReviewScale.insets = new Insets(0, 0, 5, 5);
 		gbc_ReviewScale.gridx = 4;
 		gbc_ReviewScale.gridy = 8;
@@ -204,25 +198,23 @@ public class Finalize {
 
 		ReviewExchange = new JLabel(String.format("<html>Total cubes placed<br>\tin the exchange: %s</html>",
 				String.valueOf(Core.ExchangeTeleValue)));
-		ReviewExchange.setFont(new Font("Arial", Font.PLAIN, 20));
+		ReviewExchange.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewExchange.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewExchange = new GridBagConstraints();
-		gbc_ReviewExchange.anchor = GridBagConstraints.WEST;
 		gbc_ReviewExchange.gridheight = 2;
-		gbc_ReviewExchange.gridwidth = 3;
+		gbc_ReviewExchange.gridwidth = 4;
 		gbc_ReviewExchange.insets = new Insets(0, 0, 5, 5);
-		gbc_ReviewExchange.gridx = 1;
+		gbc_ReviewExchange.gridx = 0;
 		gbc_ReviewExchange.gridy = 10;
 		ScoutingWindow.getContentPane().add(ReviewExchange, gbc_ReviewExchange);
 
 		ReviewClimb = new JLabel(String.format("<html>Can this team climb:<br><center>%s</center></html>",
 				String.valueOf(!Core.IntToBoolean(Core.DidntClimb))));
-		ReviewClimb.setFont(new Font("Arial", Font.PLAIN, 20));
+		ReviewClimb.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewClimb.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewClimb = new GridBagConstraints();
-		gbc_ReviewClimb.anchor = GridBagConstraints.WEST;
 		gbc_ReviewClimb.gridheight = 2;
-		gbc_ReviewClimb.gridwidth = 3;
+		gbc_ReviewClimb.gridwidth = 4;
 		gbc_ReviewClimb.insets = new Insets(0, 0, 5, 5);
 		gbc_ReviewClimb.gridx = 4;
 		gbc_ReviewClimb.gridy = 10;
@@ -291,7 +283,7 @@ public class Finalize {
 
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
-		ScoutingWindow.setBounds(100, 100, 566, 772);
+		ScoutingWindow.setBounds(100, 100, 570, 800);
 
 		ScoutingWindow.getRootPane().setDefaultButton(Finish);
 
