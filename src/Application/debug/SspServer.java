@@ -10,7 +10,7 @@ import javax.microedition.io.StreamConnection;
 
 import Application.Debugger;
 
-public class SSPserverTest extends Thread {
+public class SspServer extends Thread {
 	StreamConnection connection = ScoutingAppTest.currentConnection;
 
 	// Wait for client connection
@@ -38,7 +38,7 @@ public class SSPserverTest extends Thread {
 								String.format("Device disconnected: %s (%s)",
 										RemoteDevice.getRemoteDevice(connection).getFriendlyName(false),
 										RemoteDevice.getRemoteDevice(connection).getBluetoothAddress()));
-						DeviceManagementTest
+						DeviceManagement
 								.deviceDisconnected(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
 						return;
 					}
@@ -48,11 +48,11 @@ public class SSPserverTest extends Thread {
 					e1.printStackTrace();
 				}
 
-				ScoutingFileTest.writeToFile(lineRead);
+				ScoutingFile.writeToFile(lineRead);
 
 				// Try closing the writer and stream
 				try {
-					DeviceManagementTest
+					DeviceManagement
 							.deviceDisconnected(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
 					bReader.close();
 					inStream.close();

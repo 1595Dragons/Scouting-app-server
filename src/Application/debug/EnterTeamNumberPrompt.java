@@ -21,7 +21,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import Application.Debugger;
 
-public class EnterTeamNumberTest extends Thread {
+public class EnterTeamNumberPrompt extends Thread {
 
 	private JFrame frame;
 
@@ -36,7 +36,7 @@ public class EnterTeamNumberTest extends Thread {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EnterTeamNumberTest window = new EnterTeamNumberTest();
+					EnterTeamNumberPrompt window = new EnterTeamNumberPrompt();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,7 +48,7 @@ public class EnterTeamNumberTest extends Thread {
 	/**
 	 * Create the application.
 	 */
-	public EnterTeamNumberTest() {
+	public EnterTeamNumberPrompt() {
 		initialize();
 	}
 
@@ -69,7 +69,7 @@ public class EnterTeamNumberTest extends Thread {
 		} catch (UnsupportedLookAndFeelException notWindows) {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-				Debugger.d(InfoTest.class, e.getMessage());
+				Debugger.d(MainPanel.class, e.getMessage());
 				e.printStackTrace();
 		}
 
@@ -147,7 +147,7 @@ public class EnterTeamNumberTest extends Thread {
 				try {
 					teamNumber = Integer.parseInt(teamNumberInput.getText());
 					teamNumberInput.setText("");
-					AutoScoutingTest autoScouting = new AutoScoutingTest();
+					AutoScouting autoScouting = new AutoScouting();
 					autoScouting.showAutonomous();
 				} catch (NumberFormatException InvalidNumber) {
 					// Not a valid number (do nothing)

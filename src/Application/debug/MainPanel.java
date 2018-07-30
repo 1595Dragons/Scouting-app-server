@@ -19,7 +19,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import Application.Debugger;
 
-public class InfoTest {
+public class MainPanel {
 
 	private JFrame ScoutingAppWindow;
 
@@ -27,7 +27,7 @@ public class InfoTest {
 
 	public static JButton GoToFileButton;
 
-	private EnterTeamNumberTest enterTeamPrompt;
+	private EnterTeamNumberPrompt enterTeamPrompt;
 
 	/**
 	 * Launch the application.
@@ -36,7 +36,7 @@ public class InfoTest {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InfoTest window = new InfoTest();
+					MainPanel window = new MainPanel();
 					window.ScoutingAppWindow.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,10 +48,10 @@ public class InfoTest {
 	/**
 	 * Create the application.
 	 */
-	public InfoTest() {
+	public MainPanel() {
 		initialize();
-		Debugger.d(InfoTest.class, "Creating the prompt window");
-		enterTeamPrompt = new EnterTeamNumberTest();
+		Debugger.d(MainPanel.class, "Creating the prompt window");
+		enterTeamPrompt = new EnterTeamNumberPrompt();
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class InfoTest {
 		} catch (UnsupportedLookAndFeelException notWindows) {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-				Debugger.d(InfoTest.class, e.getMessage());
+				Debugger.d(MainPanel.class, e.getMessage());
 				e.printStackTrace();
 		}
 

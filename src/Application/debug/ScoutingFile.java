@@ -9,21 +9,21 @@ import java.io.IOException;
 
 import Application.Debugger;
 
-public class ScoutingFileTest {
+public class ScoutingFile {
 
 	private static final File ScoutingFile = new File(System.getProperty("user.dir") + "/scouting_data.csv");
 
 	public static boolean FileExists() {
-		Debugger.d(ScoutingFileTest.class, Boolean.toString(ScoutingFile.exists()));
+		Debugger.d(ScoutingFile.class, Boolean.toString(ScoutingFile.exists()));
 		return ScoutingFile.exists();
 	}
 
 	public static void makeFile() {
-		Debugger.d(ScoutingFileTest.class, "File path: " + ScoutingFile.getAbsolutePath());
+		Debugger.d(ScoutingFile.class, "File path: " + ScoutingFile.getAbsolutePath());
 		try {
 			ScoutingFile.createNewFile();
 		} catch (IOException e) {
-			Debugger.d(ScoutingFileTest.class, "Error: " + e.getMessage());
+			Debugger.d(ScoutingFile.class, "Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -32,7 +32,7 @@ public class ScoutingFileTest {
 		try {
 			write = new BufferedWriter(new FileWriter(ScoutingFile, true));
 		} catch (IOException e) {
-			Debugger.d(ScoutingFileTest.class, "Error: " + e.getMessage());
+			Debugger.d(ScoutingFile.class, "Error: " + e.getMessage());
 			e.printStackTrace();
 
 		}
@@ -47,30 +47,31 @@ public class ScoutingFileTest {
 			write.flush();
 			write.close();
 		} catch (IOException e) {
-			Debugger.d(ScoutingFileTest.class, "Error: " + e.getMessage());
+			Debugger.d(ScoutingFile.class, "Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 
 	}
 
 	public static void setFileText() {
-		InfoTest.FileLocation.setText(
+		MainPanel.FileLocation.setText(
 				"Data location: " + ScoutingFile.getPath().replace(System.getProperty("user.home") + "\\", ""));
 	}
 
 	public static void setupButton() {
-		InfoTest.GoToFileButton.addActionListener(new ActionListener() {
+		MainPanel.GoToFileButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					Runtime.getRuntime().exec("explorer.exe /select," + ScoutingFile.getAbsoluteFile());
 				} catch (IOException e) {
-					Debugger.d(ScoutingFileTest.class, "Error: " + e.getMessage());
+					// TODO: Catch IOException as on macOS
+					Debugger.d(ScoutingFile.class, "Error: " + e.getMessage());
 					e.printStackTrace();
 				}
 			}
 		});
-		InfoTest.GoToFileButton.setEnabled(true);
+		MainPanel.GoToFileButton.setEnabled(true);
 	}
 
 	public static void writeToFile(String data) {
@@ -81,7 +82,7 @@ public class ScoutingFileTest {
 			fw = new FileWriter(new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath(),
 					true);
 		} catch (IOException e1) {
-			Debugger.d(ScoutingFileTest.class, String.format("Error, cannot edit file: %s", e1.getMessage()));
+			Debugger.d(ScoutingFile.class, String.format("Error, cannot edit file: %s", e1.getMessage()));
 			e1.printStackTrace();
 			return;
 		}
@@ -91,7 +92,7 @@ public class ScoutingFileTest {
 			fw.flush();
 			success = true;
 		} catch (IOException e1) {
-			Debugger.d(ScoutingFileTest.class, String.format("Error, cannot write to file: %s", e1.getMessage()));
+			Debugger.d(ScoutingFile.class, String.format("Error, cannot write to file: %s", e1.getMessage()));
 			e1.printStackTrace();
 			success = false;
 		}
@@ -100,14 +101,14 @@ public class ScoutingFileTest {
 		try {
 			fw.close();
 		} catch (IOException e1) {
-			Debugger.d(ScoutingFileTest.class, String.format("Error, cannot close stream: %s", e1.getMessage()));
+			Debugger.d(ScoutingFile.class, String.format("Error, cannot close stream: %s", e1.getMessage()));
 			e1.printStackTrace();
 			return;
 		}
 
 		// Report success!
 		if (success) {
-			Debugger.d(ScoutingFileTest.class, "Data: " + data);
+			Debugger.d(ScoutingFile.class, "Data: " + data);
 			Debugger.logTest(String.format("Successfully written data for team: %s", data.split(",")[0]), false);
 		} else {
 			Debugger.logTest("Could not write data to file", true);

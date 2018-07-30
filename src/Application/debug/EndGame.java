@@ -24,7 +24,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import Application.Debugger;
 
-public class EndGameTest {
+public class EndGame {
 
 	private JFrame ScoutingWindow;
 	private ButtonGroup climb = new ButtonGroup();
@@ -36,7 +36,7 @@ public class EndGameTest {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EndGameTest window = new EndGameTest();
+					EndGame window = new EndGame();
 					window.ScoutingWindow.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,7 +48,7 @@ public class EndGameTest {
 	/**
 	 * Create the application.
 	 */
-	public EndGameTest() {
+	public EndGame() {
 		initialize();
 	}
 
@@ -69,7 +69,7 @@ public class EndGameTest {
 		} catch (UnsupportedLookAndFeelException notWindows) {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-			Debugger.d(InfoTest.class, e.getMessage());
+			Debugger.d(MainPanel.class, e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -83,7 +83,7 @@ public class EndGameTest {
 				0.0, 0.0, Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
 
-		JLabel ScoutingTeamText = new JLabel("Scouting team: " + EnterTeamNumberTest.teamNumber);
+		JLabel ScoutingTeamText = new JLabel("Scouting team: " + EnterTeamNumberPrompt.teamNumber);
 		ScoutingTeamText.setForeground(Color.WHITE);
 		ScoutingTeamText.setFont(new Font("Arial Black", Font.PLAIN, 40));
 		GridBagConstraints gbc_ScoutingTeamText = new GridBagConstraints();
@@ -280,7 +280,7 @@ public class EndGameTest {
 		Back.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				TeleScoutingTest TST = new TeleScoutingTest();
+				TeleScouting TST = new TeleScouting();
 				ScoutingWindow.setVisible(false);
 				TST.showTeleOp();
 			}
@@ -314,7 +314,7 @@ public class EndGameTest {
 		Review.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				FinalizeTest FT = new FinalizeTest();
+				Finalize FT = new Finalize();
 				if (!DidntClimb.isSelected()) {
 					Core.SingleClimbSide = Core.BooleanToInt(SingleSideClimb.isSelected());
 					Core.SingleClimbCenter = Core.BooleanToInt(SingleCenterClimb.isSelected());

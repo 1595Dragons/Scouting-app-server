@@ -24,7 +24,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import Application.Debugger;
 
-public class TeleScoutingTest {
+public class TeleScouting {
 
 	private JFrame ScoutingWindow;
 
@@ -35,7 +35,7 @@ public class TeleScoutingTest {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TeleScoutingTest window = new TeleScoutingTest();
+					TeleScouting window = new TeleScouting();
 					window.ScoutingWindow.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,7 +47,7 @@ public class TeleScoutingTest {
 	/**
 	 * Create the application.
 	 */
-	public TeleScoutingTest() {
+	public TeleScouting() {
 		initialize();
 	}
 	
@@ -68,7 +68,7 @@ public class TeleScoutingTest {
 		} catch (UnsupportedLookAndFeelException notWindows) {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-				Debugger.d(InfoTest.class, e.getMessage());
+				Debugger.d(MainPanel.class, e.getMessage());
 				e.printStackTrace();
 		}
 
@@ -82,7 +82,7 @@ public class TeleScoutingTest {
 				Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
 		
-		JLabel ScoutingTeamText = new JLabel("Scouting team: " + EnterTeamNumberTest.teamNumber);
+		JLabel ScoutingTeamText = new JLabel("Scouting team: " + EnterTeamNumberPrompt.teamNumber);
 		ScoutingTeamText.setForeground(Color.WHITE);
 		ScoutingTeamText.setFont(new Font("Arial Black", Font.PLAIN, 40));
 		GridBagConstraints gbc_ScoutingTeamText = new GridBagConstraints();
@@ -226,7 +226,7 @@ public class TeleScoutingTest {
 		Back.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				AutoScoutingTest AST = new AutoScoutingTest();
+				AutoScouting AST = new AutoScouting();
 				ScoutingWindow.setVisible(false);
 				AST.showAutonomous();
 			}
@@ -260,7 +260,7 @@ public class TeleScoutingTest {
 		Next.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				EndGameTest EGT = new EndGameTest();
+				EndGame EGT = new EndGame();
 				Core.SwitchTeleValue = (int) SwitchCube.getValue();
 				Core.ScaleTeleValue = (int) ScaleCube.getValue();
 				Core.ExchangeTeleValue = (int) ExchangeCube.getValue();

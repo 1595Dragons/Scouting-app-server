@@ -22,7 +22,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import Application.Debugger;
 
-public class FinalizeTest {
+public class Finalize {
 
 	private JFrame ScoutingWindow;
 	private JTextField CommentsField;
@@ -44,7 +44,7 @@ public class FinalizeTest {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FinalizeTest window = new FinalizeTest();
+					Finalize window = new Finalize();
 					window.ScoutingWindow.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -56,7 +56,7 @@ public class FinalizeTest {
 	/**
 	 * Create the application.
 	 */
-	public FinalizeTest() {
+	public Finalize() {
 		initialize();
 	}
 
@@ -76,7 +76,7 @@ public class FinalizeTest {
 		} catch (UnsupportedLookAndFeelException notWindows) {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-			Debugger.d(InfoTest.class, e.getMessage());
+			Debugger.d(MainPanel.class, e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -132,7 +132,7 @@ public class FinalizeTest {
 		gbc_ReviewHeader.gridy = 5;
 		ScoutingWindow.getContentPane().add(ReviewHeader, gbc_ReviewHeader);
 
-		ReviewTeamNumber = new JLabel("Team number: " + EnterTeamNumberTest.teamNumber);
+		ReviewTeamNumber = new JLabel("Team number: " + EnterTeamNumberPrompt.teamNumber);
 		ReviewTeamNumber.setFont(new Font("Arial", Font.PLAIN, 20));
 		ReviewTeamNumber.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewTeamNumber = new GridBagConstraints();
@@ -247,7 +247,7 @@ public class FinalizeTest {
 		Back.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				EndGameTest EGT = new EndGameTest();
+				EndGame EGT = new EndGame();
 				ScoutingWindow.setVisible(false);
 				EGT.showEndGame();
 			}
@@ -283,12 +283,12 @@ public class FinalizeTest {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String data = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
-						EnterTeamNumberTest.teamNumber, Core.BasicAutoValue, Core.SwitchAutoValue, Core.ScaleAutoValue,
+						EnterTeamNumberPrompt.teamNumber, Core.BasicAutoValue, Core.SwitchAutoValue, Core.ScaleAutoValue,
 						Core.SwitchTeleValue, Core.ScaleTeleValue, Core.ExchangeTeleValue, Core.SingleClimbSide,
 						Core.SingleClimbCenter, Core.DoubleClimbSide, Core.DoubleClimbCenter, Core.TripleClimbSide,
 						Core.TripleClimbCenter, Core.RampClimb, CommentsField.getText().replace(",", "."));
-				Debugger.d(FinalizeTest.class, "Data: " + data);
-				ScoutingFileTest.writeToFile(data);
+				Debugger.d(Finalize.class, "Data: " + data);
+				ScoutingFile.writeToFile(data);
 				Core.reset();
 				CommentsField.setText("");
 				ScoutingWindow.setVisible(false);

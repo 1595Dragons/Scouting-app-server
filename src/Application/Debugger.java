@@ -2,7 +2,6 @@ package Application;
 
 import java.awt.Color;
 
-import Application.debug.InfoTest;
 import Application.debug.ScoutingAppTest;
 import Application.release.ScoutingApp;
 
@@ -13,16 +12,17 @@ public class Debugger {
 			System.out.println(String.format("%s: %s", name.getName(), message));
 		}
 	}
+
 	public static void log(String message, boolean error) {
 		// TODO: Finish for official one
 	}
-	
+
 	public static void logTest(String message, boolean error) {
-		InfoTest.ConsoleText.setText(message);
+		Application.debug.MainPanel.ConsoleText.setText(message);
 		if (error) {
-			InfoTest.ConsoleText.setForeground(Color.RED);
+			Application.debug.MainPanel.ConsoleText.setForeground(Color.RED);
 		} else {
-			InfoTest.ConsoleText.setForeground(Color.WHITE);
+			Application.debug.MainPanel.ConsoleText.setForeground(Color.WHITE);
 		}
 	}
 }

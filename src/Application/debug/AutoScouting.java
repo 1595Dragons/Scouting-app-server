@@ -23,7 +23,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import Application.Debugger;
 
-public class AutoScoutingTest {
+public class AutoScouting {
 
 	private JFrame ScoutingWindow;
 
@@ -34,7 +34,7 @@ public class AutoScoutingTest {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AutoScoutingTest window = new AutoScoutingTest();
+					AutoScouting window = new AutoScouting();
 					window.ScoutingWindow.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -53,7 +53,7 @@ public class AutoScoutingTest {
 	/**
 	 * Create the application.
 	 */
-	public AutoScoutingTest() {
+	public AutoScouting() {
 		initialize();
 	}
 
@@ -67,7 +67,7 @@ public class AutoScoutingTest {
 		} catch (UnsupportedLookAndFeelException notWindows) {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-				Debugger.d(InfoTest.class, e.getMessage());
+				Debugger.d(MainPanel.class, e.getMessage());
 				e.printStackTrace();
 		}
 		
@@ -81,7 +81,7 @@ public class AutoScoutingTest {
 				Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
 
-		JLabel ScoutingTeamText = new JLabel("Scouting team: " + EnterTeamNumberTest.teamNumber);
+		JLabel ScoutingTeamText = new JLabel("Scouting team: " + EnterTeamNumberPrompt.teamNumber);
 		ScoutingTeamText.setForeground(Color.WHITE);
 		ScoutingTeamText.setFont(new Font("Arial Black", Font.PLAIN, 40));
 		GridBagConstraints gbc_ScoutingTeamText = new GridBagConstraints();
@@ -225,7 +225,7 @@ public class AutoScoutingTest {
 		Next.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				TeleScoutingTest TST = new TeleScoutingTest();
+				TeleScouting TST = new TeleScouting();
 				Core.BasicAutoValue = Core.BooleanToInt(BasicAuto.isSelected());
 				Core.SwitchAutoValue = Core.BooleanToInt(SwitchAuto.isSelected());
 				Core.ScaleAutoValue = Core.BooleanToInt(ScaleAuto.isSelected());
