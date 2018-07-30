@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
@@ -62,10 +63,13 @@ public class Updater {
 			s = new Scanner(connection.getInputStream());
 		} catch (UnknownHostException e) {
 			return false;
+		} catch (SocketTimeoutException timedOut) {
+			return false;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
+		
 		double version = (Double.parseDouble(s.nextLine()));
 		s.close();
 		

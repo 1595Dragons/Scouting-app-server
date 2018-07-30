@@ -65,6 +65,8 @@ public class Finalize {
 	 */
 	public void showFinalization() {
 		ScoutingWindow.setVisible(true);
+		ReviewClimb.setText(String.format("<html>Can this team climb:<br><center>%s</center></html>",
+				String.valueOf(!Core.IntToBoolean(Core.DidntClimb))));
 	}
 
 	/**
@@ -215,15 +217,8 @@ public class Finalize {
 		gbc_ReviewExchange.gridy = 10;
 		ScoutingWindow.getContentPane().add(ReviewExchange, gbc_ReviewExchange);
 
-		boolean noClimb = false;
-		if (Core.IntToBoolean(Core.RampClimb) || Core.IntToBoolean(Core.SingleClimbCenter)
-				|| Core.IntToBoolean(Core.SingleClimbSide) || Core.IntToBoolean(Core.DoubleClimbCenter)
-				|| Core.IntToBoolean(Core.DoubleClimbSide) || Core.IntToBoolean(Core.TripleClimbCenter)
-				|| Core.IntToBoolean(Core.TripleClimbSide)) {
-			noClimb = true;
-		}
-		ReviewClimb = new JLabel(
-				String.format("<html>Can this team climb:<br><center>%s</center></html>", String.valueOf(noClimb)));
+		ReviewClimb = new JLabel(String.format("<html>Can this team climb:<br><center>%s</center></html>",
+				String.valueOf(!Core.IntToBoolean(Core.DidntClimb))));
 		ReviewClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		ReviewClimb.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewClimb = new GridBagConstraints();
@@ -279,15 +274,15 @@ public class Finalize {
 		gbc_Finish.gridy = 15;
 		ScoutingWindow.getContentPane().add(Finish, gbc_Finish);
 
-		// TODO: Fix issue with climb detection
 		Finish.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String data = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
-						EnterTeamNumberPrompt.teamNumber, Core.BasicAutoValue, Core.SwitchAutoValue, Core.ScaleAutoValue,
-						Core.SwitchTeleValue, Core.ScaleTeleValue, Core.ExchangeTeleValue, Core.SingleClimbSide,
-						Core.SingleClimbCenter, Core.DoubleClimbSide, Core.DoubleClimbCenter, Core.TripleClimbSide,
-						Core.TripleClimbCenter, Core.RampClimb, CommentsField.getText().replace(",", "."));
+						EnterTeamNumberPrompt.teamNumber, Core.BasicAutoValue, Core.SwitchAutoValue,
+						Core.ScaleAutoValue, Core.SwitchTeleValue, Core.ScaleTeleValue, Core.ExchangeTeleValue,
+						Core.SingleClimbSide, Core.SingleClimbCenter, Core.DoubleClimbSide, Core.DoubleClimbCenter,
+						Core.TripleClimbSide, Core.TripleClimbCenter, Core.RampClimb,
+						CommentsField.getText().replace(",", "."));
 				Debugger.d(Finalize.class, "Data: " + data);
 				ScoutingFile.writeToFile(data);
 				Core.reset();
@@ -299,7 +294,7 @@ public class Finalize {
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
 		ScoutingWindow.setBounds(100, 100, 566, 772);
-		
+
 		ScoutingWindow.getRootPane().setDefaultButton(Finish);
 
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();

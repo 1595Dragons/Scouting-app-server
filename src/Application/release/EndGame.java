@@ -160,14 +160,7 @@ public class EndGame {
 		JRadioButton DidntClimb = new JRadioButton("This robot failed to climb");
 		DidntClimb.setForeground(Color.WHITE);
 		DidntClimb.setFont(new Font("Arial", Font.PLAIN, 20));
-		boolean noClimb = true;
-		if (Core.IntToBoolean(Core.RampClimb) || Core.IntToBoolean(Core.SingleClimbCenter)
-				|| Core.IntToBoolean(Core.SingleClimbSide) || Core.IntToBoolean(Core.DoubleClimbCenter)
-				|| Core.IntToBoolean(Core.DoubleClimbSide) || Core.IntToBoolean(Core.TripleClimbCenter)
-				|| Core.IntToBoolean(Core.TripleClimbSide)) {
-			noClimb = false;
-		}
-		DidntClimb.setSelected(noClimb);
+		DidntClimb.setSelected(Core.IntToBoolean(Core.DidntClimb));
 		climb.add(DidntClimb);
 		GridBagConstraints gbc_DidntClimb = new GridBagConstraints();
 		gbc_DidntClimb.gridheight = 2;
@@ -194,7 +187,7 @@ public class EndGame {
 		ScoutingWindow.getContentPane().add(SingleSideClimb, gbc_SingleSideClimb);
 
 		JRadioButton SingleCenterClimb = new JRadioButton(
-				"<html>This bot did a single climb<br>on the center of th bar</html>");
+				"<html>This bot did a single climb<br>on the center of the bar</html>");
 		SingleCenterClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		SingleCenterClimb.setForeground(Color.WHITE);
 		climb.add(SingleCenterClimb);
@@ -315,15 +308,15 @@ public class EndGame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Finalize FT = new Finalize();
-				if (!DidntClimb.isSelected()) {
-					Core.SingleClimbSide = Core.BooleanToInt(SingleSideClimb.isSelected());
-					Core.SingleClimbCenter = Core.BooleanToInt(SingleCenterClimb.isSelected());
-					Core.DoubleClimbSide = Core.BooleanToInt(DoubleSideClimb.isSelected());
-					Core.DoubleClimbCenter = Core.BooleanToInt(DoubleCenterClimb.isSelected());
-					Core.TripleClimbSide = Core.BooleanToInt(TripleSideClimb.isSelected());
-					Core.TripleClimbCenter = Core.BooleanToInt(TripleCenterClimb.isSelected());
-					Core.RampClimb = Core.BooleanToInt(RampClimb.isSelected());
-				}
+				Core.SingleClimbSide = Core.BooleanToInt(SingleSideClimb.isSelected());
+				Core.SingleClimbCenter = Core.BooleanToInt(SingleCenterClimb.isSelected());
+				Core.DoubleClimbSide = Core.BooleanToInt(DoubleSideClimb.isSelected());
+				Core.DoubleClimbCenter = Core.BooleanToInt(DoubleCenterClimb.isSelected());
+				Core.TripleClimbSide = Core.BooleanToInt(TripleSideClimb.isSelected());
+				Core.TripleClimbCenter = Core.BooleanToInt(TripleCenterClimb.isSelected());
+				Core.RampClimb = Core.BooleanToInt(RampClimb.isSelected());
+				Core.DidntClimb = Core.BooleanToInt(DidntClimb.isSelected());
+
 				ScoutingWindow.setVisible(false);
 				FT.showFinalization();
 			}
@@ -332,6 +325,8 @@ public class EndGame {
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
 		ScoutingWindow.setBounds(100, 100, 566, 772);
+
+		ScoutingWindow.getRootPane().setDefaultButton(Review);
 
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		ScoutingWindow.setLocation((d.width / 2 - ScoutingWindow.getSize().width / 2),
