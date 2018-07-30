@@ -62,12 +62,21 @@ public class ScoutingFile {
 		MainPanel.GoToFileButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					Runtime.getRuntime().exec("explorer.exe /select," + ScoutingFile.getAbsoluteFile());
-				} catch (IOException e) {
-					// TODO: Catch IOException as on macOS
-					Debugger.d(ScoutingFile.class, "Error: " + e.getMessage());
-					e.printStackTrace();
+				if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+					try {
+						Runtime.getRuntime().exec("explorer.exe /select," + ScoutingFile.getAbsoluteFile());
+					} catch (IOException e) {
+						Debugger.d(ScoutingFile.class, "Error: " + e.getMessage());
+						e.printStackTrace();
+					}
+				} else {
+					String[] cmd = new String[]{"open", "-R", ScoutingFile.getAbsolutePath()};
+					try {
+						Runtime.getRuntime().exec(cmd, null);
+					} catch (IOException e) {
+						Debugger.d(ScoutingFile.class, "Error: " + e.getMessage());
+						e.printStackTrace();
+					}
 				}
 			}
 		});
