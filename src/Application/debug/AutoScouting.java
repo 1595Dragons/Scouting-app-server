@@ -81,7 +81,7 @@ public class AutoScouting {
 				Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
 
-		JLabel ScoutingTeamText = new JLabel("Scouting team: " + EnterTeamNumberPrompt.teamNumber);
+		JLabel ScoutingTeamText = new JLabel("Scouting team: " + Core.teamNumber);
 		ScoutingTeamText.setForeground(Color.WHITE);
 		ScoutingTeamText.setFont(new Font("Arial Black", Font.PLAIN, 40));
 		GridBagConstraints gbc_ScoutingTeamText = new GridBagConstraints();
@@ -225,11 +225,13 @@ public class AutoScouting {
 		Next.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				TeleScouting TST = new TeleScouting();
 				Core.BasicAutoValue = Core.BooleanToInt(BasicAuto.isSelected());
 				Core.SwitchAutoValue = Core.BooleanToInt(SwitchAuto.isSelected());
+				Core.switchOffSet = Core.SwitchAutoValue;
 				Core.ScaleAutoValue = Core.BooleanToInt(ScaleAuto.isSelected());
+				Core.scaleOffset = Core.ScaleAutoValue;
 				ScoutingWindow.setVisible(false);
+				TeleScouting TST = new TeleScouting();
 				TST.showTeleOp();
 			}
 		});

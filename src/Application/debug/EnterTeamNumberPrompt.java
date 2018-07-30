@@ -27,8 +27,6 @@ public class EnterTeamNumberPrompt extends Thread {
 
 	private JTextField teamNumberInput;
 
-	public static int teamNumber = 0;
-
 	/**
 	 * Launch the application.
 	 */
@@ -145,7 +143,7 @@ public class EnterTeamNumberPrompt extends Thread {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.setVisible(false);
 				try {
-					teamNumber = Integer.parseInt(teamNumberInput.getText());
+					Core.teamNumber = Integer.parseInt(teamNumberInput.getText());
 					teamNumberInput.setText("");
 					AutoScouting autoScouting = new AutoScouting();
 					autoScouting.showAutonomous();

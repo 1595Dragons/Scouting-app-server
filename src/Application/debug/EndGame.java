@@ -74,6 +74,7 @@ public class EndGame {
 		}
 
 		ScoutingWindow = new JFrame();
+		ScoutingWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		ScoutingWindow.getContentPane().setBackground(Color.BLACK);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 70, 70, 70, 70, 70, 70, 70, 70, 0 };
@@ -83,7 +84,7 @@ public class EndGame {
 				0.0, 0.0, Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
 
-		JLabel ScoutingTeamText = new JLabel("Scouting team: " + EnterTeamNumberPrompt.teamNumber);
+		JLabel ScoutingTeamText = new JLabel("Scouting team: " + Core.teamNumber);
 		ScoutingTeamText.setForeground(Color.WHITE);
 		ScoutingTeamText.setFont(new Font("Arial Black", Font.PLAIN, 40));
 		GridBagConstraints gbc_ScoutingTeamText = new GridBagConstraints();
@@ -315,7 +316,6 @@ public class EndGame {
 		Review.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Finalize FT = new Finalize();
 				Core.SingleClimbSide = Core.BooleanToInt(SingleSideClimb.isSelected());
 				Core.SingleClimbCenter = Core.BooleanToInt(SingleCenterClimb.isSelected());
 				Core.DoubleClimbSide = Core.BooleanToInt(DoubleSideClimb.isSelected());
@@ -324,7 +324,7 @@ public class EndGame {
 				Core.TripleClimbCenter = Core.BooleanToInt(TripleCenterClimb.isSelected());
 				Core.RampClimb = Core.BooleanToInt(RampClimb.isSelected());
 				Core.DidntClimb = Core.BooleanToInt(DidntClimb.isSelected());
-
+				Finalize FT = new Finalize();
 				ScoutingWindow.setVisible(false);
 				FT.showFinalization();
 			}

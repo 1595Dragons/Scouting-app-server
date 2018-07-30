@@ -83,6 +83,7 @@ public class Finalize {
 		}
 
 		ScoutingWindow = new JFrame();
+		ScoutingWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		ScoutingWindow.getContentPane().setBackground(Color.BLACK);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 70, 70, 70, 70, 70, 70, 70, 70, 0 };
@@ -134,7 +135,7 @@ public class Finalize {
 		gbc_ReviewHeader.gridy = 5;
 		ScoutingWindow.getContentPane().add(ReviewHeader, gbc_ReviewHeader);
 
-		ReviewTeamNumber = new JLabel("Team number: " + EnterTeamNumberPrompt.teamNumber);
+		ReviewTeamNumber = new JLabel("Team number: " + Core.teamNumber);
 		ReviewTeamNumber.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewTeamNumber.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewTeamNumber = new GridBagConstraints();
@@ -270,7 +271,7 @@ public class Finalize {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String data = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
-						EnterTeamNumberPrompt.teamNumber, Core.BasicAutoValue, Core.SwitchAutoValue,
+						Core.teamNumber, Core.BasicAutoValue, Core.SwitchAutoValue,
 						Core.ScaleAutoValue, Core.SwitchTeleValue, Core.ScaleTeleValue, Core.ExchangeTeleValue,
 						Core.SingleClimbSide, Core.SingleClimbCenter, Core.DoubleClimbSide, Core.DoubleClimbCenter,
 						Core.TripleClimbSide, Core.TripleClimbCenter, Core.RampClimb,
