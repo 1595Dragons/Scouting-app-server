@@ -2,13 +2,11 @@ package Application.debug;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -67,18 +65,18 @@ public class AutoScouting {
 		} catch (UnsupportedLookAndFeelException notWindows) {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-				Debugger.d(MainPanel.class, e.getMessage());
-				e.printStackTrace();
+			Debugger.d(MainPanel.class, e.getMessage());
+			e.printStackTrace();
 		}
-		
+
 		ScoutingWindow = new JFrame();
 		ScoutingWindow.getContentPane().setBackground(Color.BLACK);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 70, 70, 70, 70, 70, 70, 70, 70, 0 };
 		gridBagLayout.rowHeights = new int[] { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
 
 		JLabel ScoutingTeamText = new JLabel("Scouting team: " + Core.teamNumber);
@@ -210,6 +208,7 @@ public class AutoScouting {
 		Cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Debugger.d(getClass(), "Canceling scouting");
 				Core.reset();
 				ScoutingWindow.setVisible(false);
 			}
@@ -225,11 +224,21 @@ public class AutoScouting {
 		Next.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Debugger.d(getClass(), "Basic auto value: " + Core.BooleanToInt(BasicAuto.isSelected()));
 				Core.BasicAutoValue = Core.BooleanToInt(BasicAuto.isSelected());
+
+				Debugger.d(getClass(), "Switch auto value: " + Core.BooleanToInt(SwitchAuto.isSelected()));
 				Core.SwitchAutoValue = Core.BooleanToInt(SwitchAuto.isSelected());
+				
+				Debugger.d(getClass(), "Switch offset: " + Core.SwitchAutoValue);
 				Core.switchOffSet = Core.SwitchAutoValue;
+				
+				Debugger.d(getClass(), "Scale auto value: " + Core.BooleanToInt(ScaleAuto.isSelected()));
 				Core.ScaleAutoValue = Core.BooleanToInt(ScaleAuto.isSelected());
+				
+				Debugger.d(getClass(), "Scale offset: " + Core.ScaleAutoValue);
 				Core.scaleOffset = Core.ScaleAutoValue;
+				
 				ScoutingWindow.setVisible(false);
 				TeleScouting TST = new TeleScouting();
 				TST.showTeleOp();
@@ -243,9 +252,7 @@ public class AutoScouting {
 		ScoutingWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		ScoutingWindow.getRootPane().setDefaultButton(Next);
 
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		ScoutingWindow.setLocation((d.width / 2 - ScoutingWindow.getSize().width / 2),
-				(d.height / 2 - ScoutingWindow.getSize().height / 2));
+		Core.CenterWindowLocaiton(ScoutingWindow);
 	}
 
 }

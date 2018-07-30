@@ -2,13 +2,11 @@ package Application.debug;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -25,7 +23,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import Application.Debugger;
 
 public class TeleScouting {
-	// TODO: Make JSpinner buttons larger
+
 	private JFrame ScoutingWindow;
 
 	/**
@@ -71,7 +69,7 @@ public class TeleScouting {
 			Debugger.d(MainPanel.class, e.getMessage());
 			e.printStackTrace();
 		}
-
+		
 		ScoutingWindow = new JFrame();
 		ScoutingWindow.getContentPane().setBackground(Color.BLACK);
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -153,7 +151,7 @@ public class TeleScouting {
 		ScoutingWindow.getContentPane().add(SwitchCubeHeader, gbc_SwitchCubeHeader);
 
 		JSpinner SwitchCube = new JSpinner();
-		SwitchCube.setFont(new Font("Arial", Font.PLAIN, 20));
+		SwitchCube.setFont(new Font("Arial", Font.PLAIN, 30));
 		if (Core.IntToBoolean(Core.switchOffSet)) {
 			SwitchCube.setModel(new SpinnerNumberModel(1, 1, 25, 1));
 			if (Core.SwitchTeleValue != 0) {
@@ -195,7 +193,7 @@ public class TeleScouting {
 			ScaleCube.setModel(new SpinnerNumberModel(0, 0, 25, 1));
 			ScaleCube.setValue(Core.ScaleTeleValue);
 		}
-		ScaleCube.setFont(new Font("Arial", Font.PLAIN, 20));
+		ScaleCube.setFont(new Font("Arial", Font.PLAIN, 30));
 		GridBagConstraints gbc_ScaleCube = new GridBagConstraints();
 		gbc_ScaleCube.gridwidth = 2;
 		gbc_ScaleCube.insets = new Insets(0, 0, 5, 5);
@@ -214,7 +212,7 @@ public class TeleScouting {
 		ScoutingWindow.getContentPane().add(ExchangeCubeHeader, gbc_ExchangeCubeHeader);
 
 		JSpinner ExchangeCube = new JSpinner();
-		ExchangeCube.setFont(new Font("Arial", Font.PLAIN, 20));
+		ExchangeCube.setFont(new Font("Arial", Font.PLAIN, 30));
 		ExchangeCube.setModel(new SpinnerNumberModel(0, 0, 25, 1));
 		ExchangeCube.setValue(Core.ExchangeTeleValue);
 		GridBagConstraints gbc_ExchangeCube = new GridBagConstraints();
@@ -223,7 +221,7 @@ public class TeleScouting {
 		gbc_ExchangeCube.gridx = 3;
 		gbc_ExchangeCube.gridy = 11;
 		ScoutingWindow.getContentPane().add(ExchangeCube, gbc_ExchangeCube);
-
+		
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_2 = new GridBagConstraints();
 		gbc_verticalStrut_2.gridheight = 3;
@@ -295,9 +293,7 @@ public class TeleScouting {
 		ScoutingWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		ScoutingWindow.getRootPane().setDefaultButton(Next);
 
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		ScoutingWindow.setLocation((d.width / 2 - ScoutingWindow.getSize().width / 2),
-				(d.height / 2 - ScoutingWindow.getSize().height / 2));
+		Core.CenterWindowLocaiton(ScoutingWindow);
 	}
 
 }

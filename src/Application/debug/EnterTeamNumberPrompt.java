@@ -1,7 +1,6 @@
 package Application.debug;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -156,8 +155,7 @@ public class EnterTeamNumberPrompt extends Thread {
 			}
 		});
 
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation((d.width / 2 - frame.getSize().width / 2), (d.height / 2 - frame.getSize().height / 2));
+		Core.CenterWindowLocaiton(frame);
 	}
 
 }

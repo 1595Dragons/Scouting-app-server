@@ -2,13 +2,11 @@ package Application.debug;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -336,9 +334,7 @@ public class EndGame {
 
 		ScoutingWindow.getRootPane().setDefaultButton(Review);
 
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		ScoutingWindow.setLocation((d.width / 2 - ScoutingWindow.getSize().width / 2),
-				(d.height / 2 - ScoutingWindow.getSize().height / 2));
+		Core.CenterWindowLocaiton(ScoutingWindow);
 
 	}
 }

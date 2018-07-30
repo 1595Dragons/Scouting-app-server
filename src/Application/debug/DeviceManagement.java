@@ -1,11 +1,13 @@
 package Application.debug;
 
+import Application.Debugger;
+
 public class DeviceManagement {
 
 	public static String[] connectedDevices = new String[6];
 
 	public static void deviceConnected(String deviceName) {
-
+		Debugger.d(DeviceManagement.class, "Device name: " + deviceName);
 		for (int i = 0; i < connectedDevices.length; i++) {
 			if (connectedDevices[i].equals("None")) {
 				connectedDevices[i] = deviceName;
@@ -21,6 +23,7 @@ public class DeviceManagement {
 	}
 
 	public static void deviceDisconnected(String deviceName) {
+		Debugger.d(DeviceManagement.class, "Device name: " + deviceName);
 		for (int i = 0; i < connectedDevices.length; i++) {
 			if (connectedDevices[i].equals(deviceName)) {
 				connectedDevices[i] = "None";

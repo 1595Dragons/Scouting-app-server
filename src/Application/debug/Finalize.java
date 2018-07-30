@@ -2,13 +2,11 @@ package Application.debug;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -27,15 +25,8 @@ public class Finalize {
 	private JFrame ScoutingWindow;
 	private JTextField CommentsField;
 	private Component verticalStrut;
-	private JLabel ReviewHeader;
-	private JLabel ReviewTeamNumber;
-	private JLabel ReviewHasAuto;
-	private JLabel ReviewSwitchAuto;
-	private JLabel ReviewScaleAuto;
-	private JLabel ReviewSwitch;
-	private JLabel ReviewScale;
-	private JLabel ReviewExchange;
-	private JLabel ReviewClimb;
+	private JLabel ReviewHeader, ReviewTeamNumber, ReviewHasAuto, ReviewSwitchAuto, ReviewScaleAuto, ReviewSwitch,
+			ReviewScale, ReviewExchange, ReviewClimb;
 
 	/**
 	 * Launch the application.
@@ -270,12 +261,11 @@ public class Finalize {
 		Finish.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String data = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
-						Core.teamNumber, Core.BasicAutoValue, Core.SwitchAutoValue,
-						Core.ScaleAutoValue, Core.SwitchTeleValue, Core.ScaleTeleValue, Core.ExchangeTeleValue,
-						Core.SingleClimbSide, Core.SingleClimbCenter, Core.DoubleClimbSide, Core.DoubleClimbCenter,
-						Core.TripleClimbSide, Core.TripleClimbCenter, Core.RampClimb,
-						CommentsField.getText().replace(",", "."));
+				String data = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", Core.teamNumber,
+						Core.BasicAutoValue, Core.SwitchAutoValue, Core.ScaleAutoValue, Core.SwitchTeleValue,
+						Core.ScaleTeleValue, Core.ExchangeTeleValue, Core.SingleClimbSide, Core.SingleClimbCenter,
+						Core.DoubleClimbSide, Core.DoubleClimbCenter, Core.TripleClimbSide, Core.TripleClimbCenter,
+						Core.RampClimb, CommentsField.getText().replace(",", "."));
 				Debugger.d(Finalize.class, "Data: " + data);
 				ScoutingFile.writeToFile(data);
 				Core.reset();
@@ -290,9 +280,7 @@ public class Finalize {
 
 		ScoutingWindow.getRootPane().setDefaultButton(Finish);
 
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		ScoutingWindow.setLocation((d.width / 2 - ScoutingWindow.getSize().width / 2),
-				(d.height / 2 - ScoutingWindow.getSize().height / 2));
+		Core.CenterWindowLocaiton(ScoutingWindow);
 	}
 
 }
