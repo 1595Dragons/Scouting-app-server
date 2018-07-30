@@ -247,6 +247,9 @@ public class MainPanel {
 		gbc_Device6.gridy = 10;
 		ScoutingAppWindow.getContentPane().add(Device6, gbc_Device6);
 
+		// TODO: Perhaps an undetermined loading bar below disconnected devices
+		// And then either removed or filled in when connected...
+		
 		Component verticalStrut_4 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_4 = new GridBagConstraints();
 		gbc_verticalStrut_4.gridwidth = 12;

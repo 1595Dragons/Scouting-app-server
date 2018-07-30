@@ -34,7 +34,7 @@ public class Updater {
 	/**
 	 * The current build version
 	 */
-	private static final double currentVersion = 0.9;
+	private static final double currentVersion = 1.0;
 
 	/**
 	 * Checks to see if the current version is out of date. If it is, then it will
