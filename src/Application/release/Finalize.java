@@ -1,4 +1,4 @@
-package Application.debug;
+package Application.release;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -279,7 +279,6 @@ public class Finalize {
 		gbc_Finish.gridy = 15;
 		ScoutingWindow.getContentPane().add(Finish, gbc_Finish);
 
-		// TODO: Fix issue with climb detection
 		Finish.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -299,8 +298,6 @@ public class Finalize {
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
 		ScoutingWindow.setBounds(100, 100, 566, 772);
-		
-		ScoutingWindow.getRootPane().setDefaultButton(Finish);
 
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		ScoutingWindow.setLocation((d.width / 2 - ScoutingWindow.getSize().width / 2),

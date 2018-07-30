@@ -57,7 +57,7 @@ public class ScoutingAppTest {
 			String connectionString = "btspp://localhost:" + uuid + ";name=SpudSPPServer";
 			Debugger.d(ScoutingAppTest.class, "Conenction URL: " + connectionString);
 
-			// open server url using the created URL
+			// open server URL using the created URL
 			streamConnNotifier = null;
 			try {
 				streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
@@ -70,8 +70,8 @@ public class ScoutingAppTest {
 			Debugger.logTest("Ready to recieve data!", false);
 			new Thread(new EnterTeamNumberPrompt()).start();
 			while (true) {
-				// Check if recieving a connection
-				// On connecion, open it, and pass it to a newly created thread
+				// Check if receiving a connection
+				// On connection, open it, and pass it to a newly created thread
 				try {
 					currentConnection = streamConnNotifier.acceptAndOpen();
 					if (currentConnection != null) {

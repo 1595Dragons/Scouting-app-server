@@ -1,4 +1,4 @@
-package Application.debug;
+package Application.release;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -157,8 +157,6 @@ public class EndGame {
 		gbc_RampClimb.gridy = 6;
 		ScoutingWindow.getContentPane().add(RampClimb, gbc_RampClimb);
 
-		// TODO: Fix issue with button detection
-		
 		JRadioButton DidntClimb = new JRadioButton("This robot failed to climb");
 		DidntClimb.setForeground(Color.WHITE);
 		DidntClimb.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -196,7 +194,7 @@ public class EndGame {
 		ScoutingWindow.getContentPane().add(SingleSideClimb, gbc_SingleSideClimb);
 
 		JRadioButton SingleCenterClimb = new JRadioButton(
-				"<html>This bot did a single climb<br>on the center of the bar</html>");
+				"<html>This bot did a single climb<br>on the center of th bar</html>");
 		SingleCenterClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		SingleCenterClimb.setForeground(Color.WHITE);
 		climb.add(SingleCenterClimb);
@@ -334,8 +332,6 @@ public class EndGame {
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
 		ScoutingWindow.setBounds(100, 100, 566, 772);
-		
-		ScoutingWindow.getRootPane().setDefaultButton(Review);
 
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		ScoutingWindow.setLocation((d.width / 2 - ScoutingWindow.getSize().width / 2),
