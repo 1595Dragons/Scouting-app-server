@@ -293,7 +293,7 @@ public class Finalize {
 
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
-		ScoutingWindow.setBounds(100, 100, 566, 772);
+		ScoutingWindow.setBounds(100, 100, 570, 800);
 
 		ScoutingWindow.getRootPane().setDefaultButton(Finish);
 

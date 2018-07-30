@@ -144,6 +144,7 @@ public class EndGame {
 		ScoutingWindow.getContentPane().add(EndGameHeader, gbc_EndGameHeader);
 
 		JRadioButton RampClimb = new JRadioButton("<html>This bot used a ramp to<br>help others climb</html>");
+		RampClimb.setBackground(Color.BLACK);
 		RampClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		RampClimb.setForeground(Color.WHITE);
 		climb.add(RampClimb);
@@ -158,6 +159,7 @@ public class EndGame {
 		ScoutingWindow.getContentPane().add(RampClimb, gbc_RampClimb);
 
 		JRadioButton DidntClimb = new JRadioButton("This robot failed to climb");
+		DidntClimb.setBackground(Color.BLACK);
 		DidntClimb.setForeground(Color.WHITE);
 		DidntClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		DidntClimb.setSelected(Core.IntToBoolean(Core.DidntClimb));
@@ -173,6 +175,7 @@ public class EndGame {
 
 		JRadioButton SingleSideClimb = new JRadioButton(
 				"<html>This bot did a single climb\n<br>on the side of the bar</html>");
+		SingleSideClimb.setBackground(Color.BLACK);
 		SingleSideClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		SingleSideClimb.setForeground(Color.WHITE);
 		climb.add(SingleSideClimb);
@@ -188,6 +191,7 @@ public class EndGame {
 
 		JRadioButton SingleCenterClimb = new JRadioButton(
 				"<html>This bot did a single climb<br>on the center of the bar</html>");
+		SingleCenterClimb.setBackground(Color.BLACK);
 		SingleCenterClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		SingleCenterClimb.setForeground(Color.WHITE);
 		climb.add(SingleCenterClimb);
@@ -203,6 +207,7 @@ public class EndGame {
 
 		JRadioButton DoubleSideClimb = new JRadioButton(
 				"<html>This bot climbed on the<br>side and helped another<br>bot climb</html>");
+		DoubleSideClimb.setBackground(Color.BLACK);
 		DoubleSideClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		DoubleSideClimb.setForeground(Color.WHITE);
 		climb.add(DoubleSideClimb);
@@ -218,6 +223,7 @@ public class EndGame {
 
 		JRadioButton DoubleCenterClimb = new JRadioButton(
 				"<html>This bot climbed on the<br>center and helped another<br>bot climb</html>");
+		DoubleCenterClimb.setBackground(Color.BLACK);
 		DoubleCenterClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		DoubleCenterClimb.setForeground(Color.WHITE);
 		climb.add(DoubleCenterClimb);
@@ -233,6 +239,7 @@ public class EndGame {
 
 		JRadioButton TripleSideClimb = new JRadioButton(
 				"<html>This bot climbed on the<br>side and helped two other<br>bots climb</html>");
+		TripleSideClimb.setBackground(Color.BLACK);
 		TripleSideClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		TripleSideClimb.setForeground(Color.WHITE);
 		climb.add(TripleSideClimb);
@@ -248,6 +255,7 @@ public class EndGame {
 
 		JRadioButton TripleCenterClimb = new JRadioButton(
 				"<html>This bot climbed on the<br>center and helped two<br>other bots climb</html>");
+		TripleCenterClimb.setBackground(Color.BLACK);
 		TripleCenterClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		TripleCenterClimb.setForeground(Color.WHITE);
 		climb.add(TripleCenterClimb);
@@ -324,7 +332,7 @@ public class EndGame {
 
 		ScoutingWindow.setTitle("1595 Scouting App");
 		ScoutingWindow.setResizable(false);
-		ScoutingWindow.setBounds(100, 100, 566, 772);
+		ScoutingWindow.setBounds(100, 100, 570, 800);
 
 		ScoutingWindow.getRootPane().setDefaultButton(Review);
 
