@@ -25,7 +25,7 @@ public class MainPanel {
 
 	public static JLabel MACAddress, FileLocation, ConsoleText, Device1, Device2, Device3, Device4, Device5, Device6;
 
-	public static JButton GoToFileButton;
+	public static JButton GoToFileButton, StartScoutingButton;
 
 	private EnterTeamNumberPrompt enterTeamPrompt;
 
@@ -59,6 +59,7 @@ public class MainPanel {
 	 */
 	public void showWindow() {
 		this.ScoutingAppWindow.setVisible(true);
+		this.ScoutingAppWindow.getRootPane().setDefaultButton(StartScoutingButton);
 	}
 
 	/**
@@ -246,7 +247,7 @@ public class MainPanel {
 		gbc_Device6.gridx = 15;
 		gbc_Device6.gridy = 10;
 		ScoutingAppWindow.getContentPane().add(Device6, gbc_Device6);
-
+		
 		Component verticalStrut_4 = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_verticalStrut_4 = new GridBagConstraints();
 		gbc_verticalStrut_4.gridwidth = 12;
@@ -255,8 +256,8 @@ public class MainPanel {
 		gbc_verticalStrut_4.gridy = 11;
 		ScoutingAppWindow.getContentPane().add(verticalStrut_4, gbc_verticalStrut_4);
 
-		JButton StartScoutingButton = new JButton("Start Scouting");
-		this.ScoutingAppWindow.getRootPane().setDefaultButton(StartScoutingButton);
+		StartScoutingButton = new JButton("Start Scouting");
+		
 		StartScoutingButton.setFont(new Font("Arial", Font.PLAIN, 25));
 		GridBagConstraints gbc_StartScoutingButton = new GridBagConstraints();
 		gbc_StartScoutingButton.insets = new Insets(0, 0, 0, 5);

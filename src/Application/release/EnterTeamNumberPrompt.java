@@ -1,7 +1,6 @@
 package Application.release;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -26,8 +25,6 @@ public class EnterTeamNumberPrompt extends Thread {
 	private JFrame frame;
 
 	private JTextField teamNumberInput;
-
-	public static int teamNumber = 0;
 
 	/**
 	 * Launch the application.
@@ -69,8 +66,8 @@ public class EnterTeamNumberPrompt extends Thread {
 		} catch (UnsupportedLookAndFeelException notWindows) {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-			Debugger.d(MainPanel.class, e.getMessage());
-			e.printStackTrace();
+				Debugger.d(MainPanel.class, e.getMessage());
+				e.printStackTrace();
 		}
 
 		frame = new JFrame();
@@ -139,13 +136,13 @@ public class EnterTeamNumberPrompt extends Thread {
 				teamNumberInput.setText("");
 			}
 		});
-
+		
 		Start.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				frame.setVisible(false);
 				try {
-					teamNumber = Integer.parseInt(teamNumberInput.getText());
+					Core.teamNumber = Integer.parseInt(teamNumberInput.getText());
 					teamNumberInput.setText("");
 					AutoScouting autoScouting = new AutoScouting();
 					autoScouting.showAutonomous();
@@ -158,8 +155,7 @@ public class EnterTeamNumberPrompt extends Thread {
 			}
 		});
 
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation((d.width / 2 - frame.getSize().width / 2), (d.height / 2 - frame.getSize().height / 2));
+		Core.CenterWindowLocaiton(frame);
 	}
 
 }
