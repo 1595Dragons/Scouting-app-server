@@ -1,4 +1,4 @@
-package Application.release;
+package javacode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import javax.bluetooth.RemoteDevice;
 import javax.microedition.io.StreamConnection;
 
-import Application.Debugger;
+import javacode.Debugger;
 
 public class SspServer extends Thread {
 	StreamConnection connection = ScoutingApp.currentConnection;
@@ -22,7 +22,7 @@ public class SspServer extends Thread {
 				try {
 					inStream = connection.openInputStream();
 				} catch (IOException e1) {
-					Debugger.log(String.format("Error, cannot open stream: %s", e1.getMessage()), true);
+					Debugger.logTest(String.format("Error, cannot open stream: %s", e1.getMessage()), true);
 					Debugger.d(this.getClass(), "Error: " + e1.getMessage());
 					e1.printStackTrace();
 				}
@@ -33,7 +33,7 @@ public class SspServer extends Thread {
 				try {
 					lineRead = bReader.readLine();
 					if (lineRead == null) {
-						Debugger.log("Device disconnected", false);
+						Debugger.logTest("Device disconnected", false);
 						Debugger.d(this.getClass(),
 								String.format("Device disconnected: %s (%s)",
 										RemoteDevice.getRemoteDevice(connection).getFriendlyName(false),
@@ -43,7 +43,7 @@ public class SspServer extends Thread {
 						return;
 					}
 				} catch (IOException e1) {
-					Debugger.log(String.format("Error, cannot read stream: %s", e1.getMessage()), true);
+					Debugger.logTest(String.format("Error, cannot read stream: %s", e1.getMessage()), true);
 					Debugger.d(this.getClass(), "Error: " + e1.getMessage());
 					e1.printStackTrace();
 				}
@@ -57,7 +57,7 @@ public class SspServer extends Thread {
 					bReader.close();
 					inStream.close();
 				} catch (IOException e1) {
-					Debugger.log(String.format("Error, cannot close stream: %s", e1.getMessage()), true);
+					Debugger.logTest(String.format("Error, cannot close stream: %s", e1.getMessage()), true);
 					e1.printStackTrace();
 				}
 
@@ -72,7 +72,7 @@ public class SspServer extends Thread {
 
 			}
 		} else {
-			Debugger.log("Connection is null!", true);
+			Debugger.logTest("Connection is null!", true);
 			Debugger.d(this.getClass(), "Connection is null!");
 		}
 	}

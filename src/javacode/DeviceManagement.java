@@ -1,6 +1,6 @@
-package Application.release;
+package javacode;
 
-import Application.Debugger;
+import javacode.Debugger;
 
 public class DeviceManagement {
 

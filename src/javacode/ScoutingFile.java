@@ -1,4 +1,4 @@
-package Application.release;
+package javacode;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import Application.Debugger;
+import javacode.Debugger;
 
 public class ScoutingFile {
 
@@ -85,7 +85,7 @@ public class ScoutingFile {
 
 	public static void writeToFile(String data) {
 		// Write the data to a CSV file
-		Debugger.log("Writing data to file", false);
+		Debugger.logTest("Writing data to file", false);
 		FileWriter fw = null;
 		try {
 			fw = new FileWriter(new File(System.getProperty("user.dir") + "/scouting_data.csv").getAbsolutePath(),
@@ -118,9 +118,9 @@ public class ScoutingFile {
 		// Report success!
 		if (success) {
 			Debugger.d(ScoutingFile.class, "Data: " + data);
-			Debugger.log(String.format("Successfully written data for team: %s", data.split(",")[0]), false);
+			Debugger.logTest(String.format("Successfully written data for team: %s", data.split(",")[0]), false);
 		} else {
-			Debugger.log("Could not write data to file", true);
+			Debugger.logTest("Could not write data to file", true);
 			return;
 		}
 	}

@@ -1,4 +1,4 @@
-package Application.release;
+package javacode;
 
 import java.io.IOException;
 
@@ -8,8 +8,8 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
 
-import Application.Debugger;
-import Application.Updater;
+import javacode.Debugger;
+import javacode.Updater;
 
 public class ScoutingApp {
 
@@ -36,7 +36,7 @@ public class ScoutingApp {
 		Debugger.d(ScoutingApp.class, "Does file exist?");
 		if (!ScoutingFile.FileExists()) {
 			Debugger.d(ScoutingApp.class, "Creating file");
-			Debugger.log("File missing. Creating new file", false);
+			Debugger.logTest("File missing. Creating new file", false);
 			ScoutingFile.makeFile();
 		}
 		Debugger.d(ScoutingApp.class, "Updating file info");
@@ -47,7 +47,7 @@ public class ScoutingApp {
 		DeviceManagement.reset();
 		Debugger.d(ScoutingApp.class, "Is bluetooth enabled?");
 		if (!Bluetooth.isEnabled()) {
-			Debugger.log("Bluetooth is not enabled on this device.", true);
+			Debugger.logTest("Bluetooth is not enabled on this device.", true);
 		} else {
 
 			Bluetooth.changeMACDisplay();
@@ -62,12 +62,12 @@ public class ScoutingApp {
 			try {
 				streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
 			} catch (IOException e1) {
-				Debugger.log(String.format("Error, cannot open URL: %s", e1.getMessage()), true);
+				Debugger.logTest(String.format("Error, cannot open URL: %s", e1.getMessage()), true);
 				Debugger.d(ScoutingApp.class, "Error: " + e1.getMessage());
 				e1.printStackTrace();
 			}
 
-			Debugger.log("Ready to recieve data!", false);
+			Debugger.logTest("Ready to recieve data!", false);
 			new Thread(new EnterTeamNumberPrompt()).start();
 			while (true) {
 				// Check if receiving a connection
@@ -80,7 +80,7 @@ public class ScoutingApp {
 						new Thread(new SspServer()).start();
 					}
 				} catch (IOException e) {
-					Debugger.log(String.format("Error creating a new thread: %s", e.getMessage()), true);
+					Debugger.logTest(String.format("Error creating a new thread: %s", e.getMessage()), true);
 					Debugger.d(ScoutingApp.class, "Error: " + e.getMessage());
 					e.printStackTrace();
 				}

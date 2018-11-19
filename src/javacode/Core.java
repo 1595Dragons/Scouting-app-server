@@ -1,11 +1,11 @@
-package Application.release;
+package javacode;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
-import Application.Debugger;
+import javacode.Debugger;
 
 public class Core {
 

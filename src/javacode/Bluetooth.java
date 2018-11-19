@@ -1,9 +1,9 @@
-package Application.debug;
+package javacode;
 
 import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.LocalDevice;
 
-import Application.Debugger;
+import javacode.Debugger;
 
 public class Bluetooth {
 

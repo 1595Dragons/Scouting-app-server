@@ -1,4 +1,4 @@
-package Application.debug;
+package javacode;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import Application.Debugger;
+import javacode.Debugger;
 
 public class Finalize {
 
