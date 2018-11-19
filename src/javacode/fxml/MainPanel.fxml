@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="MacAddressHeader" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" text="MAC Address" textAlignment="CENTER">
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="50.0" top="10.0" />
+         </VBox.margin>
+      </Label>
+      <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Console" textAlignment="CENTER" wrapText="true">
+         <VBox.margin>
+            <Insets bottom="5.0" top="10.0" />
+         </VBox.margin>
+      </Label>
+      <Label fx:id="console" alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="60.0" style="-fx-background-color: lightgray;" textAlignment="CENTER">
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
+         </VBox.margin>
+      </Label>
+      <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Connected Devices:" textAlignment="CENTER">
+         <VBox.margin>
+            <Insets bottom="5.0" top="10.0" />
+         </VBox.margin>
+      </Label>
+      <HBox maxHeight="40.0" maxWidth="1.7976931348623157E308">
+         <children>
+            <Label fx:id="device0" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </Label>
+            <Label fx:id="device1" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </Label>
+            <Label fx:id="device2" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="device3" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </Label>
+            <Label fx:id="device4" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </Label>
+            <Label fx:id="device5" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" top="5.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="BOTTOM_CENTER" maxWidth="1.7976931348623157E308">
+         <children>
+            <Button alignment="CENTER_RIGHT" defaultButton="true" mnemonicParsing="false" text="Scout a team" textAlignment="CENTER">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" text="View Data" textAlignment="CENTER">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>
