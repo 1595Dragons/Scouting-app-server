@@ -15,12 +15,15 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class MainPanel {
 
-	private Label macAddressHeader, console;
-	private Button startScouting, viewData;
+	
+	private static Label macAddressHeader, console;
+	private static Button startScouting, viewData;
 
+	
 	public Scene loadMainPanel() throws IOException {
 
 		Parent root = null;
@@ -42,61 +45,81 @@ public class MainPanel {
 			for (Node node : root.getChildrenUnmodifiable()) {
 				if (node instanceof HBox) {
 					for (Node childNode : ((HBox) node).getChildren()) {
-						
+
 						// If the given node of importance, set it to an object
 						if (childNode.getId().equals("newScout")) {
 							startScouting = ((Button) childNode);
 						} else if (childNode.getId().equals("viewData")) {
 							viewData = ((Button) childNode);
 						}
-						
-						Debugger.d(getClass(), "HBox node: " + childNode.getId());
+
+						Debugger.d(getClass(), "Node: " + childNode.getId());
 					}
 				} else {
-					
+
 					// If the given node of importance, set it to an object
 					if (node.getId().equals("macAddressHeader")) {
 						macAddressHeader = ((Label) node);
 					} else if (node.getId().equals("console")) {
 						console = ((Label) node);
 					}
-					
-					
+
 					Debugger.d(getClass(), "Node: " + node.getId());
 				}
 			}
-			
-			// TODO: Setup button functions
+
 			startScouting.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
-					
-					// TODO: Check if window is already visible
-					
+
 					TeamNumberDialog dialog = new TeamNumberDialog();
-					
-		            try {
-		            	// https://stackoverflow.com/questions/15041760/javafx-open-new-window
-		            	Stage stage = new Stage();
-						stage.setScene(dialog.showTeamNumberDialog());
-						stage.setTitle("Enter team number");
-						stage.show();
+
+					try {
+
+						// Check if the window is visible (for creation reasons)
+						if (!dialog.getIsVisible()) {
+
+							// Make a new window
+							// https://stackoverflow.com/questions/15041760/javafx-open-new-window
+							dialog.setStage(new Stage());
+
+							// Set it so when its closed, it will set the visibility to false
+							dialog.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
+								@Override
+								public void handle(WindowEvent event) {
+									dialog.setIsVisible(false);
+								}
+
+							});
+
+							// Set the scene to the FMXL layout
+							dialog.getStage().setScene(dialog.createTeamNumberDialog());
+							dialog.getStage().setTitle("Enter team number");
+
+							// Show the stage, and update the visibility
+							dialog.getStage().show();
+							dialog.setIsVisible(true);
+						}
+
+						// Be sure to bring the window to front
+						dialog.getStage().toFront();
+
 					} catch (IOException e) {
 						log(e.getMessage(), true);
 					}
+
 				}
-				
 			});
-			
+
+			// TODO: Setup data view
 			viewData.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 			});
 
 			Scene scene = new Scene(root);
@@ -105,12 +128,12 @@ public class MainPanel {
 			throw new IOException("Cannot load main panel FXML");
 		}
 	}
-	
+
 	
 	public void setMacAddress(String address) {
 		macAddressHeader.setText(String.format("MAC Address: %s", address));
 	}
-	
+
 	
 	public void log(String message, boolean error) {
 		if (error) {
@@ -119,7 +142,7 @@ public class MainPanel {
 		} else {
 			console.setTextFill(Color.BLACK);
 		}
-		
+
 		console.setText(message);
 	}
 
