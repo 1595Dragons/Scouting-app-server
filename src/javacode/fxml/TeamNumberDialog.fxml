@@ -6,12 +6,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="160.0" minWidth="350.0" prefHeight="160.0" prefWidth="375.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="175.0" minWidth="350.0" prefHeight="175.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Enter team number:" textAlignment="CENTER" wrapText="true">
          <font>
-            <Font name="Arial" size="20.0" />
+            <Font name="Arial" size="25.0" />
          </font>
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -22,17 +21,23 @@
             <Insets bottom="10.0" left="100.0" right="100.0" top="10.0" />
          </VBox.margin>
          <font>
-            <Font size="15.0" />
+            <Font size="20.0" />
          </font>
       </TextField>
-      <HBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER" maxWidth="1.7976931348623157E308">
          <children>
-            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" text="Start scouting" textAlignment="CENTER" />
-            <Button mnemonicParsing="false" text="Cancel" textAlignment="CENTER" />
+            <Button contentDisplay="CENTER" defaultButton="true" mnemonicParsing="false" text="Start scouting" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font></Button>
+            <Button alignment="CENTER_RIGHT" cancelButton="true" contentDisplay="CENTER" mnemonicParsing="false" text="Cancel" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font></Button>
          </children>
-         <padding>
+         <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="30.0" />
-         </padding>
+         </VBox.margin>
       </HBox>
    </children>
 </VBox>

@@ -19,11 +19,9 @@ import javafx.stage.WindowEvent;
 
 public class MainPanel {
 
-	
 	private static Label macAddressHeader, console;
 	private static Button startScouting, viewData;
 
-	
 	public Scene loadMainPanel() throws IOException {
 
 		Parent root = null;
@@ -43,28 +41,24 @@ public class MainPanel {
 
 			// Setup each of the nodes that are important
 			for (Node node : root.getChildrenUnmodifiable()) {
+
+				// Check if there is a nested view (HBox)
 				if (node instanceof HBox) {
 					for (Node childNode : ((HBox) node).getChildren()) {
-
 						// If the given node of importance, set it to an object
 						if (childNode.getId().equals("newScout")) {
 							startScouting = ((Button) childNode);
 						} else if (childNode.getId().equals("viewData")) {
 							viewData = ((Button) childNode);
 						}
-
-						Debugger.d(getClass(), "Node: " + childNode.getId());
 					}
 				} else {
-
 					// If the given node of importance, set it to an object
 					if (node.getId().equals("macAddressHeader")) {
 						macAddressHeader = ((Label) node);
 					} else if (node.getId().equals("console")) {
 						console = ((Label) node);
 					}
-
-					Debugger.d(getClass(), "Node: " + node.getId());
 				}
 			}
 
@@ -129,12 +123,10 @@ public class MainPanel {
 		}
 	}
 
-	
 	public void setMacAddress(String address) {
 		macAddressHeader.setText(String.format("MAC Address: %s", address));
 	}
 
-	
 	public void log(String message, boolean error) {
 		if (error) {
 			console.setTextFill(Color.RED);
