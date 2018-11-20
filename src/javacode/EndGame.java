@@ -67,7 +67,7 @@ public class EndGame {
 		} catch (UnsupportedLookAndFeelException notWindows) {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-			Debugger.d(MainPanel.class, e.getMessage());
+			Debugger.d(OldMainPanel.class, e.getMessage());
 			e.printStackTrace();
 		}
 

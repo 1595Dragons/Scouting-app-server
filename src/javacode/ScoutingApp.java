@@ -1,12 +1,9 @@
 package javacode;
 
 import java.io.IOException;
-import java.net.URL;
 
+import javacode.UI.MainPanel;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class ScoutingApp extends Application {
@@ -14,28 +11,21 @@ public class ScoutingApp extends Application {
 	public static boolean debug;
 
 	@Override
-	public void start(Stage mainPanel) throws Exception {
+	public void start(Stage primaryWindow) {
 
-		Parent root = null;
-
-		// Get the path of the main panel's fxml file
-		URL path = getClass().getResource("fxml/MainPanel.fxml");
-		Debugger.d(getClass(), "Path: " + path.toString());
-
+		MainPanel mainPanel = new MainPanel();
+		
 		try {
-			root = FXMLLoader.load(path);
+			primaryWindow.setScene(mainPanel.loadMainPanel());
+			primaryWindow.setTitle("1595 Scouting app");
+			primaryWindow.setResizable(false);
+			primaryWindow.show();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		if (root != null) {
-			Scene scene = new Scene(root);
-			mainPanel.setScene(scene);
-			mainPanel.setTitle("1595 Scouting app");
-			mainPanel.show();
-		} else {
-			throw new Exception("Cannot load main panel FXML");
-		}
+		
+		
+		mainPanel.log("Loaded successfully", false);
 
 	}
 

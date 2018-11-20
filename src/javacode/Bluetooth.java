@@ -14,7 +14,7 @@ public class Bluetooth {
 
 	public static void changeMACDisplay() {
 		try {
-			MainPanel.MACAddress.setText(String.format("MAC Address: %s",
+			OldMainPanel.MACAddress.setText(String.format("MAC Address: %s",
 					LocalDevice.getLocalDevice().getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase()));
 		} catch (BluetoothStateException e) {
 			Debugger.d(Bluetooth.class, e.getMessage());

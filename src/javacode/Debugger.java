@@ -13,21 +13,21 @@ public class Debugger {
 
 	@Deprecated
 	public static void log(String message, boolean error) {
-		javacode.MainPanel.ConsoleText.setText(message);
+		javacode.OldMainPanel.ConsoleText.setText(message);
 		if (error) {
-			javacode.MainPanel.ConsoleText.setForeground(Color.RED);
+			javacode.OldMainPanel.ConsoleText.setForeground(Color.RED);
 		} else {
-			javacode.MainPanel.ConsoleText.setForeground(Color.WHITE);
+			javacode.OldMainPanel.ConsoleText.setForeground(Color.WHITE);
 		}
 	}
 
 	@Deprecated
 	public static void logTest(String message, boolean error) {
-		javacode.MainPanel.ConsoleText.setText(message);
+		javacode.OldMainPanel.ConsoleText.setText(message);
 		if (error) {
-			javacode.MainPanel.ConsoleText.setForeground(Color.RED);
+			javacode.OldMainPanel.ConsoleText.setForeground(Color.RED);
 		} else {
-			javacode.MainPanel.ConsoleText.setForeground(Color.WHITE);
+			javacode.OldMainPanel.ConsoleText.setForeground(Color.WHITE);
 		}
 	}
 }

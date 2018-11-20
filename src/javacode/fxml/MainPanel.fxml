@@ -7,10 +7,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="MacAddressHeader" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" text="MAC Address" textAlignment="CENTER">
+      <Label id="macAddressHeader" fx:id="macAddressHeader" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" text="MAC Address: --:--:--:--" textAlignment="CENTER">
          <font>
             <Font name="Arial" size="20.0" />
          </font>
@@ -18,34 +17,34 @@
             <Insets bottom="50.0" top="10.0" />
          </VBox.margin>
       </Label>
-      <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Console" textAlignment="CENTER" wrapText="true">
+      <Label id="consoleHeader" fx:id="consoleHeader" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Console" textAlignment="CENTER" wrapText="true">
          <VBox.margin>
             <Insets bottom="5.0" top="10.0" />
          </VBox.margin>
       </Label>
-      <Label fx:id="console" alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="60.0" style="-fx-background-color: lightgray;" textAlignment="CENTER">
+      <Label id="console" fx:id="console" alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="60.0" style="-fx-background-color: lightgray;" textAlignment="CENTER">
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
          </VBox.margin>
       </Label>
-      <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Connected Devices:" textAlignment="CENTER">
+      <Label id="connectedDevicesHeader" fx:id="connectedDevicesHeader" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Connected Devices:" textAlignment="CENTER">
          <VBox.margin>
             <Insets bottom="5.0" top="10.0" />
          </VBox.margin>
       </Label>
       <HBox maxHeight="40.0" maxWidth="1.7976931348623157E308">
          <children>
-            <Label fx:id="device0" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
+            <Label id="device0" fx:id="device0" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
                <padding>
                   <Insets left="10.0" right="10.0" />
                </padding>
             </Label>
-            <Label fx:id="device1" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
+            <Label id="device1" fx:id="device1" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
                <padding>
                   <Insets left="10.0" right="10.0" />
                </padding>
             </Label>
-            <Label fx:id="device2" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
+            <Label id="device2" fx:id="device2" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
                <padding>
                   <Insets left="10.0" right="10.0" />
                </padding>
@@ -53,17 +52,17 @@
                   <Insets />
                </HBox.margin>
             </Label>
-            <Label fx:id="device3" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
+            <Label id="device3" fx:id="device3" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
                <padding>
                   <Insets left="10.0" right="10.0" />
                </padding>
             </Label>
-            <Label fx:id="device4" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
+            <Label id="device4" fx:id="device4" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
                <padding>
                   <Insets left="10.0" right="10.0" />
                </padding>
             </Label>
-            <Label fx:id="device5" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
+            <Label id="device5" fx:id="device5" alignment="CENTER" prefHeight="20.0" prefWidth="125.0" text="None" textAlignment="CENTER" wrapText="true">
                <padding>
                   <Insets left="10.0" right="10.0" />
                </padding>
@@ -75,7 +74,7 @@
       </HBox>
       <HBox alignment="BOTTOM_CENTER" maxWidth="1.7976931348623157E308">
          <children>
-            <Button alignment="CENTER_RIGHT" defaultButton="true" mnemonicParsing="false" text="Scout a team" textAlignment="CENTER">
+            <Button id="newScout" fx:id="newScout" alignment="CENTER_RIGHT" defaultButton="true" mnemonicParsing="false" text="Scout a team" textAlignment="CENTER">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -83,7 +82,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" text="View Data" textAlignment="CENTER">
+            <Button id="viewData" fx:id="viewData" mnemonicParsing="false" text="View Data" textAlignment="CENTER">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>

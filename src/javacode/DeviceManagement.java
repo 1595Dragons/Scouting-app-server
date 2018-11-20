@@ -14,12 +14,12 @@ public class DeviceManagement {
 				break;
 			}
 		}
-		MainPanel.Device1.setText(connectedDevices[0]);
-		MainPanel.Device2.setText(connectedDevices[1]);
-		MainPanel.Device3.setText(connectedDevices[2]);
-		MainPanel.Device4.setText(connectedDevices[3]);
-		MainPanel.Device5.setText(connectedDevices[4]);
-		MainPanel.Device6.setText(connectedDevices[5]);
+		OldMainPanel.Device1.setText(connectedDevices[0]);
+		OldMainPanel.Device2.setText(connectedDevices[1]);
+		OldMainPanel.Device3.setText(connectedDevices[2]);
+		OldMainPanel.Device4.setText(connectedDevices[3]);
+		OldMainPanel.Device5.setText(connectedDevices[4]);
+		OldMainPanel.Device6.setText(connectedDevices[5]);
 	}
 
 	public static void deviceDisconnected(String deviceName) {
@@ -30,24 +30,24 @@ public class DeviceManagement {
 				break;
 			}
 		}
-		MainPanel.Device1.setText(connectedDevices[0]);
-		MainPanel.Device2.setText(connectedDevices[1]);
-		MainPanel.Device3.setText(connectedDevices[2]);
-		MainPanel.Device4.setText(connectedDevices[3]);
-		MainPanel.Device5.setText(connectedDevices[4]);
-		MainPanel.Device6.setText(connectedDevices[5]);
+		OldMainPanel.Device1.setText(connectedDevices[0]);
+		OldMainPanel.Device2.setText(connectedDevices[1]);
+		OldMainPanel.Device3.setText(connectedDevices[2]);
+		OldMainPanel.Device4.setText(connectedDevices[3]);
+		OldMainPanel.Device5.setText(connectedDevices[4]);
+		OldMainPanel.Device6.setText(connectedDevices[5]);
 	}
 
 	public static void reset() {
 		for (int i = 0; i < connectedDevices.length; i++) {
 			connectedDevices[i] = "None";
 		}
-		MainPanel.Device1.setText(connectedDevices[0]);
-		MainPanel.Device2.setText(connectedDevices[1]);
-		MainPanel.Device3.setText(connectedDevices[2]);
-		MainPanel.Device4.setText(connectedDevices[3]);
-		MainPanel.Device5.setText(connectedDevices[4]);
-		MainPanel.Device6.setText(connectedDevices[5]);
+		OldMainPanel.Device1.setText(connectedDevices[0]);
+		OldMainPanel.Device2.setText(connectedDevices[1]);
+		OldMainPanel.Device3.setText(connectedDevices[2]);
+		OldMainPanel.Device4.setText(connectedDevices[3]);
+		OldMainPanel.Device5.setText(connectedDevices[4]);
+		OldMainPanel.Device6.setText(connectedDevices[5]);
 	}
 
 }

@@ -19,7 +19,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import javacode.Debugger;
 
-public class MainPanel {
+public class OldMainPanel {
 
 	private JFrame ScoutingAppWindow;
 
@@ -36,7 +36,7 @@ public class MainPanel {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainPanel window = new MainPanel();
+					OldMainPanel window = new OldMainPanel();
 					window.ScoutingAppWindow.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,9 +48,9 @@ public class MainPanel {
 	/**
 	 * Create the application.
 	 */
-	public MainPanel() {
+	public OldMainPanel() {
 		initialize();
-		Debugger.d(MainPanel.class, "Creating the prompt window");
+		Debugger.d(OldMainPanel.class, "Creating the prompt window");
 		enterTeamPrompt = new EnterTeamNumberPrompt();
 	}
 
@@ -72,7 +72,7 @@ public class MainPanel {
 		} catch (UnsupportedLookAndFeelException notWindows) {
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		} catch (Exception e) {
-				Debugger.d(MainPanel.class, e.getMessage());
+				Debugger.d(OldMainPanel.class, e.getMessage());
 				e.printStackTrace();
 		}
 

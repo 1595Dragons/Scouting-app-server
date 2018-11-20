@@ -30,7 +30,7 @@ public class OldScoutingApp {
 			Updater.showUpdatePrompt();
 		}
 		Debugger.d(OldScoutingApp.class, "Creating the main info window");
-		MainPanel infoWindow = new MainPanel();
+		OldMainPanel infoWindow = new OldMainPanel();
 		Debugger.d(OldScoutingApp.class, "Showing the main info window");
 		infoWindow.showWindow();
 		Debugger.d(OldScoutingApp.class, "Does file exist?");

@@ -54,12 +54,12 @@ public class ScoutingFile {
 	}
 
 	public static void setFileText() {
-		MainPanel.FileLocation.setText(
+		OldMainPanel.FileLocation.setText(
 				"Data location: " + ScoutingFile.getPath().replace(System.getProperty("user.home") + "\\", ""));
 	}
 
 	public static void setupButton() {
-		MainPanel.GoToFileButton.addActionListener(new ActionListener() {
+		OldMainPanel.GoToFileButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -80,7 +80,7 @@ public class ScoutingFile {
 				}
 			}
 		});
-		MainPanel.GoToFileButton.setEnabled(true);
+		OldMainPanel.GoToFileButton.setEnabled(true);
 	}
 
 	public static void writeToFile(String data) {
