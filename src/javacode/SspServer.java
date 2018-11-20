@@ -11,7 +11,7 @@ import javax.microedition.io.StreamConnection;
 import javacode.Debugger;
 
 public class SspServer extends Thread {
-	StreamConnection connection = ScoutingApp.currentConnection;
+	StreamConnection connection = OldScoutingApp.currentConnection;
 
 	// Wait for client connection
 	public void run() {
