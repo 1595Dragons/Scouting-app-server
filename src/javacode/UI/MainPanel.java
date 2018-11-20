@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import javacode.Debugger;
-import javafx.event.Event;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 public class MainPanel {
 
@@ -24,7 +25,7 @@ public class MainPanel {
 
 		Parent root = null;
 
-		// Get the path of the main panel's fxml file
+		// Get the path of the main panel's FXML file
 		URL path = getClass().getClassLoader().getResource("javacode/fxml/MainPanel.fxml");
 		Debugger.d(getClass(), "Path: " + path.toString());
 
@@ -66,20 +67,32 @@ public class MainPanel {
 			}
 			
 			// TODO: Setup button functions
-			startScouting.setOnAction(new EventHandler() {
+			startScouting.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
-				public void handle(Event event) {
-					// TODO Auto-generated method stub
+				public void handle(ActionEvent event) {
 					
+					// TODO: Check if window is already visible
+					
+					TeamNumberDialog dialog = new TeamNumberDialog();
+					
+		            try {
+		            	// https://stackoverflow.com/questions/15041760/javafx-open-new-window
+		            	Stage stage = new Stage();
+						stage.setScene(dialog.showTeamNumberDialog());
+						stage.setTitle("Enter team number");
+						stage.show();
+					} catch (IOException e) {
+						log(e.getMessage(), true);
+					}
 				}
 				
 			});
 			
-			viewData.setOnAction(new EventHandler() {
+			viewData.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
-				public void handle(Event event) {
+				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
 					
 				}
