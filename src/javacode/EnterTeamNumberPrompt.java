@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import javacode.Debugger;
+import javacode.OldCore.Debugger;
 
 public class EnterTeamNumberPrompt extends Thread {
 
@@ -142,7 +142,7 @@ public class EnterTeamNumberPrompt extends Thread {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.setVisible(false);
 				try {
-					Core.teamNumber = Integer.parseInt(teamNumberInput.getText());
+					OldCore.teamNumber = Integer.parseInt(teamNumberInput.getText());
 					teamNumberInput.setText("");
 					AutoScouting autoScouting = new AutoScouting();
 					autoScouting.showAutonomous();
@@ -155,7 +155,7 @@ public class EnterTeamNumberPrompt extends Thread {
 			}
 		});
 
-		Core.CenterWindowLocaiton(frame);
+		OldCore.CenterWindowLocaiton(frame);
 	}
 
 }

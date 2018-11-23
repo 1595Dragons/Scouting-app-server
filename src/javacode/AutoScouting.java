@@ -19,6 +19,8 @@ import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import javacode.OldCore.Debugger;
+
 public class AutoScouting {
 
 	private JFrame ScoutingWindow;
@@ -77,7 +79,7 @@ public class AutoScouting {
 				0.0, 0.0, Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
 
-		JLabel ScoutingTeamText = new JLabel("Scouting team: " + Core.teamNumber);
+		JLabel ScoutingTeamText = new JLabel("Scouting team: " + OldCore.teamNumber);
 		ScoutingTeamText.setForeground(Color.WHITE);
 		ScoutingTeamText.setFont(new Font("Arial Black", Font.PLAIN, 40));
 		GridBagConstraints gbc_ScoutingTeamText = new GridBagConstraints();
@@ -138,7 +140,7 @@ public class AutoScouting {
 		ScoutingWindow.getContentPane().add(AutonomousHeader, gbc_AutonomousHeader);
 
 		JCheckBox BasicAuto = new JCheckBox("This team can cross the baseline");
-		BasicAuto.setSelected(Core.IntToBoolean(Core.BasicAutoValue));
+		BasicAuto.setSelected(OldCore.IntToBoolean(OldCore.BasicAutoValue));
 		BasicAuto.setBackground(Color.BLACK);
 		BasicAuto.setForeground(Color.WHITE);
 		BasicAuto.setFont(new Font("Arial", Font.PLAIN, 25));
@@ -151,7 +153,7 @@ public class AutoScouting {
 		ScoutingWindow.getContentPane().add(BasicAuto, gbc_BasicAuto);
 
 		JCheckBox SwitchAuto = new JCheckBox("This team can place on the switch");
-		SwitchAuto.setSelected(Core.IntToBoolean(Core.SwitchAutoValue));
+		SwitchAuto.setSelected(OldCore.IntToBoolean(OldCore.SwitchAutoValue));
 		SwitchAuto.setForeground(Color.WHITE);
 		SwitchAuto.setBackground(Color.BLACK);
 		SwitchAuto.setFont(new Font("Arial", Font.PLAIN, 25));
@@ -164,7 +166,7 @@ public class AutoScouting {
 		ScoutingWindow.getContentPane().add(SwitchAuto, gbc_SwitchAuto);
 
 		JCheckBox ScaleAuto = new JCheckBox("This team can place on the scale");
-		ScaleAuto.setSelected(Core.IntToBoolean(Core.ScaleAutoValue));
+		ScaleAuto.setSelected(OldCore.IntToBoolean(OldCore.ScaleAutoValue));
 		ScaleAuto.setForeground(Color.WHITE);
 		ScaleAuto.setBackground(Color.BLACK);
 		ScaleAuto.setFont(new Font("Arial", Font.PLAIN, 25));
@@ -207,7 +209,7 @@ public class AutoScouting {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Debugger.d(getClass(), "Canceling scouting");
-				Core.reset();
+				OldCore.reset();
 				ScoutingWindow.setVisible(false);
 			}
 		});
@@ -222,20 +224,20 @@ public class AutoScouting {
 		Next.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Debugger.d(getClass(), "Basic auto value: " + Core.BooleanToInt(BasicAuto.isSelected()));
-				Core.BasicAutoValue = Core.BooleanToInt(BasicAuto.isSelected());
+				Debugger.d(getClass(), "Basic auto value: " + OldCore.BooleanToInt(BasicAuto.isSelected()));
+				OldCore.BasicAutoValue = OldCore.BooleanToInt(BasicAuto.isSelected());
 
-				Debugger.d(getClass(), "Switch auto value: " + Core.BooleanToInt(SwitchAuto.isSelected()));
-				Core.SwitchAutoValue = Core.BooleanToInt(SwitchAuto.isSelected());
+				Debugger.d(getClass(), "Switch auto value: " + OldCore.BooleanToInt(SwitchAuto.isSelected()));
+				OldCore.SwitchAutoValue = OldCore.BooleanToInt(SwitchAuto.isSelected());
 				
-				Debugger.d(getClass(), "Switch offset: " + Core.SwitchAutoValue);
-				Core.switchOffSet = Core.SwitchAutoValue;
+				Debugger.d(getClass(), "Switch offset: " + OldCore.SwitchAutoValue);
+				OldCore.switchOffSet = OldCore.SwitchAutoValue;
 				
-				Debugger.d(getClass(), "Scale auto value: " + Core.BooleanToInt(ScaleAuto.isSelected()));
-				Core.ScaleAutoValue = Core.BooleanToInt(ScaleAuto.isSelected());
+				Debugger.d(getClass(), "Scale auto value: " + OldCore.BooleanToInt(ScaleAuto.isSelected()));
+				OldCore.ScaleAutoValue = OldCore.BooleanToInt(ScaleAuto.isSelected());
 				
-				Debugger.d(getClass(), "Scale offset: " + Core.ScaleAutoValue);
-				Core.scaleOffset = Core.ScaleAutoValue;
+				Debugger.d(getClass(), "Scale offset: " + OldCore.ScaleAutoValue);
+				OldCore.scaleOffset = OldCore.ScaleAutoValue;
 				
 				ScoutingWindow.setVisible(false);
 				TeleScouting TST = new TeleScouting();
@@ -250,7 +252,7 @@ public class AutoScouting {
 		ScoutingWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		ScoutingWindow.getRootPane().setDefaultButton(Next);
 
-		Core.CenterWindowLocaiton(ScoutingWindow);
+		OldCore.CenterWindowLocaiton(ScoutingWindow);
 	}
 
 }

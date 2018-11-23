@@ -20,7 +20,7 @@ import javax.swing.JRadioButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import javacode.Debugger;
+import javacode.OldCore.Debugger;
 
 public class EndGame {
 
@@ -82,7 +82,7 @@ public class EndGame {
 				0.0, 0.0, Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
 
-		JLabel ScoutingTeamText = new JLabel("Scouting team: " + Core.teamNumber);
+		JLabel ScoutingTeamText = new JLabel("Scouting team: " + OldCore.teamNumber);
 		ScoutingTeamText.setForeground(Color.WHITE);
 		ScoutingTeamText.setFont(new Font("Arial Black", Font.PLAIN, 40));
 		GridBagConstraints gbc_ScoutingTeamText = new GridBagConstraints();
@@ -147,7 +147,7 @@ public class EndGame {
 		RampClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		RampClimb.setForeground(Color.WHITE);
 		climb.add(RampClimb);
-		RampClimb.setSelected(Core.IntToBoolean(Core.RampClimb));
+		RampClimb.setSelected(OldCore.IntToBoolean(OldCore.RampClimb));
 		GridBagConstraints gbc_RampClimb = new GridBagConstraints();
 		gbc_RampClimb.anchor = GridBagConstraints.WEST;
 		gbc_RampClimb.gridheight = 2;
@@ -161,7 +161,7 @@ public class EndGame {
 		DidntClimb.setBackground(Color.BLACK);
 		DidntClimb.setForeground(Color.WHITE);
 		DidntClimb.setFont(new Font("Arial", Font.PLAIN, 20));
-		DidntClimb.setSelected(Core.IntToBoolean(Core.DidntClimb));
+		DidntClimb.setSelected(OldCore.IntToBoolean(OldCore.DidntClimb));
 		climb.add(DidntClimb);
 		GridBagConstraints gbc_DidntClimb = new GridBagConstraints();
 		gbc_DidntClimb.gridheight = 2;
@@ -178,7 +178,7 @@ public class EndGame {
 		SingleSideClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		SingleSideClimb.setForeground(Color.WHITE);
 		climb.add(SingleSideClimb);
-		SingleSideClimb.setSelected(Core.IntToBoolean(Core.SingleClimbSide));
+		SingleSideClimb.setSelected(OldCore.IntToBoolean(OldCore.SingleClimbSide));
 		GridBagConstraints gbc_SingleSideClimb = new GridBagConstraints();
 		gbc_SingleSideClimb.anchor = GridBagConstraints.WEST;
 		gbc_SingleSideClimb.gridheight = 2;
@@ -194,7 +194,7 @@ public class EndGame {
 		SingleCenterClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		SingleCenterClimb.setForeground(Color.WHITE);
 		climb.add(SingleCenterClimb);
-		SingleCenterClimb.setSelected(Core.IntToBoolean(Core.SingleClimbCenter));
+		SingleCenterClimb.setSelected(OldCore.IntToBoolean(OldCore.SingleClimbCenter));
 		GridBagConstraints gbc_SingleCenterClimb = new GridBagConstraints();
 		gbc_SingleCenterClimb.anchor = GridBagConstraints.WEST;
 		gbc_SingleCenterClimb.gridheight = 2;
@@ -210,7 +210,7 @@ public class EndGame {
 		DoubleSideClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		DoubleSideClimb.setForeground(Color.WHITE);
 		climb.add(DoubleSideClimb);
-		DoubleSideClimb.setSelected(Core.IntToBoolean(Core.DoubleClimbSide));
+		DoubleSideClimb.setSelected(OldCore.IntToBoolean(OldCore.DoubleClimbSide));
 		GridBagConstraints gbc_DoubleSideClimb = new GridBagConstraints();
 		gbc_DoubleSideClimb.anchor = GridBagConstraints.NORTHWEST;
 		gbc_DoubleSideClimb.gridheight = 2;
@@ -226,7 +226,7 @@ public class EndGame {
 		DoubleCenterClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		DoubleCenterClimb.setForeground(Color.WHITE);
 		climb.add(DoubleCenterClimb);
-		DoubleCenterClimb.setSelected(Core.IntToBoolean(Core.DoubleClimbCenter));
+		DoubleCenterClimb.setSelected(OldCore.IntToBoolean(OldCore.DoubleClimbCenter));
 		GridBagConstraints gbc_DoubleCenterClimb = new GridBagConstraints();
 		gbc_DoubleCenterClimb.anchor = GridBagConstraints.NORTHWEST;
 		gbc_DoubleCenterClimb.gridheight = 2;
@@ -242,7 +242,7 @@ public class EndGame {
 		TripleSideClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		TripleSideClimb.setForeground(Color.WHITE);
 		climb.add(TripleSideClimb);
-		TripleSideClimb.setSelected(Core.IntToBoolean(Core.TripleClimbSide));
+		TripleSideClimb.setSelected(OldCore.IntToBoolean(OldCore.TripleClimbSide));
 		GridBagConstraints gbc_TripleSideClimb = new GridBagConstraints();
 		gbc_TripleSideClimb.gridheight = 2;
 		gbc_TripleSideClimb.anchor = GridBagConstraints.NORTHWEST;
@@ -258,7 +258,7 @@ public class EndGame {
 		TripleCenterClimb.setFont(new Font("Arial", Font.PLAIN, 20));
 		TripleCenterClimb.setForeground(Color.WHITE);
 		climb.add(TripleCenterClimb);
-		TripleCenterClimb.setSelected(Core.IntToBoolean(Core.TripleClimbCenter));
+		TripleCenterClimb.setSelected(OldCore.IntToBoolean(OldCore.TripleClimbCenter));
 		GridBagConstraints gbc_TripleCenterClimb = new GridBagConstraints();
 		gbc_TripleCenterClimb.anchor = GridBagConstraints.NORTHWEST;
 		gbc_TripleCenterClimb.gridheight = 2;
@@ -298,7 +298,7 @@ public class EndGame {
 		Cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Core.reset();
+				OldCore.reset();
 				ScoutingWindow.setVisible(false);
 			}
 		});
@@ -314,14 +314,14 @@ public class EndGame {
 		Review.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Core.SingleClimbSide = Core.BooleanToInt(SingleSideClimb.isSelected());
-				Core.SingleClimbCenter = Core.BooleanToInt(SingleCenterClimb.isSelected());
-				Core.DoubleClimbSide = Core.BooleanToInt(DoubleSideClimb.isSelected());
-				Core.DoubleClimbCenter = Core.BooleanToInt(DoubleCenterClimb.isSelected());
-				Core.TripleClimbSide = Core.BooleanToInt(TripleSideClimb.isSelected());
-				Core.TripleClimbCenter = Core.BooleanToInt(TripleCenterClimb.isSelected());
-				Core.RampClimb = Core.BooleanToInt(RampClimb.isSelected());
-				Core.DidntClimb = Core.BooleanToInt(DidntClimb.isSelected());
+				OldCore.SingleClimbSide = OldCore.BooleanToInt(SingleSideClimb.isSelected());
+				OldCore.SingleClimbCenter = OldCore.BooleanToInt(SingleCenterClimb.isSelected());
+				OldCore.DoubleClimbSide = OldCore.BooleanToInt(DoubleSideClimb.isSelected());
+				OldCore.DoubleClimbCenter = OldCore.BooleanToInt(DoubleCenterClimb.isSelected());
+				OldCore.TripleClimbSide = OldCore.BooleanToInt(TripleSideClimb.isSelected());
+				OldCore.TripleClimbCenter = OldCore.BooleanToInt(TripleCenterClimb.isSelected());
+				OldCore.RampClimb = OldCore.BooleanToInt(RampClimb.isSelected());
+				OldCore.DidntClimb = OldCore.BooleanToInt(DidntClimb.isSelected());
 				Finalize FT = new Finalize();
 				ScoutingWindow.setVisible(false);
 				FT.showFinalization();
@@ -334,7 +334,7 @@ public class EndGame {
 
 		ScoutingWindow.getRootPane().setDefaultButton(Review);
 
-		Core.CenterWindowLocaiton(ScoutingWindow);
+		OldCore.CenterWindowLocaiton(ScoutingWindow);
 
 	}
 }

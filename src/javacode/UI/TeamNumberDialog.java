@@ -3,7 +3,7 @@ package javacode.UI;
 import java.io.IOException;
 import java.net.URL;
 
-import javacode.Debugger;
+import javacode.Core.Debugger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import javacode.Debugger;
+import javacode.OldCore.Debugger;
 
 public class Finalize {
 
@@ -57,7 +57,7 @@ public class Finalize {
 	public void showFinalization() {
 		ScoutingWindow.setVisible(true);
 		ReviewClimb.setText(String.format("<html>Can this team climb:<br><center>%s</center></html>",
-				String.valueOf(!Core.IntToBoolean(Core.DidntClimb))));
+				String.valueOf(!OldCore.IntToBoolean(OldCore.DidntClimb))));
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class Finalize {
 		gbc_ReviewHeader.gridy = 5;
 		ScoutingWindow.getContentPane().add(ReviewHeader, gbc_ReviewHeader);
 
-		ReviewTeamNumber = new JLabel("Team number: " + Core.teamNumber);
+		ReviewTeamNumber = new JLabel("Team number: " + OldCore.teamNumber);
 		ReviewTeamNumber.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewTeamNumber.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewTeamNumber = new GridBagConstraints();
@@ -136,7 +136,7 @@ public class Finalize {
 		gbc_ReviewTeamNumber.gridy = 6;
 		ScoutingWindow.getContentPane().add(ReviewTeamNumber, gbc_ReviewTeamNumber);
 
-		ReviewHasAuto = new JLabel("Has basic auto: " + String.valueOf(Core.IntToBoolean(Core.BasicAutoValue)));
+		ReviewHasAuto = new JLabel("Has basic auto: " + String.valueOf(OldCore.IntToBoolean(OldCore.BasicAutoValue)));
 		ReviewHasAuto.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewHasAuto.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewHasAuto = new GridBagConstraints();
@@ -146,7 +146,7 @@ public class Finalize {
 		gbc_ReviewHasAuto.gridy = 6;
 		ScoutingWindow.getContentPane().add(ReviewHasAuto, gbc_ReviewHasAuto);
 
-		ReviewSwitchAuto = new JLabel("Has switch auto: " + String.valueOf(Core.IntToBoolean(Core.SwitchAutoValue)));
+		ReviewSwitchAuto = new JLabel("Has switch auto: " + String.valueOf(OldCore.IntToBoolean(OldCore.SwitchAutoValue)));
 		ReviewSwitchAuto.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewSwitchAuto.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewSwitchAuto = new GridBagConstraints();
@@ -156,7 +156,7 @@ public class Finalize {
 		gbc_ReviewSwitchAuto.gridy = 7;
 		ScoutingWindow.getContentPane().add(ReviewSwitchAuto, gbc_ReviewSwitchAuto);
 
-		ReviewScaleAuto = new JLabel("Has scale auto: " + String.valueOf(Core.IntToBoolean(Core.ScaleAutoValue)));
+		ReviewScaleAuto = new JLabel("Has scale auto: " + String.valueOf(OldCore.IntToBoolean(OldCore.ScaleAutoValue)));
 		ReviewScaleAuto.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewScaleAuto.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewScaleAuto = new GridBagConstraints();
@@ -167,7 +167,7 @@ public class Finalize {
 		ScoutingWindow.getContentPane().add(ReviewScaleAuto, gbc_ReviewScaleAuto);
 
 		ReviewSwitch = new JLabel(String.format("<html>Total cubes placed<br><center>on switch: %s</center></html>",
-				String.valueOf(Core.SwitchTeleValue)));
+				String.valueOf(OldCore.SwitchTeleValue)));
 		ReviewSwitch.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewSwitch.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewSwitch = new GridBagConstraints();
@@ -179,7 +179,7 @@ public class Finalize {
 		ScoutingWindow.getContentPane().add(ReviewSwitch, gbc_ReviewSwitch);
 
 		ReviewScale = new JLabel(String.format("<html>Total cubes placed<br><center>on scale: %s</center></html>",
-				String.valueOf(Core.ScaleTeleValue)));
+				String.valueOf(OldCore.ScaleTeleValue)));
 		ReviewScale.setForeground(Color.WHITE);
 		ReviewScale.setFont(new Font("Arial", Font.PLAIN, 25));
 		GridBagConstraints gbc_ReviewScale = new GridBagConstraints();
@@ -191,7 +191,7 @@ public class Finalize {
 		ScoutingWindow.getContentPane().add(ReviewScale, gbc_ReviewScale);
 
 		ReviewExchange = new JLabel(String.format("<html>Total cubes placed<br>\tin the exchange: %s</html>",
-				String.valueOf(Core.ExchangeTeleValue)));
+				String.valueOf(OldCore.ExchangeTeleValue)));
 		ReviewExchange.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewExchange.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewExchange = new GridBagConstraints();
@@ -203,7 +203,7 @@ public class Finalize {
 		ScoutingWindow.getContentPane().add(ReviewExchange, gbc_ReviewExchange);
 
 		ReviewClimb = new JLabel(String.format("<html>Can this team climb:<br><center>%s</center></html>",
-				String.valueOf(!Core.IntToBoolean(Core.DidntClimb))));
+				String.valueOf(!OldCore.IntToBoolean(OldCore.DidntClimb))));
 		ReviewClimb.setFont(new Font("Arial", Font.PLAIN, 25));
 		ReviewClimb.setForeground(Color.WHITE);
 		GridBagConstraints gbc_ReviewClimb = new GridBagConstraints();
@@ -245,7 +245,7 @@ public class Finalize {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				CommentsField.setText("");
-				Core.reset();
+				OldCore.reset();
 				ScoutingWindow.setVisible(false);
 			}
 		});
@@ -261,14 +261,14 @@ public class Finalize {
 		Finish.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String data = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", Core.teamNumber,
-						Core.BasicAutoValue, Core.SwitchAutoValue, Core.ScaleAutoValue, Core.SwitchTeleValue,
-						Core.ScaleTeleValue, Core.ExchangeTeleValue, Core.SingleClimbSide, Core.SingleClimbCenter,
-						Core.DoubleClimbSide, Core.DoubleClimbCenter, Core.TripleClimbSide, Core.TripleClimbCenter,
-						Core.RampClimb, CommentsField.getText().replace(",", "."));
+				String data = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", OldCore.teamNumber,
+						OldCore.BasicAutoValue, OldCore.SwitchAutoValue, OldCore.ScaleAutoValue, OldCore.SwitchTeleValue,
+						OldCore.ScaleTeleValue, OldCore.ExchangeTeleValue, OldCore.SingleClimbSide, OldCore.SingleClimbCenter,
+						OldCore.DoubleClimbSide, OldCore.DoubleClimbCenter, OldCore.TripleClimbSide, OldCore.TripleClimbCenter,
+						OldCore.RampClimb, CommentsField.getText().replace(",", "."));
 				Debugger.d(Finalize.class, "Data: " + data);
 				ScoutingFile.writeToFile(data);
-				Core.reset();
+				OldCore.reset();
 				CommentsField.setText("");
 				ScoutingWindow.setVisible(false);
 			}
@@ -280,7 +280,7 @@ public class Finalize {
 
 		ScoutingWindow.getRootPane().setDefaultButton(Finish);
 
-		Core.CenterWindowLocaiton(ScoutingWindow);
+		OldCore.CenterWindowLocaiton(ScoutingWindow);
 	}
 
 }

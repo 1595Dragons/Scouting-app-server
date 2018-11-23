@@ -1,7 +1,9 @@
-package javacode;
+package javacode.Core;
 
 
 import java.awt.Color;
+
+import javacode.ScoutingApp;
 
 public class Debugger {
 

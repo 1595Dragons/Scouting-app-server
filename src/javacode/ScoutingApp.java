@@ -2,6 +2,7 @@ package javacode;
 
 import java.io.IOException;
 
+import javacode.OldCore.Debugger;
 import javacode.UI.MainPanel;
 import javafx.application.Application;
 import javafx.stage.Stage;

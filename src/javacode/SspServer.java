@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import javax.bluetooth.RemoteDevice;
 import javax.microedition.io.StreamConnection;
 
-import javacode.Debugger;
+import javacode.OldCore.Debugger;
 
 public class SspServer extends Thread {
 	StreamConnection connection = OldScoutingApp.currentConnection;

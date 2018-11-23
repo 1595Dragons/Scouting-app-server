@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javacode.Debugger;
+import javacode.OldCore.Debugger;
 
 public class ScoutingFile {
 

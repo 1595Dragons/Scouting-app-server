@@ -1,4 +1,4 @@
-package javacode;
+package javacode.Core;
 
 
 import java.awt.Font;

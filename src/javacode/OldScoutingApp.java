@@ -8,8 +8,9 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
 
-import javacode.Debugger;
-import javacode.Updater;
+import javacode.Core.Updater;
+import javacode.OldCore.Bluetooth;
+import javacode.OldCore.Debugger;
 
 public class OldScoutingApp {
 

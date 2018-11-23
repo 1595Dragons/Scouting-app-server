@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import javacode.Debugger;
+import javacode.OldCore.Debugger;
 
 public class OldMainPanel {
 
@@ -269,7 +269,7 @@ public class OldMainPanel {
 		StartScoutingButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Core.reset();
+				OldCore.reset();
 				enterTeamPrompt.showPromptWindow();
 			}
 		});

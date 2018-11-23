@@ -20,7 +20,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import javacode.Debugger;
+import javacode.OldCore.Debugger;
 
 public class TeleScouting {
 
@@ -80,7 +80,7 @@ public class TeleScouting {
 				0.0, 0.0, Double.MIN_VALUE };
 		ScoutingWindow.getContentPane().setLayout(gridBagLayout);
 
-		JLabel ScoutingTeamText = new JLabel("Scouting team: " + Core.teamNumber);
+		JLabel ScoutingTeamText = new JLabel("Scouting team: " + OldCore.teamNumber);
 		ScoutingTeamText.setForeground(Color.WHITE);
 		ScoutingTeamText.setFont(new Font("Arial Black", Font.PLAIN, 40));
 		GridBagConstraints gbc_ScoutingTeamText = new GridBagConstraints();
@@ -152,16 +152,16 @@ public class TeleScouting {
 
 		JSpinner SwitchCube = new JSpinner();
 		SwitchCube.setFont(new Font("Arial", Font.PLAIN, 30));
-		if (Core.IntToBoolean(Core.switchOffSet)) {
+		if (OldCore.IntToBoolean(OldCore.switchOffSet)) {
 			SwitchCube.setModel(new SpinnerNumberModel(1, 1, 25, 1));
-			if (Core.SwitchTeleValue != 0) {
-				SwitchCube.setValue(Core.SwitchTeleValue);
+			if (OldCore.SwitchTeleValue != 0) {
+				SwitchCube.setValue(OldCore.SwitchTeleValue);
 			} else {
 				SwitchCube.setValue(1);
 			}
 		} else {
 			SwitchCube.setModel(new SpinnerNumberModel(0, 0, 25, 1));
-			SwitchCube.setValue(Core.SwitchTeleValue);
+			SwitchCube.setValue(OldCore.SwitchTeleValue);
 		}
 
 		GridBagConstraints gbc_SwitchCube = new GridBagConstraints();
@@ -182,16 +182,16 @@ public class TeleScouting {
 		ScoutingWindow.getContentPane().add(ScaleCubeHeader, gbc_ScaleCubeHeader);
 
 		JSpinner ScaleCube = new JSpinner();
-		if (Core.IntToBoolean(Core.scaleOffset)) {
+		if (OldCore.IntToBoolean(OldCore.scaleOffset)) {
 			ScaleCube.setModel(new SpinnerNumberModel(1, 1, 25, 1));
-			if (Core.ScaleTeleValue != 0) {
-				ScaleCube.setValue(Core.ScaleTeleValue);
+			if (OldCore.ScaleTeleValue != 0) {
+				ScaleCube.setValue(OldCore.ScaleTeleValue);
 			} else {
 				ScaleCube.setValue(1);
 			}
 		} else {
 			ScaleCube.setModel(new SpinnerNumberModel(0, 0, 25, 1));
-			ScaleCube.setValue(Core.ScaleTeleValue);
+			ScaleCube.setValue(OldCore.ScaleTeleValue);
 		}
 		ScaleCube.setFont(new Font("Arial", Font.PLAIN, 30));
 		GridBagConstraints gbc_ScaleCube = new GridBagConstraints();
@@ -214,7 +214,7 @@ public class TeleScouting {
 		JSpinner ExchangeCube = new JSpinner();
 		ExchangeCube.setFont(new Font("Arial", Font.PLAIN, 30));
 		ExchangeCube.setModel(new SpinnerNumberModel(0, 0, 25, 1));
-		ExchangeCube.setValue(Core.ExchangeTeleValue);
+		ExchangeCube.setValue(OldCore.ExchangeTeleValue);
 		GridBagConstraints gbc_ExchangeCube = new GridBagConstraints();
 		gbc_ExchangeCube.gridwidth = 2;
 		gbc_ExchangeCube.insets = new Insets(0, 0, 5, 5);
@@ -261,7 +261,7 @@ public class TeleScouting {
 		Cancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Core.reset();
+				OldCore.reset();
 				ScoutingWindow.setVisible(false);
 			}
 		});
@@ -277,9 +277,9 @@ public class TeleScouting {
 		Next.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Core.SwitchTeleValue = (int) SwitchCube.getValue();
-				Core.ScaleTeleValue = (int) ScaleCube.getValue();
-				Core.ExchangeTeleValue = (int) ExchangeCube.getValue();
+				OldCore.SwitchTeleValue = (int) SwitchCube.getValue();
+				OldCore.ScaleTeleValue = (int) ScaleCube.getValue();
+				OldCore.ExchangeTeleValue = (int) ExchangeCube.getValue();
 				ScoutingWindow.setVisible(false);
 				EndGame EGT = new EndGame();
 				EGT.showEndGame();
@@ -293,7 +293,7 @@ public class TeleScouting {
 		ScoutingWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		ScoutingWindow.getRootPane().setDefaultButton(Next);
 
-		Core.CenterWindowLocaiton(ScoutingWindow);
+		OldCore.CenterWindowLocaiton(ScoutingWindow);
 	}
 
 }

@@ -1,6 +1,6 @@
 package javacode;
 
-import javacode.Debugger;
+import javacode.OldCore.Debugger;
 
 public class DeviceManagement {
 
