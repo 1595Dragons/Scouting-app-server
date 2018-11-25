@@ -2,6 +2,7 @@ package javacode.Core;
 
 import java.io.IOException;
 
+import javax.bluetooth.RemoteDevice;
 import javax.microedition.io.StreamConnection;
 
 import javacode.ScoutingApp;
@@ -47,6 +48,8 @@ public class DeviceManagement {
 					connection = ScoutingApp.streamConnNotifier.acceptAndOpen();
 					if (connection != null) {
 						// Start the SPP server for that device
+						new DeviceManagement()
+								.deviceConnected(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
 						new Thread(new Bluetooth().new SSPServer(connection)).start();
 					}
 				} catch (IOException e) {

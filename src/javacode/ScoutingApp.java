@@ -42,7 +42,8 @@ public class ScoutingApp extends Application {
 			e.printStackTrace();
 		}
 
-		mainPanel.log("Loaded successfully", false);
+		new DeviceManagement().reset();
+		Debugger.d(getClass(), "Finsihed resetting device names");
 
 		// Check if bluetooth is possible
 		Bluetooth bluetooth = new Bluetooth();

@@ -15,8 +15,6 @@ import javacode.UI.MainPanel;
 public class Bluetooth {
 
 	private LocalDevice server;
-	
-	
 
 	public boolean isEnabled() {
 		try {
@@ -99,6 +97,8 @@ public class Bluetooth {
 									inputStream.close();
 								}
 								if (connection != null) {
+									new DeviceManagement().deviceDisconnected(
+											RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
 									connection.close();
 								}
 							} catch (IOException e) {
