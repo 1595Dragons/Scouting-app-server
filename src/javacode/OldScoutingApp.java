@@ -8,6 +8,7 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
 
+import javacode.Core.DeviceManagement;
 import javacode.Core.Updater;
 import javacode.OldCore.Bluetooth;
 import javacode.OldCore.Debugger;

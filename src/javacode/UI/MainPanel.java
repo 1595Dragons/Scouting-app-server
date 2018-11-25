@@ -2,6 +2,7 @@ package javacode.UI;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javacode.Core.Debugger;
 import javafx.event.ActionEvent;
@@ -21,6 +22,8 @@ public class MainPanel {
 
 	private static Label macAddressHeader, console;
 	private static Button startScouting, viewData;
+
+	public static ArrayList<Label> connectedDevices = new ArrayList<Label>();
 
 	public Scene loadMainPanel() throws IOException {
 
@@ -50,6 +53,21 @@ public class MainPanel {
 							startScouting = ((Button) childNode);
 						} else if (childNode.getId().equals("viewData")) {
 							viewData = ((Button) childNode);
+						} else if (childNode.getId().equals("device0")) {
+							connectedDevices.add(0, ((Label) childNode));
+						} else if (childNode.getId().equals("device1")) {
+							connectedDevices.add(1, ((Label) childNode));
+						} else if (childNode.getId().equals("device2")) {
+							connectedDevices.add(2, ((Label) childNode));
+						} else if (childNode.getId().equals("device3")) {
+							connectedDevices.add(3, ((Label) childNode));
+						} else if (childNode.getId().equals("device4")) {
+							connectedDevices.add(4, ((Label) childNode));
+						} else if (childNode.getId().equals("device5")) {
+							connectedDevices.add(5, ((Label) childNode));
+						} else {
+							Debugger.d(getClass(), String.format("Unused childNode: (%s) %s", childNode.getClass(),
+									childNode.getId()));
 						}
 					}
 				} else {
@@ -58,6 +76,8 @@ public class MainPanel {
 						macAddressHeader = ((Label) node);
 					} else if (node.getId().equals("console")) {
 						console = ((Label) node);
+					} else {
+						Debugger.d(getClass(), String.format("Unused node: (%s) %s", node.getClass(), node.getId()));
 					}
 				}
 			}

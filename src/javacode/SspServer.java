@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import javax.bluetooth.RemoteDevice;
 import javax.microedition.io.StreamConnection;
 
+import javacode.Core.DeviceManagement;
 import javacode.OldCore.Debugger;
 
 public class SspServer extends Thread {
