@@ -37,7 +37,6 @@ public class DeviceManagement {
 		}
 	}
 
-	// TODO: Just merge this with the SSPServer class
 	public class HandleIncommingDevices extends Thread {
 		public void run() {
 			while (!ScoutingApp.stopRequested) {
