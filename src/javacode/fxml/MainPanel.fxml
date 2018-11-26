@@ -26,9 +26,9 @@
             <Font name="Arial" size="20.0" />
          </font>
       </Label>
-      <ScrollPane id="ScrollPane" fx:id="ScrollPane" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+      <ScrollPane id="ScrollPane" fx:id="ScrollPane" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minViewportHeight="50.0">
          <content>
-            <Label id="console" fx:id="console" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="60.0" style="-fx-background-color: lightgray;">
+            <Label id="console" fx:id="console" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: lightgray;">
                <font>
                   <Font name="American Typewriter" size="15.0" />
                </font>

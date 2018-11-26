@@ -76,12 +76,13 @@ public class MainPanel {
 					}
 				} else if (node.getClass().toString().contains("ScrollPane")) {
 					ScrollPane pane = (ScrollPane) node;
-						if (pane.getContent().getId().equals("console")) {
-							console = ((Label) (pane.getContent()));
-						} else {
-							Debugger.d(getClass(), String.format("Unused childNode: (%s) %s", pane.getContent().getClass(), pane.getContent().getId()));
-						}
-					
+					if (pane.getContent().getId().equals("console")) {
+						console = ((Label) (pane.getContent()));
+					} else {
+						Debugger.d(getClass(), String.format("Unused childNode: (%s) %s", pane.getContent().getClass(),
+								pane.getContent().getId()));
+					}
+
 				} else {
 					// If the given node of importance, set it to an object
 					if (node.getId().equals("macAddressHeader")) {
@@ -120,6 +121,7 @@ public class MainPanel {
 							// Set the scene to the FMXL layout
 							dialog.getStage().setScene(dialog.createTeamNumberDialog());
 							dialog.getStage().setTitle("Enter team number");
+							dialog.getStage().setResizable(false);
 
 							// Show the stage, and update the visibility
 							dialog.getStage().show();

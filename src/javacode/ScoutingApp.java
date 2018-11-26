@@ -30,7 +30,6 @@ public class ScoutingApp extends Application {
 		try {
 			primaryWindow.setScene(mainPanel.loadMainPanel());
 			primaryWindow.setTitle("1595 Scouting app");
-			primaryWindow.setResizable(false);
 			primaryWindow.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent event) {
