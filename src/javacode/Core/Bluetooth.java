@@ -21,8 +21,7 @@ public class Bluetooth {
 			Debugger.d(getClass(), "Bluetooth is on: " + Boolean.toString(LocalDevice.isPowerOn()));
 			return LocalDevice.isPowerOn();
 		} catch (Exception e) {
-			e.printStackTrace();
-			new MainPanel().log(e.getMessage(), true);
+			MainPanel.logError(e);
 			return false;
 		}
 	}
@@ -59,7 +58,7 @@ public class Bluetooth {
 					try {
 						client = RemoteDevice.getRemoteDevice(connection);
 					} catch (IOException e) {
-						debug.log(e.getMessage() + "\n" + e.getStackTrace(), true);
+						MainPanel.logError(e);
 					}
 
 					if (client != null) {
@@ -67,7 +66,7 @@ public class Bluetooth {
 						try {
 							inputStream = connection.openInputStream();
 						} catch (IOException e) {
-							debug.log(e.getMessage() + "\n" + e.getStackTrace(), true);
+							MainPanel.logError(e);
 						}
 
 						if (inputStream != null) {
@@ -82,7 +81,7 @@ public class Bluetooth {
 											client.getBluetoothAddress()), false);
 								}
 							} catch (IOException e) {
-								debug.log(e.getMessage() + "\n" + e.getStackTrace(), true);
+								MainPanel.logError(e);
 							}
 
 							// TODO: Write to SQLite database
@@ -102,7 +101,7 @@ public class Bluetooth {
 									connection.close();
 								}
 							} catch (IOException e) {
-								debug.log(e.getMessage() + "\n" + e.getStackTrace(), true);
+								MainPanel.logError(e);
 							}
 						} else {
 							return;

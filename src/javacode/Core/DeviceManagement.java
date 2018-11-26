@@ -52,7 +52,7 @@ public class DeviceManagement {
 						new Thread(new Bluetooth().new SSPServer(connection)).start();
 					}
 				} catch (IOException e) {
-					new MainPanel().log(e.getMessage() + "\n" + e.getStackTrace(), true);
+					MainPanel.logError(e);
 				}
 			}
 		}

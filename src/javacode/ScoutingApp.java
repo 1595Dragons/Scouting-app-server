@@ -60,13 +60,13 @@ public class ScoutingApp extends Application {
 				try {
 					streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
 				} catch (IOException e) {
-					mainPanel.log(e.getMessage() + "\n" + e.getStackTrace(), true);
+					MainPanel.logError(e);
 				}
 
 				new DeviceManagement().new HandleIncommingDevices().start();
 
 			} catch (BluetoothStateException e) {
-				mainPanel.log(e.getMessage() + "\n" + e.getStackTrace(), true);
+				MainPanel.logError(e);
 			}
 		} else {
 			mainPanel.log("Bluetooth not enabled", true);

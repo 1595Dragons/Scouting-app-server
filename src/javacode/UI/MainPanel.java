@@ -1,8 +1,11 @@
 package javacode.UI;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javacode.Core.Debugger;
 import javafx.event.ActionEvent;
@@ -12,7 +15,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -44,7 +49,6 @@ public class MainPanel {
 
 			// Setup each of the nodes that are important
 			for (Node node : root.getChildrenUnmodifiable()) {
-
 				// Check if there is a nested view (HBox)
 				if (node instanceof HBox) {
 					for (Node childNode : ((HBox) node).getChildren()) {
@@ -70,12 +74,18 @@ public class MainPanel {
 									childNode.getId()));
 						}
 					}
+				} else if (node.getClass().toString().contains("ScrollPane")) {
+					ScrollPane pane = (ScrollPane) node;
+						if (pane.getContent().getId().equals("console")) {
+							console = ((Label) (pane.getContent()));
+						} else {
+							Debugger.d(getClass(), String.format("Unused childNode: (%s) %s", pane.getContent().getClass(), pane.getContent().getId()));
+						}
+					
 				} else {
 					// If the given node of importance, set it to an object
 					if (node.getId().equals("macAddressHeader")) {
 						macAddressHeader = ((Label) node);
-					} else if (node.getId().equals("console")) {
-						console = ((Label) node);
 					} else {
 						Debugger.d(getClass(), String.format("Unused node: (%s) %s", node.getClass(), node.getId()));
 					}
@@ -120,7 +130,7 @@ public class MainPanel {
 						dialog.getStage().toFront();
 
 					} catch (IOException e) {
-						log(e.getMessage(), true);
+						MainPanel.logError(e);
 					}
 
 				}
@@ -156,6 +166,14 @@ public class MainPanel {
 		}
 
 		console.setText(message);
+	}
+
+	public static void logError(Exception excetion) {
+		StringWriter sw = new StringWriter();
+		excetion.printStackTrace(new PrintWriter(sw));
+		console.setTextFill(Color.RED);
+		System.err.println(String.format("Error: %s\n%s", excetion.getMessage(), sw.toString()));
+		console.setText(String.format("%s\n%s", excetion.getMessage(), sw.toString()));
 	}
 
 }
