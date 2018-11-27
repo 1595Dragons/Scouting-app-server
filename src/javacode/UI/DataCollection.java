@@ -116,6 +116,8 @@ public class DataCollection {
 					});
 				}
 				
+				
+				// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
 				this.autoScaleNumber.getEditor().textProperty().addListener(new ChangeListener<String>() {
 				    @Override
 				    public void changed(ObservableValue<? extends String> observable, String oldValue, 
@@ -126,6 +128,8 @@ public class DataCollection {
 				    }
 				});
 				
+				
+				// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
 				this.autoSwitchNumber.getEditor().textProperty().addListener(new ChangeListener<String>() {
 				    @Override
 				    public void changed(ObservableValue<? extends String> observable, String oldValue, 
@@ -138,6 +142,8 @@ public class DataCollection {
 			}
 			
 			if (this.teleSwitchNumber != null) {
+				
+				// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
 				this.teleSwitchNumber.getEditor().textProperty().addListener(new ChangeListener<String>() {
 				    @Override
 				    public void changed(ObservableValue<? extends String> observable, String oldValue, 
@@ -150,6 +156,8 @@ public class DataCollection {
 			}
 			
 			if (this.teleScaleNumber != null) {
+				
+				// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
 				this.teleScaleNumber.getEditor().textProperty().addListener(new ChangeListener<String>() {
 				    @Override
 				    public void changed(ObservableValue<? extends String> observable, String oldValue, 
@@ -162,6 +170,8 @@ public class DataCollection {
 			}
 			
 			if (this.teleExchangeNumber != null) {
+				
+				// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
 				this.teleExchangeNumber.getEditor().textProperty().addListener(new ChangeListener<String>() {
 				    @Override
 				    public void changed(ObservableValue<? extends String> observable, String oldValue, 

@@ -6,7 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="3rd party libs/jgoodies-forms-1.8.0.jar" sourcepath="3rd party libs/jgoodies-forms-1.8.0.jar"/>
 	<classpathentry kind="lib" path="3rd party libs/sqlite-jdbc-3.23.1.jar"/>
 	<classpathentry kind="lib" path="3rd party libs/bluecove-2.1.2-SNAPSHOT.jar" sourcepath="3rd party libs/bluecove-2.1.1-SNAPSHOT"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX"/>

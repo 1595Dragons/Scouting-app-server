@@ -5,11 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import javax.bluetooth.RemoteDevice;
 import javax.microedition.io.StreamConnection;
-
-import javacode.Core.DeviceManagement;
-import javacode.OldCore.Debugger;
 
 public class SspServer extends Thread {
 	StreamConnection connection = OldScoutingApp.currentConnection;
@@ -23,8 +19,7 @@ public class SspServer extends Thread {
 				try {
 					inStream = connection.openInputStream();
 				} catch (IOException e1) {
-					Debugger.logTest(String.format("Error, cannot open stream: %s", e1.getMessage()), true);
-					Debugger.d(this.getClass(), "Error: " + e1.getMessage());
+
 					e1.printStackTrace();
 				}
 
@@ -34,18 +29,9 @@ public class SspServer extends Thread {
 				try {
 					lineRead = bReader.readLine();
 					if (lineRead == null) {
-						Debugger.logTest("Device disconnected", false);
-						Debugger.d(this.getClass(),
-								String.format("Device disconnected: %s (%s)",
-										RemoteDevice.getRemoteDevice(connection).getFriendlyName(false),
-										RemoteDevice.getRemoteDevice(connection).getBluetoothAddress()));
-						DeviceManagement
-								.deviceDisconnected(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
 						return;
 					}
 				} catch (IOException e1) {
-					Debugger.logTest(String.format("Error, cannot read stream: %s", e1.getMessage()), true);
-					Debugger.d(this.getClass(), "Error: " + e1.getMessage());
 					e1.printStackTrace();
 				}
 
@@ -53,12 +39,9 @@ public class SspServer extends Thread {
 
 				// Try closing the writer and stream
 				try {
-					DeviceManagement
-							.deviceDisconnected(RemoteDevice.getRemoteDevice(connection).getFriendlyName(false));
 					bReader.close();
 					inStream.close();
 				} catch (IOException e1) {
-					Debugger.logTest(String.format("Error, cannot close stream: %s", e1.getMessage()), true);
 					e1.printStackTrace();
 				}
 
@@ -66,15 +49,10 @@ public class SspServer extends Thread {
 				try {
 					connection.close();
 				} catch (IOException e) {
-					Debugger.log(String.format("Error closing connections: %s", e.getMessage()), true);
-					Debugger.d(this.getClass(), "Error: " + e.getMessage());
 					e.printStackTrace();
 				}
 
 			}
-		} else {
-			Debugger.logTest("Connection is null!", true);
-			Debugger.d(this.getClass(), "Connection is null!");
 		}
 	}
 }
