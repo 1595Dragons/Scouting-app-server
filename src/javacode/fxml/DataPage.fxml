@@ -84,7 +84,7 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <Spinner id="teleSwitchHeader" fx:id="teleSwitchNumber" editable="true" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
+                  <Spinner id="teleSwitchNumber" fx:id="teleSwitchNumber" editable="true" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
                   <Label id="TeleScaleHeader" fx:id="TeleScaleHeader" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Number of cubes placed on scale during TeleOp" textAlignment="CENTER">
                      <font>
                         <Font size="15.0" />
@@ -131,7 +131,7 @@
                         <Font name="Arial" size="20.0" />
                      </font>
                   </Label>
-                  <TextArea id="feedback" fx:id="feedback" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" promptText="¯\_(ツ)_/¯" wrapText="true">
+                  <TextArea id="feedback" fx:id="feedback" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" promptText="¯\_(ツ)_/¯" style="-fx-background-color: WHITE;" wrapText="true">
                      <font>
                         <Font name="Arial" size="15.0" />
                      </font>

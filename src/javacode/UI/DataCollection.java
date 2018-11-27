@@ -12,21 +12,27 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class DataCollection {
 
-	private int teamNumber, autoSwitchCube;
-	
+	private static boolean isVisible = false;
+	private int teamNumber;
+	private Spinner<Integer> autoSwitchNumber, autoScaleNumber, teleSwitchNumber, teleScaleNumber, teleExchangeNumber;
 	private CheckBox hasAutoCheck, canClimb;
+	private TextArea feedback;
+	private Button Submit, Cancel;
 	
-
+	private static Stage stage;
 
 	public DataCollection(int number) {
 		this.teamNumber = number;
@@ -49,8 +55,6 @@ public class DataCollection {
 		if (root != null) {
 
 			Label teamnumberheader = null;
-			
-			Spinner<Integer> autoSwitchNumber = null, autoScaleNumber = null;
 
 			// Create an array of all the nodes
 			ArrayList<Node> Nodes = new ArrayList<Node>();
@@ -67,11 +71,26 @@ public class DataCollection {
 					} else if (node.getId().equals("canClimb")) {
 						this.canClimb = (CheckBox) node;
 					} else if (node.getId().equals("autoSwitchNumber")) {
-						autoSwitchNumber = (Spinner<Integer>) node;
-						autoSwitchNumber.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 25, 0, 1));
+						this.autoSwitchNumber = (Spinner<Integer>) node;
+						this.autoSwitchNumber.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 25, 0, 1));
 					} else if (node.getId().equals("autoScaleNumber")) {
-						autoScaleNumber = (Spinner<Integer>) node;
-						autoScaleNumber.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 25, 0, 1));
+						this.autoScaleNumber = (Spinner<Integer>) node;
+						this.autoScaleNumber.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 25, 0, 1));
+					} else if (node.getId().equals("teleSwitchNumber")) {
+						this.teleSwitchNumber = (Spinner<Integer>) node;
+						this.teleSwitchNumber.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 25, 0, 1));
+					} else if (node.getId().equals("teleScaleNumber")) {
+						this.teleScaleNumber = (Spinner<Integer>) node;
+						this.teleScaleNumber.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 25, 0, 1));
+					} else if (node.getId().equals("exchangeNumber")) {
+						this.teleExchangeNumber = (Spinner<Integer>) node;
+						this.teleExchangeNumber.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 25, 0, 1));
+					} else if (node.getId().equals("feedback")) {
+						this.feedback = (TextArea) node;
+					} else if (node.getId().equals("CancelButton")) {
+						this.Cancel = (Button) node;
+					} else if (node.getId().equals("SubmitButton")) {
+						this.Submit = (Button) node;
 					} else {
 						Debugger.d(getClass(), String.format("Unused node: (%s) %s", node.getClass(), node.getId()));
 					}
@@ -79,13 +98,30 @@ public class DataCollection {
 			}
 			
 			if (this.hasAutoCheck != null && autoScaleNumber != null && autoSwitchNumber != null) {
-				final Spinner<Integer>  aSCn = autoScaleNumber, aSWn = autoSwitchNumber;
 				this.hasAutoCheck.setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent arg0) {
 						boolean isNotChecked = !hasAutoCheck.isSelected();
-						aSCn.setDisable(isNotChecked);
-						aSWn.setDisable(isNotChecked);
+						autoScaleNumber.setDisable(isNotChecked);
+						autoSwitchNumber.setDisable(isNotChecked);
+					}
+				});
+			}
+			
+			if (this.Cancel != null) {
+				this.Cancel.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						// TODO: Add cancel action
+					}
+				});
+			}
+			
+			if (this.Submit != null) {
+				this.Submit.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						// TODO Auto-generated method stub	
 					}
 				});
 			}
@@ -96,7 +132,6 @@ public class DataCollection {
 		} else {
 			throw new IOException("Cannot load team number dialog FXML");
 		}
-
 	}
 
 	private ArrayList<Node> getAllNodes(ObservableList<Node> parent) {
