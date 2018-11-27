@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 
 import javax.microedition.io.StreamConnection;
 
+@Deprecated
 public class SspServer extends Thread {
 	StreamConnection connection = OldScoutingApp.currentConnection;
 

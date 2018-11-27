@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+@Deprecated
 public class ScoutingFile {
 
 	private static final File ScoutingFile = new File(System.getProperty("user.dir") + "/scouting_data.csv");

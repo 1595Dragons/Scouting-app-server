@@ -27,10 +27,10 @@ import javafx.stage.Stage;
 
 public class DataCollection {
 
-	private int teamNumber;
-	private Spinner<Integer> autoSwitchNumber, autoScaleNumber, teleSwitchNumber, teleScaleNumber, teleExchangeNumber;
-	private CheckBox hasAutoCheck, canClimb;
-	private TextArea feedback;
+	public int teamNumber;
+	public Spinner<Integer> autoSwitchNumber, autoScaleNumber, teleSwitchNumber, teleScaleNumber, teleExchangeNumber;
+	public CheckBox hasAutoCheck, canClimb;
+	public TextArea feedback;
 	private Button Submit, Cancel;
 
 	private static Stage stage;
@@ -39,6 +39,7 @@ public class DataCollection {
 		this.teamNumber = number;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Scene createDataCollectionPage() throws IOException {
 		Parent root = null;
 

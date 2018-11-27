@@ -9,6 +9,7 @@ import javax.microedition.io.StreamConnectionNotifier;
 
 import javacode.Core.Updater;
 
+@Deprecated
 public class OldScoutingApp {
 
 	public static boolean debug = false;
