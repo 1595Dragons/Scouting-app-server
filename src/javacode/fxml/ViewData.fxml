@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <tabs>
+    <Tab closable="false" text="Raw data" />
+    <Tab closable="false" text="Calculated Data" />
+      <Tab closable="false" text="Execute SQL">
+         <content>
+            <HBox prefHeight="100.0" prefWidth="200.0" />
+         </content>
+         <content>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TextField />
+                        <Button mnemonicParsing="false" text="Button" />
+                     </children>
+                  </HBox>
+                  <TextArea prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </VBox>
+         </content></Tab>
+  </tabs>
+</TabPane>

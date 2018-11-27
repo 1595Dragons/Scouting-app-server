@@ -84,7 +84,12 @@ public class Bluetooth {
 								MainPanel.logError(e);
 							}
 
-							// TODO: Write to SQLite database
+							// TODO: Parse the info from the stream to data, so it can be stored in the
+							// databases
+
+							// new Database().updateDatabase(teamNumber, hasAuto, autoSwitchCube,
+							// autoScaleCube, teleSwitchCube, teleScaleCube, exchangeCube, canClimb,
+							// comments);
 
 							// TODO: Don't disconnect the device until requested
 							// But for now, just disconnect
