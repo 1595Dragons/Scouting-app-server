@@ -1,6 +1,7 @@
 package javacode;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.UUID;
@@ -8,6 +9,7 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnectionNotifier;
 
 import javacode.Core.Bluetooth;
+import javacode.Core.Database;
 import javacode.Core.Debugger;
 import javacode.Core.DeviceManagement;
 import javacode.UI.MainPanel;
@@ -43,6 +45,20 @@ public class ScoutingApp extends Application {
 
 		new DeviceManagement().reset();
 		Debugger.d(getClass(), "Finsihed resetting device names");
+		
+		// Check if the database exists
+		Database database = new Database();
+		boolean databaseExists = database.databaseExists(true);
+		Debugger.d(getClass(), "Database exists: " + databaseExists);
+		
+		// If no database exists, create one
+		if (!databaseExists) {
+			try {
+				database.createDatabase();
+			} catch (IOException | SQLException e) {
+				MainPanel.logError(e);
+			}
+		}
 
 		// Check if bluetooth is possible
 		Bluetooth bluetooth = new Bluetooth();
