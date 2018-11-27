@@ -26,6 +26,7 @@ public class Database {
 		// Execute the query
 		try {
 			executeSQL(query);
+			new MainPanel().log("Successfully written data for team " + teamNumber, false);
 		} catch (SQLException e) {
 			MainPanel.logError(e);
 		}

@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import javacode.Core.Debugger;
-import javafx.collections.ObservableList;
+import javacode.Core.NodeHelper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -16,9 +16,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -48,7 +45,7 @@ public class MainPanel {
 		if (root != null) {
 
 			// Setup each of the nodes that are important
-			ArrayList<Node> Nodes = getAllNodes(root.getChildrenUnmodifiable());
+			ArrayList<Node> Nodes = new NodeHelper().getAllNodes(root.getChildrenUnmodifiable());
 			for (Node node : Nodes) {
 				if (node.getId() != null) {
 					// If the given node of importance, set it to an object
@@ -162,28 +159,4 @@ public class MainPanel {
 		System.err.println(String.format("Error: %s\n%s", e.getMessage(), sw.toString()));
 		console.setText(String.format("%s\n%s", e.getMessage(), sw.toString()));
 	}
-
-	private ArrayList<Node> getAllNodes(ObservableList<Node> parent) {
-		ArrayList<Node> Nodes = new ArrayList<Node>();
-		for (Node node : parent) {
-			if (node instanceof HBox) {
-				Nodes.addAll(getAllNodes(((HBox) node).getChildrenUnmodifiable()));
-			} else if (node instanceof VBox) {
-				Nodes.addAll(getAllNodes(((VBox) node).getChildrenUnmodifiable()));
-			} else if (node.getClass().toString().contains("ScrollPane")) {
-				Node ScrollPaneNode = ((ScrollPane) node).getContent();
-				if (ScrollPaneNode instanceof HBox) {
-					Nodes.addAll(getAllNodes(((HBox) ScrollPaneNode).getChildrenUnmodifiable()));
-				} else if (ScrollPaneNode instanceof VBox) {
-					Nodes.addAll(getAllNodes(((VBox) ScrollPaneNode).getChildrenUnmodifiable()));
-				} else {
-					Nodes.add(ScrollPaneNode);
-				}
-			} else {
-				Nodes.add(node);
-			}
-		}
-		return Nodes;
-	}
-
 }

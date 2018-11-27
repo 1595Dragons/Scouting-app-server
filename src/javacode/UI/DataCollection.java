@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import javacode.Core.Database;
 import javacode.Core.Debugger;
+import javacode.Core.NodeHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -18,12 +18,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class DataCollection {
@@ -61,7 +58,7 @@ public class DataCollection {
 
 			// Create an array of all the nodes
 			ArrayList<Node> Nodes = new ArrayList<Node>();
-			Nodes = getAllNodes(root.getChildrenUnmodifiable());
+			Nodes = new NodeHelper().getAllNodes(root.getChildrenUnmodifiable());
 			Debugger.d(getClass(), "List of all nodes: " + Nodes.toString());
 
 			for (Node node : Nodes) {
@@ -208,29 +205,6 @@ public class DataCollection {
 		} else {
 			throw new IOException("Cannot load team number dialog FXML");
 		}
-	}
-
-	private ArrayList<Node> getAllNodes(ObservableList<Node> parent) {
-		ArrayList<Node> Nodes = new ArrayList<Node>();
-		for (Node node : parent) {
-			if (node instanceof HBox) {
-				Nodes.addAll(getAllNodes(((HBox) node).getChildrenUnmodifiable()));
-			} else if (node instanceof VBox) {
-				Nodes.addAll(getAllNodes(((VBox) node).getChildrenUnmodifiable()));
-			} else if (node.getClass().toString().contains("ScrollPane")) {
-				Node ScrollPaneNode = ((ScrollPane) node).getContent();
-				if (ScrollPaneNode instanceof HBox) {
-					Nodes.addAll(getAllNodes(((HBox) ScrollPaneNode).getChildrenUnmodifiable()));
-				} else if (ScrollPaneNode instanceof VBox) {
-					Nodes.addAll(getAllNodes(((VBox) ScrollPaneNode).getChildrenUnmodifiable()));
-				} else {
-					Nodes.add(ScrollPaneNode);
-				}
-			} else {
-				Nodes.add(node);
-			}
-		}
-		return Nodes;
 	}
 
 	public Stage getStage() {
