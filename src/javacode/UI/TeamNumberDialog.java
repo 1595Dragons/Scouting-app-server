@@ -83,10 +83,12 @@ public class TeamNumberDialog {
 						}
 						
 						try {
-							Stage data = new Stage();
-							data.setScene(new DataCollection(teamNumber).createDataCollectionPage());
-							data.setTitle("Data collection");
-							data.show();
+							DataCollection data = new DataCollection(teamNumber);
+							Stage stage = new Stage();
+							data.setStage(stage);
+							stage.setScene(data.createDataCollectionPage());
+							stage.setTitle("Data collection");
+							stage.show();
 						} catch (IOException e) {
 							MainPanel.logError(e);
 							return;

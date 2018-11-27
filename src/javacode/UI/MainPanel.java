@@ -48,7 +48,6 @@ public class MainPanel {
 		if (root != null) {
 
 			// Setup each of the nodes that are important
-			// TODO: Use function instead
 			ArrayList<Node> Nodes = getAllNodes(root.getChildrenUnmodifiable());
 			for (Node node : Nodes) {
 				if (node.getId() != null) {
