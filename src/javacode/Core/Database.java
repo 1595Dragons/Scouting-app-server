@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import javacode.UI.MainPanel;
 
@@ -13,11 +14,22 @@ public class Database {
 
 	private String databaseFile = System.getProperty("user.dir") + "/scouting-data.db";
 
-	//private DataCollection data;
+	public void updateDatabase(int teamNumber, boolean hasAuto, int autoSwitchCube, int autoScaleCube,
+			int teleSwitchCube, int teleScaleCube, int exchangeCube, boolean canClimb, String comments) {
+		// Create insert query based on entered arguments... because there aren't enough
+		// arguments to this function...
+		String query = "INSERT INTO data (teamNumber, hasAuto, autoSwitchCube, autoScaleCube, teleSwitchCube, teleScaleCube, exchangeCube, canClimb, comments) "
+				+ "VALUES ("
+				+ String.format("%s, %s, %s, %s, %s, %s, %s, %s, '%s');", teamNumber, hasAuto ? 1 : 0, autoSwitchCube,
+						autoScaleCube, teleSwitchCube, teleScaleCube, exchangeCube, canClimb ? 1 : 0, comments);
 
-	public void updateDatabase() {
-		// TODO: Update the data in the database (Basically add new data, like a write
-		// to)
+		// Execute the query
+		try {
+			executeSQL(query);
+		} catch (SQLException e) {
+			MainPanel.logError(e);
+		}
+
 	}
 
 	public void createDatabase() throws IOException, SQLException {
@@ -34,40 +46,14 @@ public class Database {
 		database.createNewFile();
 
 		// Once the database file has been created, setup the SQL table
-		Connection databaseConnection = null;
-		try {
-			databaseConnection = getDatabaseConnection();
-		} catch (ClassNotFoundException | SQLException e) {
-			MainPanel.logError(e);
-			return;
-		}
-		
-		// Check if the connection is not null
-		if (databaseConnection != null) {
-			
-			Statement SQLStatement = databaseConnection.createStatement();
-			
-			// Create the query to execute on the SQL database
-			String sqlQuery = "CREATE TABLE data (" + 
-							  "teamNumber INT NOT NULL, "+
-							  "hasAuto INT NOT NULL, "+
-							  "autoSwitchCube INT NOT NULL, "+
-							  "autoScaleCube INT NOT NULL, "+
-							  "teleSwithCube INT NOT NULL,"+
-							  "teleScaleCube INT NOT NULL,"+
-							  "exchangeCube INT NOT NULL,"+
-							  "canClimb INT NOT NULL,"+
-							  "comments TEXT)";
-			
-			// Execute the query
-			SQLStatement.execute(sqlQuery);
-			SQLStatement.close();
-			databaseConnection.close();
-			
-		} else {
-			// Throw an error
-			throw new SQLException("Database connection is null");
-		}
+		// Create the query to execute on the SQL database
+		String sqlQuery = "CREATE TABLE data (" + "teamNumber INT NOT NULL, " + "hasAuto INT NOT NULL, "
+				+ "autoSwitchCube INT NOT NULL, " + "autoScaleCube INT NOT NULL, " + "teleSwitchCube INT NOT NULL,"
+				+ "teleScaleCube INT NOT NULL," + "exchangeCube INT NOT NULL," + "canClimb INT NOT NULL,"
+				+ "comments TEXT)";
+
+		// Execute the query
+		executeSQL(sqlQuery);
 
 	}
 
@@ -103,17 +89,55 @@ public class Database {
 		return exists;
 	}
 
-	public Object executeSQL(String query) {
-		// TODO: Execute a SQL query on the database, return whatever is appropriate...
-		return null;
+	public ResultSet executeSQL(String query) throws SQLException {
+		Debugger.d(getClass(), "Executing query: " + query);
+
+		// Create the return variable
+		ResultSet result = null;
+
+		// Get the database connection
+		Connection databaseConnection = null;
+
+		try {
+			databaseConnection = getDatabaseConnection();
+		} catch (ClassNotFoundException e) {
+			MainPanel.logError(e);
+			return null;
+		}
+
+		// Execute the following only if the database connection isn't null
+		if (databaseConnection != null) {
+
+			// Prepare the query to prevent SQL injection attacks
+			PreparedStatement SQLStatement = databaseConnection.prepareStatement(query);
+
+			// If the prepared statement isn't null, go ahead and execute it
+			if (SQLStatement != null) {
+
+				if (query.startsWith("SELECT")) {
+					result = SQLStatement.executeQuery();
+				} else {
+					SQLStatement.execute();
+				}
+
+				// Close the statement at the end, to free up resources
+				SQLStatement.close();
+
+			}
+			// Close the database connection
+			databaseConnection.close();
+		}
+		// Return the result of the execution
+		Debugger.d(getClass(), "Result of execution: " + result);
+		return result;
 	}
 
 	private Connection getDatabaseConnection() throws ClassNotFoundException, SQLException {
 
 		// Load the SQLite library drivers
 		Debugger.d(getClass(), "SQLite driver: " + Class.forName("org.sqlite.JDBC"));
-		
-		return DriverManager.getConnection("jdbc:sqlite:"+databaseFile);
+
+		return DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
 	}
 
 }

@@ -36,8 +36,6 @@ public class SspServer extends Thread {
 					e1.printStackTrace();
 				}
 
-				ScoutingFile.writeToFile(lineRead);
-
 				// Try closing the writer and stream
 				try {
 					bReader.close();

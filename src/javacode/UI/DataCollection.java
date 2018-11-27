@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javacode.Core.Database;
 import javacode.Core.Debugger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -27,10 +28,10 @@ import javafx.stage.Stage;
 
 public class DataCollection {
 
-	public int teamNumber;
-	public Spinner<Integer> autoSwitchNumber, autoScaleNumber, teleSwitchNumber, teleScaleNumber, teleExchangeNumber;
-	public CheckBox hasAutoCheck, canClimb;
-	public TextArea feedback;
+	private int teamNumber;
+	private Spinner<Integer> autoSwitchNumber, autoScaleNumber, teleSwitchNumber, teleScaleNumber, teleExchangeNumber;
+	private CheckBox hasAutoCheck, canClimb;
+	private TextArea feedback;
 	private Button Submit, Cancel;
 
 	private static Stage stage;
@@ -104,7 +105,6 @@ public class DataCollection {
 				}
 			}
 
-			
 			if (this.autoScaleNumber != null && this.autoSwitchNumber != null) {
 				if (this.hasAutoCheck != null) {
 					this.hasAutoCheck.setOnAction(new EventHandler<ActionEvent>() {
@@ -116,71 +116,69 @@ public class DataCollection {
 						}
 					});
 				}
-				
-				
+
 				// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
 				this.autoScaleNumber.getEditor().textProperty().addListener(new ChangeListener<String>() {
-				    @Override
-				    public void changed(ObservableValue<? extends String> observable, String oldValue, 
-				        String newValue) {
-				        if (!newValue.matches("\\d*")) {
-				            autoScaleNumber.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
-				        }
-				    }
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue,
+							String newValue) {
+						if (!newValue.matches("\\d*")) {
+							autoScaleNumber.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+						}
+					}
 				});
-				
-				
+
 				// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
 				this.autoSwitchNumber.getEditor().textProperty().addListener(new ChangeListener<String>() {
-				    @Override
-				    public void changed(ObservableValue<? extends String> observable, String oldValue, 
-				        String newValue) {
-				        if (!newValue.matches("\\d*")) {
-				            autoSwitchNumber.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
-				        }
-				    }
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue,
+							String newValue) {
+						if (!newValue.matches("\\d*")) {
+							autoSwitchNumber.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+						}
+					}
 				});
 			}
-			
+
 			if (this.teleSwitchNumber != null) {
-				
+
 				// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
 				this.teleSwitchNumber.getEditor().textProperty().addListener(new ChangeListener<String>() {
-				    @Override
-				    public void changed(ObservableValue<? extends String> observable, String oldValue, 
-				        String newValue) {
-				        if (!newValue.matches("\\d*")) {
-				            teleSwitchNumber.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
-				        }
-				    }
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue,
+							String newValue) {
+						if (!newValue.matches("\\d*")) {
+							teleSwitchNumber.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+						}
+					}
 				});
 			}
-			
+
 			if (this.teleScaleNumber != null) {
-				
+
 				// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
 				this.teleScaleNumber.getEditor().textProperty().addListener(new ChangeListener<String>() {
-				    @Override
-				    public void changed(ObservableValue<? extends String> observable, String oldValue, 
-				        String newValue) {
-				        if (!newValue.matches("\\d*")) {
-				            teleScaleNumber.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
-				        }
-				    }
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue,
+							String newValue) {
+						if (!newValue.matches("\\d*")) {
+							teleScaleNumber.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+						}
+					}
 				});
 			}
-			
+
 			if (this.teleExchangeNumber != null) {
-				
+
 				// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
 				this.teleExchangeNumber.getEditor().textProperty().addListener(new ChangeListener<String>() {
-				    @Override
-				    public void changed(ObservableValue<? extends String> observable, String oldValue, 
-				        String newValue) {
-				        if (!newValue.matches("\\d*")) {
-				            teleExchangeNumber.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
-				        }
-				    }
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue,
+							String newValue) {
+						if (!newValue.matches("\\d*")) {
+							teleExchangeNumber.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+						}
+					}
 				});
 			}
 
@@ -197,7 +195,8 @@ public class DataCollection {
 				this.Submit.setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent arg0) {
-						// TODO: Write to SQL database
+						new Database().updateDatabase(teamNumber,hasAutoCheck.isSelected(), autoSwitchNumber.getValue(), autoScaleNumber.getValue(), teleSwitchNumber.getValue(),
+								teleScaleNumber.getValue(), teleExchangeNumber.getValue(), canClimb.isSelected(), feedback.getText());
 						getStage().close();
 					}
 				});

@@ -29,10 +29,6 @@ public class OldScoutingApp {
 			Updater.showUpdatePrompt();
 		}
 
-		if (!ScoutingFile.FileExists()) {
-			ScoutingFile.makeFile();
-		}
-
 		// Create a UUID for SPP, and then create the URL
 		UUID uuid = new UUID("1101", true);
 		String connectionString = "btspp://localhost:" + uuid + ";name=SpudSPPServer";
