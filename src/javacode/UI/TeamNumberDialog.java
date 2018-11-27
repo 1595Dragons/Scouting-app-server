@@ -76,13 +76,17 @@ public class TeamNumberDialog {
 					public void handle(ActionEvent arg0) {
 						try {
 							TeamNumberDialog.teamNumber = Integer.parseInt(TNI.getText());
-						} catch (NumberFormatException e) {
-							MainPanel.logError(e);
+						} catch (NumberFormatException InvalidNumber) {
 							return;
+						} catch (Exception e) {
+							MainPanel.logError(e);
 						}
 						
 						try {
-							new DataCollection(teamNumber).createDataCollectionPage();
+							Stage data = new Stage();
+							data.setScene(new DataCollection(teamNumber).createDataCollectionPage());
+							data.setTitle("Data collection");
+							data.show();
 						} catch (IOException e) {
 							MainPanel.logError(e);
 							return;

@@ -5,9 +5,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javacode.Core.Debugger;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -15,10 +15,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -48,44 +48,30 @@ public class MainPanel {
 		if (root != null) {
 
 			// Setup each of the nodes that are important
-			for (Node node : root.getChildrenUnmodifiable()) {
-				// Check if there is a nested view (HBox)
-				if (node instanceof HBox) {
-					for (Node childNode : ((HBox) node).getChildren()) {
-						// If the given node of importance, set it to an object
-						if (childNode.getId().equals("newScout")) {
-							startScouting = ((Button) childNode);
-						} else if (childNode.getId().equals("viewData")) {
-							viewData = ((Button) childNode);
-						} else if (childNode.getId().equals("device0")) {
-							connectedDevices.add(0, ((Label) childNode));
-						} else if (childNode.getId().equals("device1")) {
-							connectedDevices.add(1, ((Label) childNode));
-						} else if (childNode.getId().equals("device2")) {
-							connectedDevices.add(2, ((Label) childNode));
-						} else if (childNode.getId().equals("device3")) {
-							connectedDevices.add(3, ((Label) childNode));
-						} else if (childNode.getId().equals("device4")) {
-							connectedDevices.add(4, ((Label) childNode));
-						} else if (childNode.getId().equals("device5")) {
-							connectedDevices.add(5, ((Label) childNode));
-						} else {
-							Debugger.d(getClass(), String.format("Unused childNode: (%s) %s", childNode.getClass(),
-									childNode.getId()));
-						}
-					}
-				} else if (node.getClass().toString().contains("ScrollPane")) {
-					ScrollPane pane = (ScrollPane) node;
-					if (pane.getContent().getId().equals("console")) {
-						console = ((Label) (pane.getContent()));
-					} else {
-						Debugger.d(getClass(), String.format("Unused childNode: (%s) %s", pane.getContent().getClass(),
-								pane.getContent().getId()));
-					}
-
-				} else {
+			// TODO: Use function instead
+			ArrayList<Node> Nodes = getAllNodes(root.getChildrenUnmodifiable());
+			for (Node node : Nodes) {
+				if (node.getId() != null) {
 					// If the given node of importance, set it to an object
-					if (node.getId().equals("macAddressHeader")) {
+					if (node.getId().equals("newScout")) {
+						startScouting = ((Button) node);
+					} else if (node.getId().equals("viewData")) {
+						viewData = ((Button) node);
+					} else if (node.getId().equals("device0")) {
+						connectedDevices.add(0, ((Label) node));
+					} else if (node.getId().equals("device1")) {
+						connectedDevices.add(1, ((Label) node));
+					} else if (node.getId().equals("device2")) {
+						connectedDevices.add(2, ((Label) node));
+					} else if (node.getId().equals("device3")) {
+						connectedDevices.add(3, ((Label) node));
+					} else if (node.getId().equals("device4")) {
+						connectedDevices.add(4, ((Label) node));
+					} else if (node.getId().equals("device5")) {
+						connectedDevices.add(5, ((Label) node));
+					} else if (node.getId().equals("console")) {
+						console = ((Label) node);
+					} else if (node.getId().equals("macAddressHeader")) {
 						macAddressHeader = ((Label) node);
 					} else {
 						Debugger.d(getClass(), String.format("Unused node: (%s) %s", node.getClass(), node.getId()));
@@ -170,12 +156,35 @@ public class MainPanel {
 		console.setText(message);
 	}
 
-	public static void logError(Exception excetion) {
+	public static void logError(Exception e) {
 		StringWriter sw = new StringWriter();
-		excetion.printStackTrace(new PrintWriter(sw));
+		e.printStackTrace(new PrintWriter(sw));
 		console.setTextFill(Color.RED);
-		System.err.println(String.format("Error: %s\n%s", excetion.getMessage(), sw.toString()));
-		console.setText(String.format("%s\n%s", excetion.getMessage(), sw.toString()));
+		System.err.println(String.format("Error: %s\n%s", e.getMessage(), sw.toString()));
+		console.setText(String.format("%s\n%s", e.getMessage(), sw.toString()));
+	}
+
+	private ArrayList<Node> getAllNodes(ObservableList<Node> parent) {
+		ArrayList<Node> Nodes = new ArrayList<Node>();
+		for (Node node : parent) {
+			if (node instanceof HBox) {
+				Nodes.addAll(getAllNodes(((HBox) node).getChildrenUnmodifiable()));
+			} else if (node instanceof VBox) {
+				Nodes.addAll(getAllNodes(((VBox) node).getChildrenUnmodifiable()));
+			} else if (node.getClass().toString().contains("ScrollPane")) {
+				Node ScrollPaneNode = ((ScrollPane) node).getContent();
+				if (ScrollPaneNode instanceof HBox) {
+					Nodes.addAll(getAllNodes(((HBox) ScrollPaneNode).getChildrenUnmodifiable()));
+				} else if (ScrollPaneNode instanceof VBox) {
+					Nodes.addAll(getAllNodes(((VBox) ScrollPaneNode).getChildrenUnmodifiable()));
+				} else {
+					Nodes.add(ScrollPaneNode);
+				}
+			} else {
+				Nodes.add(node);
+			}
+		}
+		return Nodes;
 	}
 
 }

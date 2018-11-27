@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" cache="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" cache="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Scouting team: 0000">
+      <Label id="teamNumberHeader" fx:id="teamNumberHeader" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Scouting team: 0000">
          <font>
             <Font name="Arial" size="30.0" />
          </font>
@@ -24,7 +26,7 @@
          <content>
             <VBox alignment="CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Autonomous:">
+                  <Label id="AutoHeader" fx:id="AutoHeader" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Autonomous:">
                      <font>
                         <Font name="Arial" size="20.0" />
                      </font>
@@ -32,7 +34,7 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <CheckBox alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Team has an auto">
+                  <CheckBox id="hasAutoCheck" fx:id="hasAutoCheck" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Team has an auto">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -40,7 +42,7 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </CheckBox>
-                  <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Number of cubes placed on switch during auto">
+                  <Label id="AutoSwitchHeader" fx:id="AutoSwitchHeader" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Number of cubes placed on switch during auto">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -48,12 +50,12 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <Spinner disable="true" editable="true" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+                  <Spinner id="autoSwitchNumber" fx:id="autoSwitchNumber" disable="true" editable="true" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
                   </Spinner>
-                  <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Number of cubes placed on scale during auto">
+                  <Label id="AutoScaleHeader" fx:id="AutoScaleHeader" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Number of cubes placed on scale during auto">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -61,20 +63,20 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <Spinner disable="true" editable="true" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+                  <Spinner id="autoScaleNumber" fx:id="autoScaleNumber" disable="true" editable="true" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
                   </Spinner>
-                  <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="TeleOp:">
+                  <Label id="TeleOpHeader" fx:id="TeleOpHeader" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="TeleOp:">
                      <font>
-                        <Font size="20.0" />
+                        <Font name="Arial" size="20.0" />
                      </font>
                      <VBox.margin>
                         <Insets bottom="5.0" top="20.0" />
                      </VBox.margin>
                   </Label>
-                  <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Numer of cubes placed on switch during TeleOp" textAlignment="CENTER">
+                  <Label id="TeleSwitchHeader" fx:id="TeleSwitchHeader" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Numer of cubes placed on switch during TeleOp" textAlignment="CENTER">
                      <font>
                         <Font name="Arial" size="15.0" />
                      </font>
@@ -82,8 +84,8 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <Spinner disable="true" editable="true" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
-                  <Label maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Number of cubes placed on scale during TeleOp" textAlignment="CENTER">
+                  <Spinner id="teleSwitchHeader" fx:id="teleSwitchNumber" editable="true" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
+                  <Label id="TeleScaleHeader" fx:id="TeleScaleHeader" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Number of cubes placed on scale during TeleOp" textAlignment="CENTER">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -91,8 +93,8 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <Spinner disable="true" editable="true" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
-                  <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Number of cubes placed in the exchange during TeleOp" textAlignment="CENTER">
+                  <Spinner id="teleScaleNumber" fx:id="teleScaleNumber" editable="true" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
+                  <Label id="ExchangeHeader" fx:id="ExchangeHeader" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Number of cubes placed in the exchange during TeleOp" textAlignment="CENTER">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -100,12 +102,12 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <Spinner disable="true" editable="true" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+                  <Spinner id="exchangeNumber" fx:id="exchangeNumber" editable="true" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
                   </Spinner>
-                  <Label alignment="CENTER" contentDisplay="CENTER" text="End Game:" textAlignment="CENTER">
+                  <Label id="EndGameHeader" fx:id="EndGameHeader" alignment="CENTER" contentDisplay="CENTER" text="End Game:" textAlignment="CENTER">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -113,7 +115,7 @@
                         <Insets bottom="5.0" top="20.0" />
                      </VBox.margin>
                   </Label>
-                  <CheckBox alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Team can climb">
+                  <CheckBox id="canClimb" fx:id="canClimb" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Team can climb">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -121,26 +123,51 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </CheckBox>
+                  <Label id="FeedbackHeader" fx:id="FeedbackHeader" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Additional Feedback (Optional):">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="20.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="Arial" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextArea id="feedback" fx:id="feedback" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" promptText="¯\_(ツ)_/¯" wrapText="true">
+                     <font>
+                        <Font name="Arial" size="15.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor>
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="5.0" right="5.0" />
+                     </padding>
+                  </TextArea>
                </children>
             </VBox>
          </content>
          <VBox.margin>
-            <Insets top="10.0" />
+            <Insets bottom="10.0" top="10.0" />
          </VBox.margin>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
       </ScrollPane>
       <HBox alignment="BOTTOM_CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
          <children>
-            <Button cancelButton="true" contentDisplay="RIGHT" mnemonicParsing="false" text="Cancel">
+            <Button id="CancelButton" fx:id="CancelButton" cancelButton="true" contentDisplay="RIGHT" mnemonicParsing="false" text="Cancel">
                <font>
-                  <Font name="Arial" size="20.0" />
+                  <Font name="Arial" size="15.0" />
                </font>
                <HBox.margin>
                   <Insets right="5.0" />
                </HBox.margin>
             </Button>
-            <Button defaultButton="true" mnemonicParsing="false" text="Submit">
+            <Button id="SubmitButton" fx:id="SubmitButton" defaultButton="true" mnemonicParsing="false" text="Submit">
                <font>
-                  <Font name="Arial" size="20.0" />
+                  <Font name="Arial" size="15.0" />
                </font>
                <HBox.margin>
                   <Insets left="5.0" />
@@ -148,7 +175,7 @@
             </Button>
          </children>
          <VBox.margin>
-            <Insets bottom="5.0" top="10.0" />
+            <Insets bottom="15.0" top="5.0" />
          </VBox.margin>
       </HBox>
    </children>
