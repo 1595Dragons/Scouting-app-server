@@ -47,7 +47,7 @@
                   </HBox>
                   <ScrollPane fitToWidth="true" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: LIGHTGRAY;">
                      <content>
-                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: LIGHTGRAY;">
+                        <Label id="returnedSQL" fx:id="returnedSQL" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: LIGHTGRAY;">
                            <padding>
                               <Insets left="5.0" right="5.0" />
                            </padding>

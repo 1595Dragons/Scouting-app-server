@@ -35,7 +35,10 @@ public class NodeHelper {
 		return Nodes;
 	}
 
+	
+	
 	public ArrayList<Node> getAllNodesFromParent(Parent root) {
+		Debugger.d(getClass(), "Parent object class: " + root.getClass().getName());
 		ArrayList<Node> Nodes = new ArrayList<Node>();
 		if (root instanceof TabPane) {
 			TabPane TabPaneNode = (TabPane) root;

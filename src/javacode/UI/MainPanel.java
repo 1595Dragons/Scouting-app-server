@@ -118,7 +118,6 @@ public class MainPanel {
 				}
 			});
 
-			// TODO: Setup data view
 			viewData.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override

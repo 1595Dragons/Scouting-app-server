@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import javacode.UI.MainPanel;
@@ -90,11 +91,11 @@ public class Database {
 		return exists;
 	}
 
-	public ResultSet executeSQL(String query) throws SQLException {
+	public String executeSQL(String query) throws SQLException {
 		Debugger.d(getClass(), "Executing query: " + query);
 
 		// Create the return variable
-		ResultSet result = null;
+		String result = "";
 
 		// Get the database connection
 		Connection databaseConnection = null;
@@ -116,7 +117,23 @@ public class Database {
 			if (SQLStatement != null) {
 
 				if (query.startsWith("SELECT")) {
-					result = SQLStatement.executeQuery();
+					ResultSet resultset = SQLStatement.executeQuery();
+					
+					// Get the result as a string
+					// https://coderwall.com/p/609ppa/printing-the-result-of-resultset
+					ResultSetMetaData metadata = resultset.getMetaData();
+					
+					int columnsNumber = metadata.getColumnCount();
+					while (resultset.next()) {
+						for (int i = 1; i <= columnsNumber; i++) {
+							if (i > 1)
+								System.out.print(",  ");
+							String columnValue = resultset.getString(i);
+							result += (columnValue + " " + metadata.getColumnName(i) + "\n");
+						}
+						result += ("\n");
+					}
+					
 				} else {
 					SQLStatement.execute();
 				}
