@@ -34,7 +34,7 @@ public class ViewData {
 		
 		if (root != null) {
 			
-			ArrayList<Node> Nodes = new NodeHelper().getAllNodes(root.getChildrenUnmodifiable());
+			ArrayList<Node> Nodes = new NodeHelper().getAllNodesFromParent(root);
 			for (Node node : Nodes) {
 				if (node.getId() != null) {
 					Debugger.d(getClass(), String.format("Unused node: (%s) %s", node.getClass(), node.getId()));
