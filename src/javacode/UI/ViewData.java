@@ -14,9 +14,10 @@ import javafx.stage.Stage;
 
 public class ViewData {
 
+	private static boolean isVisible = false;
 	private static Stage stage;
 	
-	public Scene createDataCollectionPage() throws IOException {
+	public Scene ViewDataScene() throws IOException {
 		
 		Parent root = null;
 
@@ -54,6 +55,16 @@ public class ViewData {
 
 	public void setStage(Stage stage) {
 		ViewData.stage = stage;
+	}
+	
+	public boolean getIsVisible() {
+		Debugger.d(getClass(), "Is view data dialog visible: " + isVisible);
+		return isVisible;
+	}
+
+	public void setIsVisible(boolean value) {
+		Debugger.d(getClass(), "Setting view data dialog visibility: " + value);
+		isVisible = value;
 	}
 
 }

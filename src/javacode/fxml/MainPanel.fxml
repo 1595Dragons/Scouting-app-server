@@ -30,7 +30,7 @@
          <content>
             <Label id="console" fx:id="console" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: lightgray;">
                <font>
-                  <Font name="American Typewriter" size="15.0" />
+                  <Font name="Andale Mono" size="15.0" />
                </font>
                <padding>
                   <Insets left="5.0" right="5.0" />

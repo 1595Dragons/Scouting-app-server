@@ -83,7 +83,6 @@ public class MainPanel {
 					TeamNumberDialog dialog = new TeamNumberDialog();
 
 					try {
-
 						// Check if the window is visible (for creation reasons)
 						if (!dialog.getIsVisible()) {
 
@@ -112,7 +111,6 @@ public class MainPanel {
 
 						// Be sure to bring the window to front
 						dialog.getStage().toFront();
-
 					} catch (IOException e) {
 						MainPanel.logError(e);
 					}
@@ -126,6 +124,39 @@ public class MainPanel {
 				@Override
 				public void handle(ActionEvent event) {
 
+					ViewData window = new ViewData();
+
+
+					if (!window.getIsVisible()) {
+
+						// Make a new window
+						// https://stackoverflow.com/questions/15041760/javafx-open-new-window
+						window.setStage(new Stage());
+						
+						// Set it so when its closed, it will set the visibility to false
+						window.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
+							@Override
+							public void handle(WindowEvent event) {
+								window.setIsVisible(false);
+							}
+
+						});
+						
+						// Set the scene to the FMXL layout
+						try {
+							window.getStage().setScene(window.ViewDataScene());
+							window.getStage().setTitle("Data");
+
+							// Show the stage, and update the visibility
+							window.getStage().show();
+							window.setIsVisible(true);
+						} catch (IOException e) {
+							MainPanel.logError(e);
+						}
+					}
+					
+					// Be sure to bring the window to front
+					window.getStage().toFront();
 				}
 
 			});
