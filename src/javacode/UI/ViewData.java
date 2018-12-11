@@ -60,6 +60,9 @@ public class ViewData {
 					}
 				}
 			}
+			
+			setupRawDataView();
+			setupCalculatedDataView();
 
 			if (ExecuteSQL != null && SQLField != null && SQLReturn != null) {
 				ExecuteSQL.setOnAction(new EventHandler<ActionEvent>() {
@@ -101,6 +104,14 @@ public class ViewData {
 	public void setIsVisible(boolean value) {
 		Debugger.d(getClass(), "Setting view data dialog visibility: " + value);
 		isVisible = value;
+	}
+	
+	private void setupRawDataView() {
+		// TODO
+	}
+	
+	private void setupCalculatedDataView() {
+		// TODO
 	}
 
 }

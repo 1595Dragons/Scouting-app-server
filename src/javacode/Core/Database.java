@@ -118,22 +118,31 @@ public class Database {
 
 				if (query.startsWith("SELECT")) {
 					ResultSet resultset = SQLStatement.executeQuery();
-					
+
 					// Get the result as a string
 					// https://coderwall.com/p/609ppa/printing-the-result-of-resultset
-					ResultSetMetaData metadata = resultset.getMetaData();
+					ResultSetMetaData meta = resultset.getMetaData();
+
+					// Get the number of columns
+					final int columns = meta.getColumnCount();
 					
-					int columnsNumber = metadata.getColumnCount();
-					while (resultset.next()) {
-						for (int i = 1; i <= columnsNumber; i++) {
-							if (i > 1)
-								System.out.print(",  ");
-							String columnValue = resultset.getString(i);
-							result += (columnValue + " " + metadata.getColumnName(i) + "\n");
-						}
-						result += ("\n");
+					// Get the headers
+					for (int i = 1; i < columns; i++) {
+						result += meta.getColumnName(i) + "\t|\t";
 					}
-					
+
+					// Run through each row
+					while(resultset.next()) {
+						// Iterator over all appropriate columns, SQL starts at 1 though... REEEEEEEEEEE
+						for (int i = 1; i < columns; i++) {
+							result += resultset.getString(i);
+							if (i != columns - 1) {
+								result += "\t|\t";
+							} else {
+								result += "\n";
+							}
+						}
+					}
 				} else {
 					SQLStatement.execute();
 				}
@@ -157,5 +166,7 @@ public class Database {
 
 		return DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
 	}
+	
+	// TODO: Get what kind of data (and types) to read from a user friendly config file
 
 }
