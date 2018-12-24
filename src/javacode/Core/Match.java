@@ -1,46 +1,48 @@
 package javacode.Core;
 
+import java.util.ArrayList;
+
+import javax.json.JsonValue;
+
 public class Match {
 
-	Match.Autonomous[] autonomousData;
-	Match.TeleOp[] teleopData;
-	Match.Endgame[] endgameData;
-	
+	public Autonomous[] autonomousData;
+	public TeleOp[] teleopData;
+	public Endgame[] endgameData;
+
 	
 	public class Autonomous {
-		
-		String name;
-		DataType datatype;
-		Object count;
-		
+
+		public String name;
+		public DataType datatype;
+		public ArrayList<JsonValue> value;
+
 	}
-	
+
 	
 	public class TeleOp {
-		
-		String name;
-		DataType datatype;
-		Object count;
-		
+
+		public String name;
+		public DataType datatype;
+		public ArrayList<JsonValue> value;
+
 	}
 	
+
 	
 	public class Endgame {
-		
-		String name;
-		DataType datatype;
-		Object count;
-		
+
+		public String name;
+		public DataType datatype;
+		public ArrayList<JsonValue> value;
+
 	}
-	
+
 	
 	public enum DataType {
-		
-		Text,
-		Number,
-		Boolean,
-		BooleanGroup;
-		
+
+		Text, Number, Boolean, BooleanGroup;
+
 	}
-	
+
 }
