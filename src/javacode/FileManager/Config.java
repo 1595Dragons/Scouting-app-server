@@ -1,22 +1,31 @@
 package javacode.FileManager;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.stream.JsonParsingException;
+
+import javacode.Core.Debugger;
+import javacode.Core.Match;
 import javacode.UI.MainPanel;
 
 /**
  * Manages the config file for dynamically creating the database, and data
  * collection page.
  * 
- * @author stephenogden
  *
  */
 public class Config {
 
 	private final String configLocation = System.getProperty("user.dir") + "/config.json";
+	
+	public Match matchData;
 
 	public boolean validateConfig() throws IOException {
 
@@ -34,7 +43,14 @@ public class Config {
 		}
 		
 		
-		// TODO: Compare files and check if they are the same
+		// TODO: Check if config has been modified
+		
+		// TODO: Try to generate valid fxml and database schema, but return false if unable to
+		try {
+			this.loadConfig();
+		} catch (JsonParsingException e) {
+			throw new IOException("Invlaid config (See the README on how to use it): " + e.getMessage());
+		}
 
 		return true;
 	}
@@ -66,6 +82,20 @@ public class Config {
 		} catch (IOException e) {
 			MainPanel.logError(e);;
 		}
+	}
+	
+	
+	private void loadConfig() throws JsonParsingException {
+		
+		JsonReader reader = null;
+		try {
+			reader = Json.createReader(new FileReader(configLocation));
+		} catch (FileNotFoundException e) {
+			MainPanel.logError(e);
+		}
+		
+		JsonObject FullObject = reader.readObject().asJsonObject();
+		Debugger.d(this.getClass(), "Full Json: " + FullObject.toString());
 	}
 
 }

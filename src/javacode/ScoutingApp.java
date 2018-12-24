@@ -54,6 +54,7 @@ public class ScoutingApp extends Application {
 
 		
 		if (validConfig) {
+			
 			new DeviceManagement().reset();
 			Debugger.d(getClass(), "Finsihed resetting device names");
 

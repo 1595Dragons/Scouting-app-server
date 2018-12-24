@@ -1,31 +1,4 @@
 {
-
-	/*
-	 * This is the configuration for what kind of data is to be recorded and in what period of the game it corresponds with.
-	 *
-	 * Anything in the "Autonomous" object will correspond to what data is taken during the autonomous period,
-	 * anything in the "TeleOp" object will correspond to what data is taken during the teleoperated period, and
-	 * anything in the "Endgame" object will correspond to what data is taken during the end game period.
-	 * 
-	 * The valid format to be used is:
-	 *		"Header and or name" : ["DataType", value...]
-	 *
-	 * The correct datatypes to be entered are:
-	 *		- Text (for any values that need to be entered as text, such as a string)
-	 *		- Number (for any values that need to be entered as numbers, such as counts of objects)
-	 *		- Boolean (for true false values, such as having a specific autonomous function)
-	 * 		- Boolean group (Like booleans, but are represented as radio buttons. If one thing is true, everything else is false)
-	 *
-	 * With a given data type, there are specific values that need to be used.
-	 * For the datatype "Text", the following value is the default value as a string. This is usually an empty string ("").
-	 * For the datatype "Number", the following values need to be the default value, the minimum value, the maximum vallue, and by how much the values increase/decrease.
-	 * For the datatype "Boolean", the following value is the default value. Either true or false.
-	 * For the datatype "Boolean group", the following value must be a json object, which contains the name or the header, 
-	 * followed the default value (either true or false).
-	 *
-	 * Below is an example of how to impliment most the formats in the config file. BE SURE TO CHANGE THIS TO THE CURRENT DATA YOU'RE USING.
-	 */
-
 	"Autonomous" : {
 		"Has auto" : ["Boolean", false],
 		"Number of cubes placed on switch" : ["Number", 0, 0, 25, 1],
