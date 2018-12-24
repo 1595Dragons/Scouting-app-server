@@ -11,6 +11,7 @@ import javax.microedition.io.StreamConnectionNotifier;
 import javacode.Core.Bluetooth;
 import javacode.Core.Debugger;
 import javacode.Core.DeviceManagement;
+import javacode.FileManager.Config;
 import javacode.FileManager.Database;
 import javacode.UI.MainPanel;
 import javafx.application.Application;
@@ -43,48 +44,59 @@ public class ScoutingApp extends Application {
 			e.printStackTrace();
 		}
 
-		new DeviceManagement().reset();
-		Debugger.d(getClass(), "Finsihed resetting device names");
-		
-		// Check if the database exists
-		Database database = new Database();
-		boolean databaseExists = database.databaseExists(true);
-		Debugger.d(getClass(), "Database exists: " + databaseExists);
-		
-		// If no database exists, create one
-		if (!databaseExists) {
-			try {
-				database.createDatabase();
-			} catch (IOException | SQLException e) {
-				MainPanel.logError(e);
-			}
+		// Check for valid config
+		boolean validConfig = false;
+		try {
+			validConfig = new Config().validateConfig();
+		} catch (IOException e1) {
+			MainPanel.logError(e1);
 		}
 
-		// Check if bluetooth is possible
-		Bluetooth bluetooth = new Bluetooth();
+		
+		if (validConfig) {
+			new DeviceManagement().reset();
+			Debugger.d(getClass(), "Finsihed resetting device names");
 
-		if (bluetooth.isEnabled()) {
-			try {
-				mainPanel.setMacAddress(bluetooth.getMACAddress());
+			// Check if the database exists
+			Database database = new Database();
+			boolean databaseExists = database.databaseExists(true);
+			Debugger.d(getClass(), "Database exists: " + databaseExists);
 
-				// Create a UUID for SPP, and then create the URL
-				UUID uuid = new UUID("1101", true);
-				String connectionString = "btspp://localhost:" + uuid + ";name=DragonSPPServer";
-				mainPanel.log("Connection URL: " + connectionString, false);
-
+			// If no database exists, create one
+			if (!databaseExists) {
 				try {
-					streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
-				} catch (IOException e) {
+					database.createDatabase();
+				} catch (IOException | SQLException e) {
 					MainPanel.logError(e);
 				}
-
-				new DeviceManagement().new HandleIncommingDevices().start();
-
-			} catch (BluetoothStateException e) {
-				MainPanel.logError(e);
 			}
-		} else {
-			mainPanel.log("Bluetooth not enabled", true);
+
+			// Check if bluetooth is possible
+			Bluetooth bluetooth = new Bluetooth();
+
+			if (bluetooth.isEnabled()) {
+				try {
+					mainPanel.setMacAddress(bluetooth.getMACAddress());
+
+					// Create a UUID for SPP, and then create the URL
+					UUID uuid = new UUID("1101", true);
+					String connectionString = "btspp://localhost:" + uuid + ";name=DragonSPPServer";
+					mainPanel.log("Connection URL: " + connectionString, false);
+
+					try {
+						streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
+					} catch (IOException e) {
+						MainPanel.logError(e);
+					}
+
+					new DeviceManagement().new HandleIncommingDevices().start();
+
+				} catch (BluetoothStateException e) {
+					MainPanel.logError(e);
+				}
+			} else {
+				mainPanel.log("Bluetooth not enabled", true);
+			}
 		}
 
 	}

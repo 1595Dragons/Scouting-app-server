@@ -1,11 +1,10 @@
-
 {
 
 	/*
 	 * This is the configuration for what kind of data is to be recorded and in what period of the game it corresponds with.
 	 *
 	 * Anything in the "Autonomous" object will correspond to what data is taken during the autonomous period,
-	 * anything in the "TeleOp" obhect will correspond to what data is taken during the teleoperated period, and
+	 * anything in the "TeleOp" object will correspond to what data is taken during the teleoperated period, and
 	 * anything in the "Endgame" object will correspond to what data is taken during the end game period.
 	 * 
 	 * The valid format to be used is:
@@ -19,7 +18,7 @@
 	 *
 	 * With a given data type, there are specific values that need to be used.
 	 * For the datatype "Text", the following value is the default value as a string. This is usually an empty string ("").
-	 * For the datatype "Number", the folling values need to be the default value, the minimum value, the maximum vallue, and by how much the values increase/decrease.
+	 * For the datatype "Number", the following values need to be the default value, the minimum value, the maximum vallue, and by how much the values increase/decrease.
 	 * For the datatype "Boolean", the following value is the default value. Either true or false.
 	 * For the datatype "Boolean group", the following value must be a json object, which contains the name or the header, 
 	 * followed the default value (either true or false).
@@ -46,8 +45,8 @@
 			"Can single climb on the center" : false,
 			"Can double climb on the side" : false,
 			"Can double climb on the center" : false,
-			"Can tripple climb on the side" : false,
-			"Can tripple climb on the center" : false,
+			"Can triple climb on the side" : false,
+			"Can triple climb on the center" : false,
 			"Single ramp climb" : false,
 			"Double ramp climb" : false
 		}]

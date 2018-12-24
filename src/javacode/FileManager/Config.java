@@ -18,15 +18,13 @@ public class Config {
 
 	private final String configLocation = System.getProperty("user.dir") + "/config.json";
 
-	public void validateConfig() throws IOException {
+	public boolean validateConfig() throws IOException {
 
-		File config = new File(configLocation);
+		File config = new File(this.configLocation);
 
 		if (!config.exists()) {
-			
-			// TODO: Create the new config file
-			
-			throw new IOException("A config file was not found, so a new one was created. Please modify the file and restart the app.");
+			this.createNewConfig();
+			throw new IOException("Config file was not found, so a new one was created. Please modify the file and restart the app.");
 		}
 		
 		
@@ -38,12 +36,13 @@ public class Config {
 		
 		// TODO: Compare files and check if they are the same
 
+		return true;
 	}
 	
 	
-	public void createNewConfig() {
+	private void createNewConfig() {
 		
-		File config = new File(configLocation);
+		File config = new File(this.configLocation);
 		
 	
 		// Create the empty file
@@ -59,7 +58,7 @@ public class Config {
 		FileReader reader = null;
 		try {
 			writer = new FileWriter(config);
-			reader = new FileReader(new File(this.getClass().getClassLoader() + "configExample.txt"));
+			reader = new FileReader(new File(this.getClass().getResource("configExample.txt").getFile()));
 			reader.transferTo(writer);
 			reader.close();
 			writer.flush();
