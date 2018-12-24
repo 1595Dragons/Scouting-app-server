@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import javacode.Core.Database;
 import javacode.Core.Debugger;
 import javacode.Core.NodeHelper;
+import javacode.FileManager.Database;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;

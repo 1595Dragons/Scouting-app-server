@@ -5,9 +5,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javacode.Core.Database;
 import javacode.Core.Debugger;
 import javacode.Core.NodeHelper;
+import javacode.FileManager.Database;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;

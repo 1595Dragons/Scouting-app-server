@@ -9,9 +9,9 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnectionNotifier;
 
 import javacode.Core.Bluetooth;
-import javacode.Core.Database;
 import javacode.Core.Debugger;
 import javacode.Core.DeviceManagement;
+import javacode.FileManager.Database;
 import javacode.UI.MainPanel;
 import javafx.application.Application;
 import javafx.event.EventHandler;

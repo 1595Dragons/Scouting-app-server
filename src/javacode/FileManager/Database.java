@@ -1,4 +1,4 @@
-package javacode.Core;
+package javacode.FileManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
+import javacode.Core.Debugger;
 import javacode.UI.MainPanel;
 
 public class Database {

@@ -38,7 +38,8 @@ public class Match {
 		
 		Text,
 		Number,
-		Boolean;
+		Boolean,
+		BooleanGroup;
 		
 	}
 	
