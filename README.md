@@ -43,12 +43,12 @@ The correct datatypes to be entered are:"
 	- Text (for any values that need to be entered as text, such as a string)
 	- Number (for any values that need to be entered as numbers, such as counts of objects)
 	- Boolean (for true false values, such as having a specific autonomous function)
- 	- Boolean group (Like booleans, but are represented as radio buttons. If one thing is true, everything else is false)
+ 	- BooleanGroup (Like booleans, but are represented as radio buttons. If one thing is true, everything else is false)
 
 
 With a given data type, there are specific values that need to be used.
 For the datatype 'Text', the following value is the default value as a string. This is usually an empty string.
 For the datatype 'Number', the following values need to be the default value, the minimum value, the maximum vallue, and by how much the values increase/decrease.
 For the datatype 'Boolean', the following value is the default value. Either true or false.
-For the datatype 'Boolean group', the following value must be a json object, which contains the name or the header,
+For the datatype 'BooleanGroup', the following value must be a json object, which contains the name or the header,
 followed the default value (either true or false).

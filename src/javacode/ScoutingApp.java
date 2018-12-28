@@ -50,6 +50,7 @@ public class ScoutingApp extends Application {
 			validConfig = new Config().validateConfig();
 		} catch (IOException e1) {
 			MainPanel.logError(e1);
+			return;
 		}
 
 		

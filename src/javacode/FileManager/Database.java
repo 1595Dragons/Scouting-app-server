@@ -3,6 +3,7 @@ package javacode.FileManager;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -76,7 +77,7 @@ public class Database {
 			} else {
 				// If it doesn't, make a new file
 				try {
-					createDatabase();
+					this.createDatabase();
 					exists = true;
 				} catch (IOException | SQLException e) {
 					// If there's an error, return false, and log the error
@@ -102,7 +103,7 @@ public class Database {
 		Connection databaseConnection = null;
 
 		try {
-			databaseConnection = getDatabaseConnection();
+			databaseConnection = this.getDatabaseConnection();
 		} catch (ClassNotFoundException e) {
 			MainPanel.logError(e);
 			return null;
@@ -117,33 +118,10 @@ public class Database {
 			// If the prepared statement isn't null, go ahead and execute it
 			if (SQLStatement != null) {
 
-				if (query.startsWith("SELECT")) {
+				if (query.toUpperCase().startsWith("SELECT")) {
 					ResultSet resultset = SQLStatement.executeQuery();
-
-					// Get the result as a string
-					// https://coderwall.com/p/609ppa/printing-the-result-of-resultset
-					ResultSetMetaData meta = resultset.getMetaData();
-
-					// Get the number of columns
-					final int columns = meta.getColumnCount();
 					
-					// Get the headers
-					for (int i = 1; i < columns; i++) {
-						result += meta.getColumnName(i) + "\t|\t";
-					}
-
-					// Run through each row
-					while(resultset.next()) {
-						// Iterator over all appropriate columns, SQL starts at 1 though... REEEEEEEEEEE
-						for (int i = 1; i < columns; i++) {
-							result += resultset.getString(i);
-							if (i != columns - 1) {
-								result += "\t|\t";
-							} else {
-								result += "\n";
-							}
-						}
-					}
+					result = resultSetToString(resultset);
 				} else {
 					SQLStatement.execute();
 				}
@@ -164,10 +142,99 @@ public class Database {
 
 		// Load the SQLite library drivers
 		Debugger.d(getClass(), "SQLite driver: " + Class.forName("org.sqlite.JDBC"));
-
+		
 		return DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
 	}
 	
+	
+	// FIXME
+	public ResultSet getDatabaseSchema() {
+		ResultSet schema = null;
+		
+		Connection databaseConnection = null;
+		try {
+			databaseConnection = this.getDatabaseConnection();
+		} catch (ClassNotFoundException | SQLException e) {
+			MainPanel.logError(e);
+			return null;
+		}
+		
+		if (databaseConnection != null) {
+			
+			
+			DatabaseMetaData metadata = null;
+			try {
+				metadata = databaseConnection.getMetaData();
+				Debugger.d(this.getClass(), "Metadata: " + databaseConnection + "\n" + metadata);
+			} catch (SQLException e) {
+				MainPanel.logError(e);
+				return null;
+			}
+			
+			if (metadata != null) {
+				try {
+					schema = metadata.getSchemas();
+					Debugger.d(this.getClass(), "Schema: " + resultSetToString(schema));
+				} catch (SQLException e) {
+					MainPanel.logError(e);
+					return null;
+				}
+			}
+			
+			
+			try {
+				databaseConnection.close();
+			} catch (SQLException e) {
+				MainPanel.logError(e);
+			}
+			
+			
+		}
+		
+		return schema;
+	}
+	
+	
+	public static String resultSetToString(ResultSet resultset) throws SQLException {
+		String result = "";
+		
+		
+		// Get the result as a string
+		// https://coderwall.com/p/609ppa/printing-the-result-of-resultset
+		ResultSetMetaData meta = resultset.getMetaData();
+
+		// Get the number of columns
+		final int columns = meta.getColumnCount();
+		
+		// Get the headers
+		for (int i = 1; i < columns; i++) {
+			result += meta.getColumnName(i) + "\t|\t";
+		}
+		
+		
+		// Add a new line
+		result += "\n";
+
+		
+		// Run through each row
+		while(resultset.next()) {
+			// Iterator over all appropriate columns, SQL starts at 1 though... REEEEEEEEEEE
+			for (int i = 1; i < columns; i++) {
+				result += resultset.getString(i);
+				if (i != columns - 1) {
+					result += "\t|\t";
+				} else {
+					result += "\n";
+				}
+			}
+		}
+		
+		
+		return result;
+	}
+	
+	
 	// TODO: Get what kind of data (and types) to read from a user friendly config file
+	
 
 }

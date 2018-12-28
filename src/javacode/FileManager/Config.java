@@ -17,6 +17,7 @@ import javax.json.stream.JsonParsingException;
 import javacode.Core.Debugger;
 import javacode.Core.Match;
 import javacode.Core.Match.Autonomous;
+import javacode.Core.Match.Endgame;
 import javacode.Core.Match.TeleOp;
 import javacode.UI.MainPanel;
 
@@ -42,20 +43,15 @@ public class Config {
 		}
 
 		if (!config.canRead()) {
-
 			throw new IOException("Cannot read config file. Please modify the read permissions and restart the app.");
 		}
 
-		// TODO: Check if config has been modified
-
-		// TODO: Try to generate valid fxml and database schema, but return false if
-		// unable to
 		try {
 			this.loadConfig();
 		} catch (JsonParsingException e) {
-			throw new IOException("Invlaid config (See the README on how to use it): " + e.getMessage());
+			throw new IOException("Invlaid config (See the README on config documentaiton): " + e.getMessage());
 		}
-
+		
 		return true;
 	}
 
@@ -68,7 +64,6 @@ public class Config {
 			config.createNewFile();
 		} catch (IOException e) {
 			MainPanel.logError(e);
-			;
 		}
 
 		// Write example config data to the config file
@@ -83,7 +78,6 @@ public class Config {
 			writer.close();
 		} catch (IOException e) {
 			MainPanel.logError(e);
-			;
 		}
 	}
 
@@ -134,7 +128,7 @@ public class Config {
 		matchData.autonomousData = autonomousData;
 		
 		JsonObject rawTeleOp = FullObject.get("TeleOp").asJsonObject();
-		int teleSize = rawAutonomous.size();
+		int teleSize = rawTeleOp.size();
 		Debugger.d(this.getClass(), "Raw teleop Json: " + rawTeleOp.toString() + "\nSize: " + teleSize);
 		
 		TeleOp teleopData[] = new TeleOp[teleSize];
@@ -142,10 +136,61 @@ public class Config {
 		for (int i = 0; i < teleSize; i++) {
 			Debugger.d(this.getClass(), "Key: " + teleopKeys[i]);
 
+			JsonArray teleopArray = rawTeleOp.getJsonArray(teleopKeys[i]);
+			Debugger.d(this.getClass(), "TeleOp array: " + teleopArray.toString());
+			
+			TeleOp teleop = new Match().new TeleOp();
+			
+			teleop.name = teleopKeys[i];
+			teleop.datatype = Match.DataType.valueOf(teleopArray.getString(0));
+			
+			
+			int teleopArrayValues = teleopArray.size();
+			ArrayList<JsonValue> values = new ArrayList<JsonValue>();
+			for (int k = 1; k < teleopArrayValues; k++) {
+				values.add(teleopArray.get(k));
+			}
+			teleop.value = values;
+			
+			
+			teleopData[i] = teleop;
 			
 		}
 		
+		matchData.teleopData = teleopData;
+		
+		
+		JsonObject rawEndGame = FullObject.get("Endgame").asJsonObject();
+		int endgameSize = rawEndGame.size();
+		Debugger.d(this.getClass(), "Raw endgame json: " + rawEndGame.toString() + "\nSize: " + endgameSize);
+		
+		Endgame endgameData[] = new Endgame[endgameSize];
+		String[] endgameKeys = rawEndGame.keySet().toArray(new String[endgameSize]);
+		for (int i = 0; i < endgameSize; i++) {
+			Debugger.d(this.getClass(), "Key: " + endgameKeys[i]);
+			
+			JsonArray endgameArray = rawEndGame.getJsonArray(endgameKeys[i]);
+			Debugger.d(this.getClass(), "Endgame array: " + endgameArray.toString());
+			
+			Endgame endgame = new Match().new Endgame();
+			
+			
+			endgame.name = endgameKeys[i];
+			endgame.datatype = Match.DataType.valueOf(endgameArray.getString(0));
+			
+			int endgameArrayValues = endgameArray.size();
+			ArrayList<JsonValue> values = new ArrayList<JsonValue>();
+			for (int k = 1; k < endgameArrayValues; k++) {
+				values.add(endgameArray.get(k));
+			}
+			endgame.value = values;
+			
+			
+			endgameData[i] = endgame;
+		}
 		
 	}
+	
+	// TODO: Create custom view stuff for data, as well as custom database
 
 }

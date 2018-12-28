@@ -12,13 +12,13 @@ public class Match {
 
 	
 	public class Autonomous {
-
+	
 		public String name;
 		public DataType datatype;
 		public ArrayList<JsonValue> value;
-
+		
 	}
-
+	
 	
 	public class TeleOp {
 
@@ -27,7 +27,6 @@ public class Match {
 		public ArrayList<JsonValue> value;
 
 	}
-	
 
 	
 	public class Endgame {
