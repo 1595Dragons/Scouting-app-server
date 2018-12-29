@@ -5,15 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.json.JsonValue;
 import javax.json.stream.JsonParsingException;
 
+import javacode.ScoutingApp;
 import javacode.Core.Debugger;
 import javacode.Core.Match;
 import javacode.Core.Match.Autonomous;
@@ -51,7 +49,7 @@ public class Config {
 		} catch (JsonParsingException e) {
 			throw new IOException("Invlaid config (See the README on config documentaiton): " + e.getMessage());
 		}
-		
+
 		return true;
 	}
 
@@ -96,101 +94,42 @@ public class Config {
 		// Close the reader
 		reader.close();
 
-		JsonObject rawAutonomous = FullObject.get("Autonomous").asJsonObject();
-		int autoSize = rawAutonomous.size();
+		
+		final JsonObject rawAutonomous = FullObject.get("Autonomous").asJsonObject();
+		final int autoSize = rawAutonomous.size();
 		Debugger.d(this.getClass(), "Raw autonomous Json: " + rawAutonomous.toString() + "\nSize: " + autoSize);
 
-		Autonomous autonomousData[] = new Autonomous[autoSize];
-		String[] autonomousKeys = rawAutonomous.keySet().toArray(new String[autoSize]);
-		for (int i = 0; i < autoSize; i++) {
-			Debugger.d(this.getClass(), "Key: " + autonomousKeys[i]);
+		this.matchData.autonomousData = Match.matchBaseToAutonomous(Match.getMatchData(rawAutonomous, autoSize));
 
-			JsonArray autoArray = rawAutonomous.getJsonArray(autonomousKeys[i]);
-			Debugger.d(this.getClass(), "Auto array: " + autoArray.toString());
-
-			Autonomous auto = new Match().new Autonomous();
-
-			auto.name = autonomousKeys[i] + "(Autonomous)";
-			auto.datatype = Match.DataType.valueOf(autoArray.getString(0));
-			
-			
-			int autoArrayValues = autoArray.size();
-			ArrayList<JsonValue> values = new ArrayList<JsonValue>();
-			for (int k = 1; k < autoArrayValues; k++) {
-				values.add(autoArray.get(k));
-			}
-			auto.value = values;
-
-			
-			autonomousData[i] = auto;
-		}
-		
-		matchData.autonomousData = autonomousData;
-		
-		JsonObject rawTeleOp = FullObject.get("TeleOp").asJsonObject();
-		int teleSize = rawTeleOp.size();
+		final JsonObject rawTeleOp = FullObject.get("TeleOp").asJsonObject();
+		final int teleSize = rawTeleOp.size();
 		Debugger.d(this.getClass(), "Raw teleop Json: " + rawTeleOp.toString() + "\nSize: " + teleSize);
-		
-		TeleOp teleopData[] = new TeleOp[teleSize];
-		String[] teleopKeys = rawTeleOp.keySet().toArray(new String[teleSize]);
-		for (int i = 0; i < teleSize; i++) {
-			Debugger.d(this.getClass(), "Key: " + teleopKeys[i]);
 
-			JsonArray teleopArray = rawTeleOp.getJsonArray(teleopKeys[i]);
-			Debugger.d(this.getClass(), "TeleOp array: " + teleopArray.toString());
-			
-			TeleOp teleop = new Match().new TeleOp();
-			
-			teleop.name = teleopKeys[i];
-			teleop.datatype = Match.DataType.valueOf(teleopArray.getString(0));
-			
-			
-			int teleopArrayValues = teleopArray.size();
-			ArrayList<JsonValue> values = new ArrayList<JsonValue>();
-			for (int k = 1; k < teleopArrayValues; k++) {
-				values.add(teleopArray.get(k));
-			}
-			teleop.value = values;
-			
-			
-			teleopData[i] = teleop;
-			
-		}
-		
-		matchData.teleopData = teleopData;
-		
-		
-		JsonObject rawEndGame = FullObject.get("Endgame").asJsonObject();
-		int endgameSize = rawEndGame.size();
+		this.matchData.teleopData = Match.matchBaseToTeleOp(Match.getMatchData(rawTeleOp, teleSize));
+
+		final JsonObject rawEndGame = FullObject.get("Endgame").asJsonObject();
+		final int endgameSize = rawEndGame.size();
 		Debugger.d(this.getClass(), "Raw endgame json: " + rawEndGame.toString() + "\nSize: " + endgameSize);
+
+		this.matchData.endgameData = Match.matchBaseToEndgame(Match.getMatchData(rawEndGame, endgameSize));;
 		
-		Endgame endgameData[] = new Endgame[endgameSize];
-		String[] endgameKeys = rawEndGame.keySet().toArray(new String[endgameSize]);
-		for (int i = 0; i < endgameSize; i++) {
-			Debugger.d(this.getClass(), "Key: " + endgameKeys[i]);
-			
-			JsonArray endgameArray = rawEndGame.getJsonArray(endgameKeys[i]);
-			Debugger.d(this.getClass(), "Endgame array: " + endgameArray.toString());
-			
-			Endgame endgame = new Match().new Endgame();
-			
-			
-			endgame.name = endgameKeys[i];
-			endgame.datatype = Match.DataType.valueOf(endgameArray.getString(0));
-			
-			int endgameArrayValues = endgameArray.size();
-			ArrayList<JsonValue> values = new ArrayList<JsonValue>();
-			for (int k = 1; k < endgameArrayValues; k++) {
-				values.add(endgameArray.get(k));
+		
+		// Validation, only for debug mode though
+		if (ScoutingApp.debug) {
+			for (Autonomous autoCheck : this.matchData.autonomousData) {
+				Debugger.d(this.getClass(), "Loaded autonomous name: " + autoCheck.name);
 			}
-			endgame.value = values;
 			
+			for (TeleOp teleCheck : this.matchData.teleopData) {
+				Debugger.d(this.getClass(), "Loaded teleop name: " + teleCheck.name);
+			}
 			
-			endgameData[i] = endgame;
+			for (Endgame endgameCheck : this.matchData.endgameData) {
+				Debugger.d(this.getClass(), "Loaded endgame name: " + endgameCheck.name);
+			}
 		}
-		
 	}
-	
+
 	// TODO: Create custom view stuff for data, as well as custom database
 
 }

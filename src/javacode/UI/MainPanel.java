@@ -25,6 +25,8 @@ public class MainPanel {
 	private static Label macAddressHeader, console;
 	private static Button startScouting, viewData;
 
+	public static Stage stage;
+
 	public static ArrayList<Label> connectedDevices = new ArrayList<Label>();
 
 	public Scene loadMainPanel() throws IOException {
@@ -40,131 +42,47 @@ public class MainPanel {
 			root = FXMLLoader.load(path);
 		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
 		}
 
-		if (root != null) {
-
-			// Setup each of the nodes that are important
-			ArrayList<Node> Nodes = new NodeHelper().getAllNodes(root.getChildrenUnmodifiable());
-			for (Node node : Nodes) {
-				if (node.getId() != null) {
-					// If the given node of importance, set it to an object
-					if (node.getId().equals("newScout")) {
-						startScouting = ((Button) node);
-					} else if (node.getId().equals("viewData")) {
-						viewData = ((Button) node);
-					} else if (node.getId().equals("device0")) {
-						connectedDevices.add(0, ((Label) node));
-					} else if (node.getId().equals("device1")) {
-						connectedDevices.add(1, ((Label) node));
-					} else if (node.getId().equals("device2")) {
-						connectedDevices.add(2, ((Label) node));
-					} else if (node.getId().equals("device3")) {
-						connectedDevices.add(3, ((Label) node));
-					} else if (node.getId().equals("device4")) {
-						connectedDevices.add(4, ((Label) node));
-					} else if (node.getId().equals("device5")) {
-						connectedDevices.add(5, ((Label) node));
-					} else if (node.getId().equals("console")) {
-						console = ((Label) node);
-					} else if (node.getId().equals("macAddressHeader")) {
-						macAddressHeader = ((Label) node);
-					} else {
-						Debugger.d(getClass(), String.format("Unused node: (%s) %s", node.getClass(), node.getId()));
-					}
+		// Setup each of the nodes that are important
+		ArrayList<Node> Nodes = new NodeHelper().getAllNodes(root.getChildrenUnmodifiable());
+		for (Node node : Nodes) {
+			if (node.getId() != null) {
+				// If the given node of importance, set it to an object
+				if (node.getId().equals("newScout")) {
+					startScouting = ((Button) node);
+				} else if (node.getId().equals("viewData")) {
+					viewData = ((Button) node);
+				} else if (node.getId().equals("device0")) {
+					connectedDevices.add(0, ((Label) node));
+				} else if (node.getId().equals("device1")) {
+					connectedDevices.add(1, ((Label) node));
+				} else if (node.getId().equals("device2")) {
+					connectedDevices.add(2, ((Label) node));
+				} else if (node.getId().equals("device3")) {
+					connectedDevices.add(3, ((Label) node));
+				} else if (node.getId().equals("device4")) {
+					connectedDevices.add(4, ((Label) node));
+				} else if (node.getId().equals("device5")) {
+					connectedDevices.add(5, ((Label) node));
+				} else if (node.getId().equals("console")) {
+					console = ((Label) node);
+				} else if (node.getId().equals("macAddressHeader")) {
+					macAddressHeader = ((Label) node);
+				} else {
+					Debugger.d(getClass(), String.format("Unused node: (%s) %s", node.getClass(), node.getId()));
 				}
 			}
-
-			startScouting.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-
-					TeamNumberDialog dialog = new TeamNumberDialog();
-
-					try {
-						// Check if the window is visible (for creation reasons)
-						if (!dialog.getIsVisible()) {
-
-							// Make a new window
-							// https://stackoverflow.com/questions/15041760/javafx-open-new-window
-							dialog.setStage(new Stage());
-
-							// Set it so when its closed, it will set the visibility to false
-							dialog.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
-								@Override
-								public void handle(WindowEvent event) {
-									dialog.setIsVisible(false);
-								}
-
-							});
-
-							// Set the scene to the FMXL layout
-							dialog.getStage().setScene(dialog.createTeamNumberDialog());
-							dialog.getStage().setTitle("Enter team number");
-							dialog.getStage().setResizable(false);
-
-							// Show the stage, and update the visibility
-							dialog.getStage().show();
-							dialog.setIsVisible(true);
-						}
-
-						// Be sure to bring the window to front
-						dialog.getStage().toFront();
-					} catch (IOException e) {
-						MainPanel.logError(e);
-					}
-
-				}
-			});
-
-			viewData.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-
-					ViewData window = new ViewData();
-
-
-					if (!window.getIsVisible()) {
-
-						// Make a new window
-						// https://stackoverflow.com/questions/15041760/javafx-open-new-window
-						window.setStage(new Stage());
-						
-						// Set it so when its closed, it will set the visibility to false
-						window.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
-							@Override
-							public void handle(WindowEvent event) {
-								window.setIsVisible(false);
-							}
-
-						});
-						
-						// Set the scene to the FMXL layout
-						try {
-							window.getStage().setScene(window.ViewDataScene());
-							window.getStage().setTitle("Data");
-
-							// Show the stage, and update the visibility
-							window.getStage().show();
-							window.setIsVisible(true);
-						} catch (IOException e) {
-							MainPanel.logError(e);
-						}
-					}
-					
-					// Be sure to bring the window to front
-					window.getStage().toFront();
-				}
-
-			});
-
-			Scene scene = new Scene(root);
-			return scene;
-		} else {
-			throw new IOException("Cannot load main panel FXML");
 		}
+
+		startScouting.setOnAction(new MainPanel.startScouting());
+
+		viewData.setOnAction(new MainPanel.viewDataHandler());
+
+		Scene scene = new Scene(root);
+		return scene;
+
 	}
 
 	public void setMacAddress(String address) {
@@ -188,5 +106,87 @@ public class MainPanel {
 		console.setTextFill(Color.RED);
 		System.err.println(String.format("Error: %s\n%s", e.getMessage(), sw.toString()));
 		console.setText(String.format("%s\n%s", e.getMessage(), sw.toString()));
+	}
+	
+	
+	private class startScouting implements EventHandler<ActionEvent> {
+
+		public void handle(ActionEvent event) {
+			TeamNumberDialog dialog = new TeamNumberDialog();
+
+			try {
+				// Check if the window is visible (for creation reasons)
+				if (!dialog.getIsVisible()) {
+
+					// Make a new window
+					// https://stackoverflow.com/questions/15041760/javafx-open-new-window
+					dialog.setStage(new Stage());
+
+					// Set it so when its closed, it will set the visibility to false
+					dialog.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
+						@Override
+						public void handle(WindowEvent event) {
+							dialog.setIsVisible(false);
+						}
+
+					});
+
+					// Set the scene to the FMXL layout
+					dialog.getStage().setScene(dialog.createTeamNumberDialog());
+					dialog.getStage().setTitle("Enter team number");
+					dialog.getStage().setResizable(false);
+
+					// Show the stage, and update the visibility
+					dialog.getStage().show();
+					dialog.setIsVisible(true);
+				}
+
+				// Be sure to bring the window to front
+				dialog.getStage().toFront();
+			} catch (IOException e) {
+				MainPanel.logError(e);
+			}
+		}
+		
+	}
+	
+	private class viewDataHandler implements EventHandler<ActionEvent> {
+
+		@Override
+		public void handle(ActionEvent event) {
+			ViewData window = new ViewData();
+
+			if (!window.getIsVisible()) {
+
+				// Make a new window
+				// https://stackoverflow.com/questions/15041760/javafx-open-new-window
+				window.setStage(new Stage());
+
+				// Set it so when its closed, it will set the visibility to false
+				window.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent event) {
+						window.setIsVisible(false);
+					}
+
+				});
+
+				// Set the scene to the FMXL layout
+				try {
+					window.getStage().setScene(window.ViewDataScene());
+					window.getStage().setTitle("Data");
+
+					// Show the stage, and update the visibility
+					window.getStage().show();
+					window.setIsVisible(true);
+				} catch (IOException e) {
+					MainPanel.logError(e);
+				}
+			}
+
+			// Be sure to bring the window to front
+			window.getStage().toFront();
+		}
+		
 	}
 }
