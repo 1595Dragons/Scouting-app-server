@@ -24,6 +24,8 @@ public class ScoutingApp extends Application {
 	public static boolean debug;
 	public static StreamConnectionNotifier streamConnNotifier = null;
 	public static boolean stopRequested = false;
+	
+	public static Config config = new Config();
 
 	@Override
 	public void start(Stage primaryWindow) {
@@ -47,21 +49,19 @@ public class ScoutingApp extends Application {
 
 		// Check for valid config
 		try {
-			new Config().validateConfig();
+			config.validateConfig();
 		} catch (IOException e1) {
 			// If config validation fails, just return
 			MainPanel.logError(e1);
 			return;
 		}
 
-		new DeviceManagement().reset();
-		Debugger.d(getClass(), "Finsihed resetting device names");
-
 		// Check if the database exists
 		Database database = new Database();
 		boolean databaseExists = database.databaseExists(true);
 		Debugger.d(getClass(), "Database exists: " + databaseExists);
-
+		
+		
 		// If no database exists, create one
 		if (!databaseExists) {
 			try {
@@ -70,11 +70,21 @@ public class ScoutingApp extends Application {
 				MainPanel.logError(e);
 			}
 		}
-
+		
+		// Check if the database is valid
+		if (!database.validateDatabase()) {
+			mainPanel.log("Database is invalid!", true);
+			return;
+		}
+		
 		// Check if bluetooth is possible
 		Bluetooth bluetooth = new Bluetooth();
 
 		if (bluetooth.isEnabled()) {
+
+			new DeviceManagement().reset();
+			Debugger.d(getClass(), "Finsihed resetting device names");
+
 			try {
 				mainPanel.setMacAddress(bluetooth.getMACAddress());
 

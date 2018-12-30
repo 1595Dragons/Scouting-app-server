@@ -26,13 +26,13 @@ import javacode.UI.MainPanel;
  */
 public class Config {
 
-	private final String configLocation = System.getProperty("user.dir") + "/config.json";
+	private static final String configLocation = System.getProperty("user.dir") + "/config.json";
 
 	public Match matchData = new Match();
 
 	public boolean validateConfig() throws IOException {
 
-		File config = new File(this.configLocation);
+		File config = new File(configLocation);
 
 		if (!config.exists()) {
 			this.createNewConfig();
@@ -55,7 +55,7 @@ public class Config {
 
 	private void createNewConfig() {
 
-		File config = new File(this.configLocation);
+		File config = new File(configLocation);
 
 		// Create the empty file
 		try {
