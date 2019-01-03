@@ -9,6 +9,8 @@ import javax.json.JsonObject;
 import javacode.ScoutingApp;
 import javacode.Core.Debugger;
 import javacode.Core.Match.Autonomous;
+import javacode.Core.Match.Endgame;
+import javacode.Core.Match.TeleOp;
 import javacode.Core.NodeHelper;
 import javacode.FileManager.Database;
 import javafx.beans.value.ChangeListener;
@@ -238,7 +240,7 @@ public class DataCollection {
 		VBox pane = (VBox) ((ScrollPane) root.getChildrenUnmodifiable().get(1)).getContent();
 
 		// Create the autonomous header label
-		Label autonomousHeader = new Label("Autonomous");
+		Label autonomousHeader = new Label("Autonomous:");
 		autonomousHeader.setFont(new Font("Arial", 20));
 		autonomousHeader.setAlignment(Pos.CENTER);
 		autonomousHeader.setContentDisplay(ContentDisplay.CENTER);
@@ -344,8 +346,225 @@ public class DataCollection {
 				break;
 
 			}
-
 		}
+
+		// Create the teleop header label
+		Label teleopHeader = new Label("TeleOp:");
+		teleopHeader.setFont(new Font("Arial", 20));
+		teleopHeader.setAlignment(Pos.CENTER);
+		teleopHeader.setContentDisplay(ContentDisplay.CENTER);
+		teleopHeader.setMaxWidth(Double.MAX_VALUE);
+		VBox.setMargin(teleopHeader, new Insets(20, 0, 5, 0));
+		pane.getChildren().add(teleopHeader);
+
+		// Get the teleop fields from the config
+		for (TeleOp teleop : ScoutingApp.config.matchData.teleopData) {
+
+			switch (teleop.datatype) {
+			case Boolean:
+				// Create the check box
+				CheckBox auto = new CheckBox(teleop.name);
+				auto.setSelected(Boolean.parseBoolean(teleop.value.get(0).toString()));
+				auto.setFont(new Font("Arial", 15));
+				auto.setAlignment(Pos.CENTER);
+				auto.setContentDisplay(ContentDisplay.CENTER);
+				auto.setMaxWidth(Double.MAX_VALUE);
+				VBox.setMargin(auto, new Insets(5, 0, 5, 0));
+				pane.getChildren().add(auto);
+				break;
+			case BooleanGroup:
+				// Create the header for the group
+				Label booleanGroupHeader = new Label(teleop.name);
+				booleanGroupHeader.setFont(new Font("Arail", 15));
+				booleanGroupHeader.setAlignment(Pos.CENTER);
+				booleanGroupHeader.setContentDisplay(ContentDisplay.CENTER);
+				booleanGroupHeader.setMaxWidth(Double.MAX_VALUE);
+				VBox.setMargin(booleanGroupHeader, new Insets(5, 0, 0, 0));
+				pane.getChildren().add(booleanGroupHeader);
+
+				// Create a group for the radio buttons
+				ToggleGroup group = new ToggleGroup();
+
+				// Get the checkboxes from the value of the datatype
+				JsonObject checkBoxes = teleop.value.get(0).asJsonObject();
+				String[] keys = checkBoxes.keySet().toArray(new String[checkBoxes.size()]);
+				for (int index = 0; index < checkBoxes.size(); index++) {
+					// Get the current key at the index, and get the object value. This is the name
+					// of the checkbox, and if this checked
+					String key = keys[index];
+					boolean checked = Boolean.parseBoolean(checkBoxes.get(key).toString());
+
+					RadioButton autoGroup = new RadioButton(key);
+					autoGroup.setSelected(checked);
+					autoGroup.setFont(new Font("Arial", 15));
+					autoGroup.setAlignment(Pos.CENTER);
+					autoGroup.setContentDisplay(ContentDisplay.CENTER);
+					autoGroup.setMaxWidth(Double.MAX_VALUE);
+					autoGroup.setToggleGroup(group);
+					VBox.setMargin(autoGroup, new Insets(5, 0, 5, 0));
+					pane.getChildren().add(autoGroup);
+				}
+				break;
+			case Number:
+				// Create the label header for the spinner
+				Label spinnerHeader = new Label(teleop.name);
+				spinnerHeader.setFont(new Font("Arial", 15));
+				spinnerHeader.setAlignment(Pos.CENTER);
+				spinnerHeader.setContentDisplay(ContentDisplay.CENTER);
+				spinnerHeader.setMaxWidth(Double.MAX_VALUE);
+
+				VBox.setMargin(spinnerHeader, new Insets(5, 0, 0, 0));
+				pane.getChildren().add(spinnerHeader);
+
+				// Create the actual spinner
+				Spinner<Integer> spinner = new Spinner<Integer>(Integer.parseInt(teleop.value.get(1).toString()),
+						Integer.parseInt(teleop.value.get(2).toString()),
+						Integer.parseInt(teleop.value.get(0).toString()),
+						Integer.parseInt(teleop.value.get(3).toString()));
+				spinner.setEditable(true);
+				spinner.setMaxWidth(Double.MAX_VALUE);
+				spinner.setMinHeight(Double.NEGATIVE_INFINITY);
+				spinner.setMinWidth(Double.NEGATIVE_INFINITY);
+
+				// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
+				spinner.getEditor().textProperty().addListener(new ChangeListener<String>() {
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue,
+							String newValue) {
+						if (!newValue.matches("\\d*")) {
+							spinner.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+						}
+					}
+				});
+
+				VBox.setMargin(spinner, new Insets(5, 0, 5, 0));
+				pane.getChildren().add(spinner);
+				break;
+			case Text:
+				TextField text = new TextField(teleop.value.get(0).toString());
+				text.setFont(new Font("Arial", 15));
+				text.setEditable(true);
+				text.setPromptText(teleop.name);
+				text.setAlignment(Pos.CENTER);
+				text.setMaxWidth(Double.MAX_VALUE);
+				VBox.setMargin(text, new Insets(5, 0, 5, 0));
+				pane.getChildren().add(text);
+				break;
+			default:
+				Debugger.d(this.getClass(), "Unknown datatype for " + teleop.name);
+				break;
+
+			}
+		}
+
+		// Create the endgame header label
+		Label endgameHeader = new Label("End Game:");
+		endgameHeader.setFont(new Font("Arial", 20));
+		endgameHeader.setAlignment(Pos.CENTER);
+		endgameHeader.setContentDisplay(ContentDisplay.CENTER);
+		endgameHeader.setMaxWidth(Double.MAX_VALUE);
+		VBox.setMargin(endgameHeader, new Insets(20, 0, 5, 0));
+		pane.getChildren().add(endgameHeader);
+		
+		// Get the endgame fields from the config
+				for (Endgame endgame : ScoutingApp.config.matchData.endgameData) {
+
+					switch (endgame.datatype) {
+					case Boolean:
+						// Create the check box
+						CheckBox auto = new CheckBox(endgame.name);
+						auto.setSelected(Boolean.parseBoolean(endgame.value.get(0).toString()));
+						auto.setFont(new Font("Arial", 15));
+						auto.setAlignment(Pos.CENTER);
+						auto.setContentDisplay(ContentDisplay.CENTER);
+						auto.setMaxWidth(Double.MAX_VALUE);
+						VBox.setMargin(auto, new Insets(5, 0, 5, 0));
+						pane.getChildren().add(auto);
+						break;
+					case BooleanGroup:
+						// Create the header for the group
+						Label booleanGroupHeader = new Label(endgame.name);
+						booleanGroupHeader.setFont(new Font("Arail", 17));
+						booleanGroupHeader.setAlignment(Pos.CENTER);
+						booleanGroupHeader.setContentDisplay(ContentDisplay.CENTER);
+						booleanGroupHeader.setMaxWidth(Double.MAX_VALUE);
+						VBox.setMargin(booleanGroupHeader, new Insets(5, 0, 0, 0));
+						pane.getChildren().add(booleanGroupHeader);
+
+						// Create a group for the radio buttons
+						ToggleGroup group = new ToggleGroup();
+
+						// Get the checkboxes from the value of the datatype
+						JsonObject checkBoxes = endgame.value.get(0).asJsonObject();
+						String[] keys = checkBoxes.keySet().toArray(new String[checkBoxes.size()]);
+						for (int index = 0; index < checkBoxes.size(); index++) {
+							// Get the current key at the index, and get the object value. This is the name
+							// of the checkbox, and if this checked
+							String key = keys[index];
+							boolean checked = Boolean.parseBoolean(checkBoxes.get(key).toString());
+
+							RadioButton autoGroup = new RadioButton(key);
+							autoGroup.setSelected(checked);
+							autoGroup.setFont(new Font("Arial", 15));
+							autoGroup.setAlignment(Pos.CENTER);
+							autoGroup.setContentDisplay(ContentDisplay.CENTER);
+							autoGroup.setMaxWidth(Double.MAX_VALUE);
+							autoGroup.setToggleGroup(group);
+							VBox.setMargin(autoGroup, new Insets(5, 0, 5, 0));
+							pane.getChildren().add(autoGroup);
+						}
+						break;
+					case Number:
+						// Create the label header for the spinner
+						Label spinnerHeader = new Label(endgame.name);
+						spinnerHeader.setFont(new Font("Arial", 15));
+						spinnerHeader.setAlignment(Pos.CENTER);
+						spinnerHeader.setContentDisplay(ContentDisplay.CENTER);
+						spinnerHeader.setMaxWidth(Double.MAX_VALUE);
+
+						VBox.setMargin(spinnerHeader, new Insets(5, 0, 0, 0));
+						pane.getChildren().add(spinnerHeader);
+
+						// Create the actual spinner
+						Spinner<Integer> spinner = new Spinner<Integer>(Integer.parseInt(endgame.value.get(1).toString()),
+								Integer.parseInt(endgame.value.get(2).toString()),
+								Integer.parseInt(endgame.value.get(0).toString()),
+								Integer.parseInt(endgame.value.get(3).toString()));
+						spinner.setEditable(true);
+						spinner.setMaxWidth(Double.MAX_VALUE);
+						spinner.setMinHeight(Double.NEGATIVE_INFINITY);
+						spinner.setMinWidth(Double.NEGATIVE_INFINITY);
+
+						// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
+						spinner.getEditor().textProperty().addListener(new ChangeListener<String>() {
+							@Override
+							public void changed(ObservableValue<? extends String> observable, String oldValue,
+									String newValue) {
+								if (!newValue.matches("\\d*")) {
+									spinner.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
+								}
+							}
+						});
+
+						VBox.setMargin(spinner, new Insets(5, 0, 5, 0));
+						pane.getChildren().add(spinner);
+						break;
+					case Text:
+						TextField text = new TextField(endgame.value.get(0).toString());
+						text.setFont(new Font("Arial", 15));
+						text.setEditable(true);
+						text.setPromptText(endgame.name);
+						text.setAlignment(Pos.CENTER);
+						text.setMaxWidth(Double.MAX_VALUE);
+						VBox.setMargin(text, new Insets(5, 0, 5, 0));
+						pane.getChildren().add(text);
+						break;
+					default:
+						Debugger.d(this.getClass(), "Unknown datatype for " + endgame.name);
+						break;
+
+					}
+				}
 
 	}
 
