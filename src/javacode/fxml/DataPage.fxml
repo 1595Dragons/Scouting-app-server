@@ -24,7 +24,7 @@
       </Label>
       <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <content>
-            <VBox alignment="CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <VBox id="DataContence" fx:id="DataContence" alignment="CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
                   <Label id="AutoHeader" fx:id="AutoHeader" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Autonomous:">
                      <font>

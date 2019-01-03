@@ -129,7 +129,4 @@ public class Config {
 			}
 		}
 	}
-
-	// TODO: Create custom view stuff for data, as well as custom database
-
 }

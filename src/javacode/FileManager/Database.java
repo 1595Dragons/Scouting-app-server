@@ -9,6 +9,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.json.JsonObject;
 
 import javacode.ScoutingApp;
 import javacode.Core.Debugger;
@@ -63,24 +66,51 @@ public class Database {
 
 		Match data = ScoutingApp.config.matchData;
 		for (Autonomous autonomous : data.autonomousData) {
-			query += ", \"" + autonomous.name + "\" ";
 
-			// If the datatype is text, make the type text, otherwise its an int
-			query += autonomous.datatype == DataType.Text ? "TEXT NOT NULL" : "INT NOT NULL";
+			// Check if the datatype is a boolean group
+			if (autonomous.datatype.equals(DataType.BooleanGroup)) {
+				// Get the checkboxes from the value of the datatype
+				JsonObject checkBoxes = autonomous.value.get(0).asJsonObject();
+				String[] keys = checkBoxes.keySet().toArray(new String[checkBoxes.size()]);
+				for (int index = 0; index < checkBoxes.size(); index++) {
+					query += ", \"" + keys[index] + "\" INT NOT NULL";
+				}
+			} else {
+				query += ", \"" + autonomous.name + "\" ";
+				// If the datatype is text, make the type text, otherwise its an int
+				query += autonomous.datatype == DataType.Text ? "TEXT NOT NULL" : "INT NOT NULL";
+			}
+
 		}
 
 		for (TeleOp teleop : data.teleopData) {
-			query += ", \"" + teleop.name + "\" ";
-
-			// If the datatype is text, make the type text, otherwise its an int
-			query += teleop.datatype == DataType.Text ? "TEXT NOT NULL" : "INT NOT NULL";
+			// Check if the datatype is a boolean group
+			if (teleop.datatype.equals(DataType.BooleanGroup)) {
+				JsonObject checkBoxes = teleop.value.get(0).asJsonObject();
+				String[] keys = checkBoxes.keySet().toArray(new String[checkBoxes.size()]);
+				for (int index = 0; index < checkBoxes.size(); index++) {
+					query += ", \"" + keys[index] + "\" INT NOT NULL";
+				}
+			} else {
+				query += ", \"" + teleop.name + "\" ";
+				// If the datatype is text, make the type text, otherwise its an int
+				query += teleop.datatype == DataType.Text ? "TEXT NOT NULL" : "INT NOT NULL";
+			}
 		}
 
 		for (Endgame endgame : data.endgameData) {
-			query += ", \"" + endgame.name + "\" ";
-
-			// If the datatype is text, make the type text, otherwise its an int
-			query += endgame.datatype == DataType.Text ? "TEXT NOT NULL" : "INT NOT NULL";
+			// Check if the datatype is a boolean group
+			if (endgame.datatype.equals(DataType.BooleanGroup)) {
+				JsonObject checkBoxes = endgame.value.get(0).asJsonObject();
+				String[] keys = checkBoxes.keySet().toArray(new String[checkBoxes.size()]);
+				for (int index = 0; index < checkBoxes.size(); index++) {
+					query += ", \"" + keys[index] + "\" INT NOT NULL";
+				}
+			} else {
+				query += ", \"" + endgame.name + "\" ";
+				// If the datatype is text, make the type text, otherwise its an int
+				query += endgame.datatype == DataType.Text ? "TEXT NOT NULL" : "INT NOT NULL";
+			}
 		}
 
 		query += ", Comments TEXT)";
@@ -195,13 +225,13 @@ public class Database {
 	}
 
 	public boolean validateDatabase() {
-		
+
 		// Get database headers
 		String getHeaderQuery = "SELECT * FROM data";
-		
+
 		ResultSet result = null;
 		try {
-			
+
 			Connection databaseConnection = null;
 			try {
 				databaseConnection = this.getDatabaseConnection();
@@ -209,54 +239,74 @@ public class Database {
 				MainPanel.logError(e);
 				return false;
 			}
-			
+
 			result = databaseConnection.prepareStatement(getHeaderQuery).executeQuery();
-			
+
 			final int numberOfHeaders = result.getMetaData().getColumnCount();
 			String[] currentHeaderNames = new String[numberOfHeaders];
-			
+
 			// Get current headers
 			for (int i = 1; i <= numberOfHeaders; i++) {
 				currentHeaderNames[i - 1] = result.getMetaData().getColumnName(i);
 				Debugger.d(this.getClass(), "Current header name: " + currentHeaderNames[i - 1]);
 			}
-			
+
 			// Get the correct headers
 			ArrayList<String> correctHeaderNames = new ArrayList<String>();
 			correctHeaderNames.add("Team number");
-			
+
 			Match data = ScoutingApp.config.matchData;
 			for (Autonomous autonomous : data.autonomousData) {
-				correctHeaderNames.add(autonomous.name);
+				if (autonomous.datatype.equals(DataType.BooleanGroup)) {
+					JsonObject checkBoxes = autonomous.value.get(0).asJsonObject();
+					Collection<String> keys = checkBoxes.keySet();
+					correctHeaderNames.addAll(keys);
+				} else {
+					correctHeaderNames.add(autonomous.name);
+				}
 			}
 
 			for (TeleOp teleop : data.teleopData) {
-				correctHeaderNames.add(teleop.name);
+				if (teleop.datatype.equals(DataType.BooleanGroup)) {
+					JsonObject checkBoxes = teleop.value.get(0).asJsonObject();
+					Collection<String> keys = checkBoxes.keySet();
+					correctHeaderNames.addAll(keys);
+				} else {
+					correctHeaderNames.add(teleop.name);
+				}
 			}
 
 			for (Endgame endgame : data.endgameData) {
-				correctHeaderNames.add(endgame.name);
+				if (endgame.datatype.equals(DataType.BooleanGroup)) {
+					JsonObject checkBoxes = endgame.value.get(0).asJsonObject();
+					Collection<String> keys = checkBoxes.keySet();
+					correctHeaderNames.addAll(keys);
+				} else {
+					correctHeaderNames.add(endgame.name);
+				}
 			}
 			correctHeaderNames.add("Comments");
 
 			// Compare stuff
-			Debugger.d(this.getClass(), String.format("Size of current headers: %s\nSize of correct headers: %s", currentHeaderNames.length, correctHeaderNames.size()));
+			Debugger.d(this.getClass(), String.format("Size of current headers: %s\nSize of correct headers: %s",
+					currentHeaderNames.length, correctHeaderNames.size()));
 			if (currentHeaderNames.length == correctHeaderNames.size()) {
-				
+
 				// Iterate through each header, and check if they are the same
 				for (int i = 0; i < correctHeaderNames.size(); i++) {
-					Debugger.d(this.getClass(), String.format("Comparing headers: %s | %s", currentHeaderNames[i], correctHeaderNames.get(i)));
+					Debugger.d(this.getClass(), String.format("Comparing headers: %s | %s", currentHeaderNames[i],
+							correctHeaderNames.get(i)));
 					if (!currentHeaderNames[i].equals(correctHeaderNames.get(i))) {
 						return false;
 					}
 				}
-				
+
 				return true;
-				
+
 			} else {
 				return false;
 			}
-			
+
 		} catch (SQLException e) {
 			MainPanel.logError(e);
 			return false;
