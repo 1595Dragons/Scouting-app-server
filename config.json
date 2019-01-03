@@ -8,7 +8,7 @@
 	"TeleOp" : {
 		"Number of cubes placed on switch" : ["Number", 0, 0, 25, 1],
 		"Nuber of cubes placed on scale" : ["Number", 0, 0, 25, 1],
-		"Number of cubes placed in exchange" : ["Number", 0, 0, 1, 25]
+		"Number of cubes placed in exchange" : ["Number", 0, 0, 25, 1]
 	},
 
 	"Endgame" : {

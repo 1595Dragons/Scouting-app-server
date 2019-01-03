@@ -26,15 +26,11 @@ public class Database {
 
 	private String databaseFile = System.getProperty("user.dir") + "/scouting-data.db";
 
-	public void updateDatabase(int teamNumber, boolean hasAuto, int autoSwitchCube, int autoScaleCube,
-			int teleSwitchCube, int teleScaleCube, int exchangeCube, boolean canClimb, String comments) {
+	public void updateDatabase(int teamNumber, Match data, String comments) {
 		// Create insert query based on entered arguments... because there aren't enough
 		// arguments to this function...
 		// FIXME
-		String query = "INSERT INTO data (teamNumber, hasAuto, autoSwitchCube, autoScaleCube, teleSwitchCube, teleScaleCube, exchangeCube, canClimb, comments) "
-				+ "VALUES ("
-				+ String.format("%s, %s, %s, %s, %s, %s, %s, %s, '%s');", teamNumber, hasAuto ? 1 : 0, autoSwitchCube,
-						autoScaleCube, teleSwitchCube, teleScaleCube, exchangeCube, canClimb ? 1 : 0, comments);
+		String query = String.format("INSERT INTO data (\"Team number\", %s) VALUES (%s)");
 
 		// Execute the query
 		try {
