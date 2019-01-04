@@ -203,6 +203,48 @@ public class Database {
 		Debugger.d(getClass(), "Result of execution: " + result);
 		return result;
 	}
+	
+	public ResultSet executeResult(String query) throws SQLException {
+		Debugger.d(getClass(), "Executing query: " + query);
+
+		// Create the return variable
+		ResultSet result = null;
+
+		// Get the database connection
+		Connection databaseConnection = null;
+
+		try {
+			databaseConnection = this.getDatabaseConnection();
+		} catch (ClassNotFoundException e) {
+			MainPanel.logError(e);
+			return null;
+		}
+
+		// Execute the following only if the database connection isn't null
+		if (databaseConnection != null) {
+
+			// Prepare the query to prevent SQL injection attacks
+			PreparedStatement SQLStatement = databaseConnection.prepareStatement(query);
+
+			// If the prepared statement isn't null, go ahead and execute it
+			if (SQLStatement != null) {
+
+				if (query.toUpperCase().startsWith("SELECT")) {
+					result = SQLStatement.executeQuery(); // TOOD: Error on close
+				} else {
+					SQLStatement.execute();
+				}
+				
+				// Close the statement at the end, to free up resources
+				//SQLStatement.close();
+				// Note:When a Statement object is closed, its current ResultSet object, if one exists, is also closed.
+			}
+			// Close the database connection
+			databaseConnection.close();
+		}
+		// Return the result of the execution
+		return result;
+	}
 
 	private void deprecateDatabase() {
 		final File directory = new File(System.getProperty("user.dir"));

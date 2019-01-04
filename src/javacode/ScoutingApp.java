@@ -11,6 +11,7 @@ import javax.microedition.io.StreamConnectionNotifier;
 import javacode.Core.Bluetooth;
 import javacode.Core.Debugger;
 import javacode.Core.DeviceManagement;
+import javacode.Core.Updater;
 import javacode.FileManager.Config;
 import javacode.FileManager.Database;
 import javacode.UI.MainPanel;
@@ -29,6 +30,12 @@ public class ScoutingApp extends Application {
 
 	@Override
 	public void start(Stage primaryWindow) {
+		
+		// Check for update
+		if (Updater.updateAvalible()) {
+			Updater.showUpdatePrompt();
+		}
+		
 
 		// Setup the main panel for the user
 		MainPanel mainPanel = new MainPanel();

@@ -16,7 +16,7 @@
 	<classpathentry exported="true" kind="lib" path="3rd-party-libs/javafx-sdk-11.0.1/lib/javafx.media.jar" sourcepath="3rd-party-libs/javafx-sdk-11.0.1/lib/src.zip"/>
 	<classpathentry exported="true" kind="lib" path="3rd-party-libs/javafx-sdk-11.0.1/lib/javafx.swing.jar" sourcepath="3rd-party-libs/javafx-sdk-11.0.1/lib/src.zip"/>
 	<classpathentry exported="true" kind="lib" path="3rd-party-libs/javafx-sdk-11.0.1/lib/javafx.web.jar" sourcepath="3rd-party-libs/javafx-sdk-11.0.1/lib/src.zip"/>
-	<classpathentry kind="lib" path="3rd-party-libs/javax.json-1.1.jar" sourcepath="3rd-party-libs/javax.json-api-1.1-sources.jar">
+	<classpathentry exported="true" kind="lib" path="3rd-party-libs/javax.json-1.1.jar" sourcepath="3rd-party-libs/javax.json-api-1.1-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/Scouting-App-Server/3rd-party-libs/javax.json-api-1.1-javadoc.jar!/"/>
 		</attributes>

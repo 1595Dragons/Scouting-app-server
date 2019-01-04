@@ -17,7 +17,7 @@
   <tabs>
     <Tab closable="false" text="Raw data">
          <content>
-            <TableView prefHeight="200.0" prefWidth="200.0">
+            <TableView id="table" fx:id="table" prefHeight="200.0" prefWidth="200.0">
               <columns>
                 <TableColumn prefWidth="75.0" text="Team Number" />
               </columns>
