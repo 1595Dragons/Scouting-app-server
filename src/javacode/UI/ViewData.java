@@ -10,6 +10,8 @@ import javacode.Core.Debugger;
 import javacode.Core.NodeHelper;
 import javacode.FileManager.Database;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,9 +23,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class ViewData {
 
@@ -52,7 +56,7 @@ public class ViewData {
 		if (root != null) {
 
 			// Get a table view object for the raw data
-			TableView<String> rawDataTable = null;
+			TableView<String[]> rawDataTable = null;
 
 			ArrayList<Node> Nodes = new NodeHelper().getAllNodesFromParent(root);
 			for (Node node : Nodes) {
@@ -64,7 +68,7 @@ public class ViewData {
 					} else if (node.getId().equals("returnedSQL")) {
 						SQLReturn = (Label) node;
 					} else if (node.getId().equals("table")) {
-						rawDataTable = (TableView<String>) node;
+						rawDataTable = (TableView<String[]>) node;
 					} else {
 						Debugger.d(getClass(),
 								String.format("Unused node: (type %s) %s", node.getClass().getName(), node.getId()));
@@ -119,7 +123,7 @@ public class ViewData {
 		isVisible = value;
 	}
 
-	private void setupRawDataView(TableView<String> table) {
+	private void setupRawDataView(TableView<String[]> table) {
 		// TODO
 
 		Database db = new Database();
@@ -135,27 +139,42 @@ public class ViewData {
 		// Dynamically create table headers
 		// First clear the current headers
 		table.getColumns().clear();
-		String contence[] = result.replace("\t|\t", "<>").split("\n");
-		String headers[] = contence[0].split("<>");
-		for (int i = 0; i < headers.length; i++) {
-			TableColumn<String, String> col = new TableColumn<>(headers[i]);
-			col.setMaxWidth(Double.MAX_VALUE);
-			col.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
-			Debugger.d(this.getClass(), "Creating table column: " + headers[i]);
-			table.getColumns().add(col);
-
-		}
-
-		// Now add the table content
-		for (int row = 1; row < 2; row++) {
-			String[] rowString = contence[row].split("<>");
-			ArrayList<String> Strings = new ArrayList<>();
-			for (String string : rowString) {
-				Strings.add(string);
+		
+		// Then create a 2d array of the data
+		String rows[] = result.split("\n");
+		Debugger.d(this.getClass(), "Rows: " + Arrays.toString(rows));
+		Debugger.d(this.getClass(), "Row value: " + rows.length);
+		String columns[] = rows[0].replace("\t|\t", "<>").split("<>");
+		Debugger.d(this.getClass(), "Columns: " + Arrays.toString(columns));
+		Debugger.d(this.getClass(), "Column value: " + columns.length);
+		String[][] twod = new String[columns.length][rows.length];
+		
+		// Setup the content of the 2d array
+		for (int y = 0; y < twod[0].length; y++) {
+			for (int x = 0; x < twod.length; x++) {
+				twod[x][y] = rows[y].replace("\t|\t", "<>").split("<>")[x];
 			}
-			ObservableList<String> strings = FXCollections.observableArrayList(Strings);
-			table.getItems().add("Foo");
 		}
+		
+		// https://stackoverflow.com/questions/20769723/populate-tableview-with-two-dimensional-array
+		ObservableList<String[]> data = FXCollections.observableArrayList();
+		data.addAll(Arrays.asList(twod));
+        data.remove(0);//remove titles from data
+        for (int i = 0; i < columns.length; i++) {
+        	TableColumn col = new TableColumn(twod[i][0]);
+            final int colNo = i;
+            col.setCellValueFactory(new Callback<CellDataFeatures<String[], String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<String[], String> p) {
+                    return new SimpleStringProperty((p.getValue()[colNo]));
+                }
+            });
+			col.setMaxWidth(Double.MAX_VALUE);
+			Debugger.d(this.getClass(), "Creating table column: " + twod[i][0]);
+			table.getColumns().add(col);
+		}
+        
+        table.setItems(data);
 
 	}
 
