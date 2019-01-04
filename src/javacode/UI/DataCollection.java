@@ -12,6 +12,7 @@ import javacode.Core.Match.Autonomous;
 import javacode.Core.Match.Endgame;
 import javacode.Core.Match.TeleOp;
 import javacode.Core.NodeHelper;
+import javacode.FileManager.Database;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -40,7 +41,6 @@ import javafx.stage.Stage;
 public class DataCollection {
 
 	private int teamNumber;
-	private TextArea feedback;
 	private Button Submit, Cancel;
 
 	private static Stage stage;
@@ -50,24 +50,17 @@ public class DataCollection {
 	}
 
 	public Scene createDataCollectionPage() throws IOException {
-		Parent root = null;
-
 		// Get the path of the main panel's FXML file
 		URL path = getClass().getClassLoader().getResource("javacode/fxml/DataPage.fxml");
 		Debugger.d(getClass(), "Path: " + path.toString());
 
 		// Load the FXML from the layout file
-		try {
-			root = FXMLLoader.load(path);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		final Parent root = FXMLLoader.load(path);
 
+		// Only proceed if root is not null
 		if (root != null) {
 
 			Label teamnumberheader = null;
-
-			this.generateFromConfig(root);
 
 			// Create an array of all the nodes
 			ArrayList<Node> Nodes = new ArrayList<Node>();
@@ -79,8 +72,6 @@ public class DataCollection {
 					if (node.getId().equals("teamNumberHeader")) {
 						teamnumberheader = (Label) node;
 						teamnumberheader.setText("Scouting team: " + this.teamNumber);
-					} else if (node.getId().equals("feedback")) {
-						this.feedback = (TextArea) node;
 					} else if (node.getId().equals("CancelButton")) {
 						this.Cancel = (Button) node;
 					} else if (node.getId().equals("SubmitButton")) {
@@ -90,6 +81,8 @@ public class DataCollection {
 					}
 				}
 			}
+
+			this.generateFromConfig(root);
 
 			if (this.Cancel != null) {
 				this.Cancel.setOnAction(new EventHandler<ActionEvent>() {
@@ -102,13 +95,51 @@ public class DataCollection {
 
 			if (this.Submit != null) {
 				this.Submit.setOnAction(new EventHandler<ActionEvent>() {
+					@SuppressWarnings("unchecked")
 					@Override
 					public void handle(ActionEvent arg0) {
-						// TODO: Finish submit function
-						// new Database().updateDatabase(teamNumber, hasAutoCheck.isSelected(),
-						// autoSwitchNumber.getValue(), autoScaleNumber.getValue(),
-						// teleSwitchNumber.getValue(), teleScaleNumber.getValue(),
-						// teleExchangeNumber.getValue(), canClimb.isSelected(), feedback.getText());
+						VBox content = (VBox) ((ScrollPane) root.getChildrenUnmodifiable().get(1)).getContent();
+
+						// Create an array of all the nodes
+						ArrayList<Node> Nodes = new ArrayList<Node>(), validNodes = new ArrayList<Node>();
+						Nodes = new NodeHelper().getAllNodes(content.getChildrenUnmodifiable());
+						for (Node node : Nodes) {
+							if (node.getId() != null) {
+								Debugger.d(getClass(), String.format("Registered node for submission: (%s) %s",
+										node.getClass(), node.getId()));
+								validNodes.add(node);
+
+							}
+						}
+
+						// Create a string 2d array for the data, the first array is the name, the
+						// second is the value
+						String[][] data = new String[validNodes.size()][2];
+
+						for (int index = 0; index < validNodes.size(); index++) {
+							Node node = validNodes.get(index);
+
+							// Apply the name
+							data[index][0] = node.getId();
+
+							// Apply the value
+							if (node instanceof CheckBox) {
+								data[index][1] = ((CheckBox) node).isSelected() ? "1" : "0";
+							} else if (node instanceof Spinner) {
+								data[index][1] = (String) Integer.toString(((Spinner<Integer>) node).getValue());
+							} else if (node instanceof RadioButton) {
+								data[index][1] = ((RadioButton) node).isSelected() ? "1" : "0";
+							} else if (node instanceof TextArea) {
+								data[index][1] = String.format("\"%s\"", ((TextArea) node).getText());
+							} else {
+								Debugger.d(this.getClass(), "Unknown class for node " + node.getId());
+							}
+						}
+
+						// Update the database
+						new Database().updateDatabase(teamNumber, data);
+						;
+
 						getStage().close();
 					}
 				});
@@ -156,6 +187,7 @@ public class DataCollection {
 				auto.setAlignment(Pos.CENTER);
 				auto.setContentDisplay(ContentDisplay.CENTER);
 				auto.setMaxWidth(Double.MAX_VALUE);
+				auto.setId(autonomous.name);
 				VBox.setMargin(auto, new Insets(5, 0, 5, 0));
 				pane.getChildren().add(auto);
 				break;
@@ -188,6 +220,7 @@ public class DataCollection {
 					autoGroup.setContentDisplay(ContentDisplay.CENTER);
 					autoGroup.setMaxWidth(Double.MAX_VALUE);
 					autoGroup.setToggleGroup(group);
+					autoGroup.setId(key);
 					VBox.setMargin(autoGroup, new Insets(5, 0, 5, 0));
 					pane.getChildren().add(autoGroup);
 				}
@@ -223,7 +256,7 @@ public class DataCollection {
 						}
 					}
 				});
-
+				spinner.setId(autonomous.name);
 				VBox.setMargin(spinner, new Insets(5, 0, 5, 0));
 				pane.getChildren().add(spinner);
 				break;
@@ -234,6 +267,7 @@ public class DataCollection {
 				text.setPromptText(autonomous.name);
 				text.setAlignment(Pos.CENTER);
 				text.setMaxWidth(Double.MAX_VALUE);
+				text.setId(autonomous.name);
 				VBox.setMargin(text, new Insets(5, 0, 5, 0));
 				pane.getChildren().add(text);
 				break;
@@ -259,14 +293,15 @@ public class DataCollection {
 			switch (teleop.datatype) {
 			case Boolean:
 				// Create the check box
-				CheckBox auto = new CheckBox(teleop.name);
-				auto.setSelected(Boolean.parseBoolean(teleop.value.get(0).toString()));
-				auto.setFont(new Font("Arial", 15));
-				auto.setAlignment(Pos.CENTER);
-				auto.setContentDisplay(ContentDisplay.CENTER);
-				auto.setMaxWidth(Double.MAX_VALUE);
-				VBox.setMargin(auto, new Insets(5, 0, 5, 0));
-				pane.getChildren().add(auto);
+				CheckBox box = new CheckBox(teleop.name);
+				box.setSelected(Boolean.parseBoolean(teleop.value.get(0).toString()));
+				box.setFont(new Font("Arial", 15));
+				box.setAlignment(Pos.CENTER);
+				box.setContentDisplay(ContentDisplay.CENTER);
+				box.setMaxWidth(Double.MAX_VALUE);
+				VBox.setMargin(box, new Insets(5, 0, 5, 0));
+				box.setId(teleop.name);
+				pane.getChildren().add(box);
 				break;
 			case BooleanGroup:
 				// Create the header for the group
@@ -290,15 +325,16 @@ public class DataCollection {
 					String key = keys[index];
 					boolean checked = Boolean.parseBoolean(checkBoxes.get(key).toString());
 
-					RadioButton autoGroup = new RadioButton(key);
-					autoGroup.setSelected(checked);
-					autoGroup.setFont(new Font("Arial", 15));
-					autoGroup.setAlignment(Pos.CENTER);
-					autoGroup.setContentDisplay(ContentDisplay.CENTER);
-					autoGroup.setMaxWidth(Double.MAX_VALUE);
-					autoGroup.setToggleGroup(group);
-					VBox.setMargin(autoGroup, new Insets(5, 0, 5, 0));
-					pane.getChildren().add(autoGroup);
+					RadioButton teleGroup = new RadioButton(key);
+					teleGroup.setSelected(checked);
+					teleGroup.setFont(new Font("Arial", 15));
+					teleGroup.setAlignment(Pos.CENTER);
+					teleGroup.setContentDisplay(ContentDisplay.CENTER);
+					teleGroup.setMaxWidth(Double.MAX_VALUE);
+					teleGroup.setToggleGroup(group);
+					teleGroup.setId(key);
+					VBox.setMargin(teleGroup, new Insets(5, 0, 5, 0));
+					pane.getChildren().add(teleGroup);
 				}
 				break;
 			case Number:
@@ -332,7 +368,7 @@ public class DataCollection {
 						}
 					}
 				});
-
+				spinner.setId(teleop.name);
 				VBox.setMargin(spinner, new Insets(5, 0, 5, 0));
 				pane.getChildren().add(spinner);
 				break;
@@ -343,6 +379,7 @@ public class DataCollection {
 				text.setPromptText(teleop.name);
 				text.setAlignment(Pos.CENTER);
 				text.setMaxWidth(Double.MAX_VALUE);
+				text.setId(teleop.name);
 				VBox.setMargin(text, new Insets(5, 0, 5, 0));
 				pane.getChildren().add(text);
 				break;
@@ -368,14 +405,15 @@ public class DataCollection {
 			switch (endgame.datatype) {
 			case Boolean:
 				// Create the check box
-				CheckBox auto = new CheckBox(endgame.name);
-				auto.setSelected(Boolean.parseBoolean(endgame.value.get(0).toString()));
-				auto.setFont(new Font("Arial", 15));
-				auto.setAlignment(Pos.CENTER);
-				auto.setContentDisplay(ContentDisplay.CENTER);
-				auto.setMaxWidth(Double.MAX_VALUE);
-				VBox.setMargin(auto, new Insets(5, 0, 5, 0));
-				pane.getChildren().add(auto);
+				CheckBox endbox = new CheckBox(endgame.name);
+				endbox.setSelected(Boolean.parseBoolean(endgame.value.get(0).toString()));
+				endbox.setFont(new Font("Arial", 15));
+				endbox.setAlignment(Pos.CENTER);
+				endbox.setContentDisplay(ContentDisplay.CENTER);
+				endbox.setMaxWidth(Double.MAX_VALUE);
+				endbox.setId(endgame.name);
+				VBox.setMargin(endbox, new Insets(5, 0, 5, 0));
+				pane.getChildren().add(endbox);
 				break;
 			case BooleanGroup:
 				// Create the header for the group
@@ -399,15 +437,16 @@ public class DataCollection {
 					String key = keys[index];
 					boolean checked = Boolean.parseBoolean(checkBoxes.get(key).toString());
 
-					RadioButton autoGroup = new RadioButton(key);
-					autoGroup.setSelected(checked);
-					autoGroup.setFont(new Font("Arial", 15));
-					autoGroup.setAlignment(Pos.CENTER);
-					autoGroup.setContentDisplay(ContentDisplay.CENTER);
-					autoGroup.setMaxWidth(Double.MAX_VALUE);
-					autoGroup.setToggleGroup(group);
-					VBox.setMargin(autoGroup, new Insets(5, 0, 5, 0));
-					pane.getChildren().add(autoGroup);
+					RadioButton endGroup = new RadioButton(key);
+					endGroup.setSelected(checked);
+					endGroup.setFont(new Font("Arial", 15));
+					endGroup.setAlignment(Pos.CENTER);
+					endGroup.setContentDisplay(ContentDisplay.CENTER);
+					endGroup.setMaxWidth(Double.MAX_VALUE);
+					endGroup.setToggleGroup(group);
+					endGroup.setId(key);
+					VBox.setMargin(endGroup, new Insets(5, 0, 5, 0));
+					pane.getChildren().add(endGroup);
 				}
 				break;
 			case Number:
@@ -441,7 +480,7 @@ public class DataCollection {
 						}
 					}
 				});
-
+				spinner.setId(endgame.name);
 				VBox.setMargin(spinner, new Insets(5, 0, 5, 0));
 				pane.getChildren().add(spinner);
 				break;
@@ -452,6 +491,7 @@ public class DataCollection {
 				text.setPromptText(endgame.name);
 				text.setAlignment(Pos.CENTER);
 				text.setMaxWidth(Double.MAX_VALUE);
+				text.setId(endgame.name);
 				VBox.setMargin(text, new Insets(5, 0, 5, 0));
 				pane.getChildren().add(text);
 				break;
@@ -461,7 +501,7 @@ public class DataCollection {
 
 			}
 		}
-		
+
 		// Add the comments field, start with the header
 		Label commentHeader = new Label("Additional Feedback (Optional):");
 		commentHeader.setFont(new Font("Arial", 20));
@@ -470,7 +510,7 @@ public class DataCollection {
 		commentHeader.setMaxWidth(Double.MAX_VALUE);
 		VBox.setMargin(commentHeader, new Insets(20, 0, 5, 0));
 		pane.getChildren().add(commentHeader);
-		
+
 		// Now add the comment box
 		TextArea comments = new TextArea();
 		comments.setFont(new Font("Arial", 15));
@@ -483,10 +523,11 @@ public class DataCollection {
 		comments.minHeight(Double.NEGATIVE_INFINITY);
 		comments.maxWidth(Double.MAX_VALUE);
 		comments.maxHeight(Double.MAX_VALUE);
-		comments.setPadding(new Insets(0,5,0,5));
+		comments.setPadding(new Insets(0, 5, 0, 5));
+		comments.setId("Comments");
 		VBox.setMargin(comments, new Insets(5, 0, 5, 0));
 		pane.getChildren().add(comments);
-		
+
 	}
 
 }

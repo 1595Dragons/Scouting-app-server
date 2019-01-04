@@ -73,8 +73,14 @@ public class ScoutingApp extends Application {
 		
 		// Check if the database is valid
 		if (!database.validateDatabase()) {
-			mainPanel.log("Database is invalid!", true);
-			return;
+			mainPanel.log("Database is invalid, creating new database", true);
+			try {
+				database.createDatabase();
+			} catch (IOException | SQLException e) {
+				MainPanel.logError(e);
+				return;
+			}
+			
 		}
 		
 		// Check if bluetooth is possible

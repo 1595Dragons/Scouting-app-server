@@ -26,11 +26,20 @@ public class Database {
 
 	private String databaseFile = System.getProperty("user.dir") + "/scouting-data.db";
 
-	public void updateDatabase(int teamNumber, Match data, String comments) {
-		// Create insert query based on entered arguments... because there aren't enough
-		// arguments to this function...
-		// FIXME
-		String query = String.format("INSERT INTO data (\"Team number\", %s) VALUES (%s)");
+	public void updateDatabase(int teamNumber, String[][] data) {
+		// Get the headers from the data, and their values
+		String headers = "", values = "";
+		for (int index = 0; index < data.length; index++) {
+			for (int value = 0; value < 2; value++) {
+				if (value == 0) {
+					headers += "\", \"" + data[index][value];
+				} else {
+					values += ", " + data[index][value];
+				}
+			}
+		}
+		
+		String query = String.format("INSERT INTO data (\"Team number%s\") VALUES (%s%s)", headers, teamNumber, values);
 
 		// Execute the query
 		try {
