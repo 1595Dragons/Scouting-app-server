@@ -139,42 +139,44 @@ public class ViewData {
 		// Dynamically create table headers
 		// First clear the current headers
 		table.getColumns().clear();
-		
+
 		// Then create a 2d array of the data
+		// TODO: Flip X and Y
+
 		String rows[] = result.split("\n");
 		Debugger.d(this.getClass(), "Rows: " + Arrays.toString(rows));
 		Debugger.d(this.getClass(), "Row value: " + rows.length);
 		String columns[] = rows[0].replace("\t|\t", "<>").split("<>");
 		Debugger.d(this.getClass(), "Columns: " + Arrays.toString(columns));
 		Debugger.d(this.getClass(), "Column value: " + columns.length);
-		String[][] twod = new String[columns.length][rows.length];
-		
+		String[][] twod = new String[rows.length][columns.length];
+
 		// Setup the content of the 2d array
-		for (int y = 0; y < twod[0].length; y++) {
-			for (int x = 0; x < twod.length; x++) {
-				twod[x][y] = rows[y].replace("\t|\t", "<>").split("<>")[x];
+		for (int x = 0; x < twod.length; x++) {
+			for (int y = 0; y < twod[0].length; y++) {
+				twod[x][y] = rows[x].replace("\t|\t", "<>").split("<>")[y];
 			}
 		}
-		
+
 		// https://stackoverflow.com/questions/20769723/populate-tableview-with-two-dimensional-array
 		ObservableList<String[]> data = FXCollections.observableArrayList();
 		data.addAll(Arrays.asList(twod));
-        data.remove(0);//remove titles from data
-        for (int i = 0; i < columns.length; i++) {
-        	TableColumn col = new TableColumn(twod[i][0]);
-            final int colNo = i;
-            col.setCellValueFactory(new Callback<CellDataFeatures<String[], String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(CellDataFeatures<String[], String> p) {
-                    return new SimpleStringProperty((p.getValue()[colNo]));
-                }
-            });
+		data.remove(0);// remove titles from data
+		for (int i = 0; i < columns.length; i++) {
+			TableColumn<String[], String> col = new TableColumn<String[], String>(twod[0][i]);
+			final int colNo = i;
+			col.setCellValueFactory(new Callback<CellDataFeatures<String[], String>, ObservableValue<String>>() {
+				@Override
+				public ObservableValue<String> call(CellDataFeatures<String[], String> p) {
+					return new SimpleStringProperty((p.getValue()[colNo]));
+				}
+			});
 			col.setMaxWidth(Double.MAX_VALUE);
-			Debugger.d(this.getClass(), "Creating table column: " + twod[i][0]);
+			Debugger.d(this.getClass(), "Creating table column: " + col.getText());
 			table.getColumns().add(col);
 		}
-        
-        table.setItems(data);
+
+		table.setItems(data);
 
 	}
 
