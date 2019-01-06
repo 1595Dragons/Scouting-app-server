@@ -106,8 +106,10 @@ public class DataCollection {
 					data[index][1] = ((RadioButton) node).isSelected() ? "1" : "0";
 				} else if (node instanceof TextArea) {
 					data[index][1] = String.format("\"%s\"", ((TextArea) node).getText());
+				} else if (node instanceof TextField) {
+					data[index][1] = String.format("\"%s\"", ((TextField) node).getText());
 				} else {
-					Debugger.d(this.getClass(), "Unknown class for node " + node.getId());
+					Debugger.d(this.getClass(), "Unknown class for node " + node.getId() + "\n" + node.getClass());
 				}
 			}
 
@@ -172,8 +174,8 @@ public class DataCollection {
 								Integer.parseInt(autonomous.value.get(0).toString()), new Insets(5, 0, 5, 0)));
 				break;
 			case Text:
-				pane.getChildren().add(this.createTextField(autonomous.name, autonomous.value.get(0).toString(), 15,
-						new Insets(5, 0, 5, 0)));
+				pane.getChildren().add(this.createTextField(autonomous.name,
+						autonomous.value.get(0).toString().replace("\"", ""), 15, new Insets(5, 0, 5, 0)));
 				break;
 			default:
 				Debugger.d(this.getClass(), "Unknown datatype for " + autonomous.name);
@@ -224,8 +226,8 @@ public class DataCollection {
 								Integer.parseInt(teleop.value.get(0).toString()), new Insets(5, 0, 5, 0)));
 				break;
 			case Text:
-				pane.getChildren().add(
-						this.createTextField(teleop.name, teleop.value.get(0).toString(), 15, new Insets(5, 0, 5, 0)));
+				pane.getChildren().add(this.createTextField(teleop.name,
+						teleop.value.get(0).toString().replace("\"", ""), 15, new Insets(5, 0, 5, 0)));
 				break;
 			default:
 				Debugger.d(this.getClass(), "Unknown datatype for " + teleop.name);
@@ -276,8 +278,8 @@ public class DataCollection {
 								Integer.parseInt(endgame.value.get(0).toString()), new Insets(5, 0, 5, 0)));
 				break;
 			case Text:
-				pane.getChildren().add(this.createTextField(endgame.name, endgame.value.get(0).toString(), 15,
-						new Insets(5, 0, 5, 0)));
+				pane.getChildren().add(this.createTextField(endgame.name,
+						endgame.value.get(0).toString().replace("\"", ""), 15, new Insets(5, 0, 5, 0)));
 				break;
 			default:
 				Debugger.d(this.getClass(), "Unknown datatype for " + endgame.name);

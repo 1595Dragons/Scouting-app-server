@@ -62,16 +62,18 @@ public class Config {
 			config.createNewFile();
 		} catch (IOException e) {
 			MainPanel.logError(e);
+			return;
 		}
+
+		String conf = "{\n\t\"Autonomous\" : {\n\t\t\"Do the thing\" : [\"Boolean\", false]\n\t},\n\t"
+				+ "\"TeleOp\" : {\n\t\t\"Get the points\" : [\"Number\", 0, 0, 25, 1],\n\t\t\"Win\" : [\"Number\", 0, 0, 25, 1]\n\t},\n\t"
+				+ "\"Endgame\" : {\n\t\t\"Info\" : [\"Text\", \"See the readme for config documentatiuon\"]\n\t}\n}";
 
 		// Write example config data to the config file
 		FileWriter writer = null;
-		FileReader reader = null;
 		try {
 			writer = new FileWriter(config);
-			reader = new FileReader(new File(this.getClass().getResource("configExample.txt").getFile()));
-			reader.transferTo(writer);
-			reader.close();
+			writer.write(conf);
 			writer.flush();
 			writer.close();
 		} catch (IOException e) {
@@ -94,7 +96,6 @@ public class Config {
 		// Close the reader
 		reader.close();
 
-		
 		final JsonObject rawAutonomous = FullObject.get("Autonomous").asJsonObject();
 		final int autoSize = rawAutonomous.size();
 		Debugger.d(this.getClass(), "Raw autonomous Json: " + rawAutonomous.toString() + "\nSize: " + autoSize);
@@ -111,19 +112,19 @@ public class Config {
 		final int endgameSize = rawEndGame.size();
 		Debugger.d(this.getClass(), "Raw endgame json: " + rawEndGame.toString() + "\nSize: " + endgameSize);
 
-		this.matchData.endgameData = Match.matchBaseToEndgame(Match.getMatchData(rawEndGame, endgameSize));;
-		
-		
+		this.matchData.endgameData = Match.matchBaseToEndgame(Match.getMatchData(rawEndGame, endgameSize));
+		;
+
 		// Validation, only for debug mode though
 		if (ScoutingApp.debug) {
 			for (Autonomous autoCheck : this.matchData.autonomousData) {
 				Debugger.d(this.getClass(), "Loaded autonomous name: " + autoCheck.name);
 			}
-			
+
 			for (TeleOp teleCheck : this.matchData.teleopData) {
 				Debugger.d(this.getClass(), "Loaded teleop name: " + teleCheck.name);
 			}
-			
+
 			for (Endgame endgameCheck : this.matchData.endgameData) {
 				Debugger.d(this.getClass(), "Loaded endgame name: " + endgameCheck.name);
 			}
