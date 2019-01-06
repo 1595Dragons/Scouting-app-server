@@ -1,6 +1,7 @@
 package javacode.FileManager;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -38,7 +39,7 @@ public class Database {
 				}
 			}
 		}
-		
+
 		String query = String.format("INSERT INTO data (\"Team number%s\") VALUES (%s%s)", headers, teamNumber, values);
 
 		// Execute the query
@@ -203,7 +204,7 @@ public class Database {
 		Debugger.d(getClass(), "Result of execution: " + result);
 		return result;
 	}
-	
+
 	public ResultSet executeResult(String query) throws SQLException {
 		Debugger.d(getClass(), "Executing query: " + query);
 
@@ -230,17 +231,11 @@ public class Database {
 			if (SQLStatement != null) {
 
 				if (query.toUpperCase().startsWith("SELECT")) {
-					result = SQLStatement.executeQuery(); // TOOD: Error on close
+					result = SQLStatement.executeQuery();
 				} else {
 					SQLStatement.execute();
 				}
-				
-				// Close the statement at the end, to free up resources
-				//SQLStatement.close();
-				// Note:When a Statement object is closed, its current ResultSet object, if one exists, is also closed.
 			}
-			// Close the database connection
-			databaseConnection.close();
 		}
 		// Return the result of the execution
 		return result;
@@ -400,6 +395,57 @@ public class Database {
 		}
 
 		return result;
+	}
+
+	public void exportToCSV(File file) {
+		String out = "";
+
+		// Get everything out of the database
+		try {
+			ResultSet result = this.executeResult("SELECT * FROM data");
+
+			ResultSetMetaData meta = result.getMetaData();
+
+			// Get the number of columns
+			final int columns = meta.getColumnCount();
+
+			// Get the headers
+			for (int i = 1; i <= columns; i++) {
+				out += meta.getColumnName(i).replace(",", "，") + ",";
+			}
+
+			// Add a new line
+			out += "\n";
+
+			// Run through each row
+			while (result.next()) {
+				// Iterator over all appropriate columns, SQL starts at 1 though... REEEEEEEEEEE
+				for (int i = 1; i <= columns; i++) {
+					out += result.getString(i);
+					if (i != columns) {
+						out += ",";
+					} else {
+						out += "\n";
+					}
+				}
+			}
+			result.close();
+		} catch (SQLException e) {
+			MainPanel.logError(e);
+		}
+
+		try {
+			// Write the out string to a file
+			FileWriter fw = new FileWriter(file);
+			fw.write(out);
+			fw.flush();
+			fw.close();
+		} catch (IOException e) {
+			MainPanel.logError(e);
+		}
+
+		new MainPanel().log("Succsessfully exported data", false);
+
 	}
 
 }

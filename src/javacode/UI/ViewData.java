@@ -1,5 +1,6 @@
 package javacode.UI;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -30,6 +31,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -107,6 +110,23 @@ public class ViewData {
 							Debugger.d(this.getClass(), "Refreshing raw data");
 							unloadDataTable((BorderPane) rawDataTab.getContent());
 							generateRawDataTable((BorderPane) rawDataTab.getContent());
+						}
+					});
+
+			// Get the export button
+			((Button) (((HBox) ((BorderPane) rawDataTab.getContent()).getBottom()).getChildren().get(0)))
+					.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							FileChooser destination = new FileChooser();
+							destination.setInitialFileName("scouting-data.csv");
+							destination.setSelectedExtensionFilter(new ExtensionFilter("*.csv", "*.csv"));
+							destination.setInitialDirectory(new File(System.getProperty("user.dir")));
+							File csv = destination.showSaveDialog(ViewData.stage);
+							if (csv != null) {
+								Debugger.d(this.getClass(), "Chosen file location: " + csv.getAbsolutePath());
+								new Database().exportToCSV(csv);
+							}
 						}
 					});
 
