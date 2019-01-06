@@ -125,6 +125,7 @@ public class ViewData {
 	}
 
 	private void setupRawDataView(TableView<String[]> table) {
+		// TODO: Auto create the table view to replace the loading icon
 		Database db = new Database();
 
 		// Load all the data from the database
@@ -184,7 +185,6 @@ public class ViewData {
 	}
 
 	private void setupCalculatedDataView(TableView<String[]> table) {
-		// TODO
 
 		Database db = new Database();
 
@@ -231,8 +231,8 @@ public class ViewData {
 							Debugger.d(this.getClass(), "Adding to 2d array: " + str);
 							twod[x][y] = str;
 						} else {
-							Debugger.d(this.getClass(), "Adding to 2d array: " + teamNumbers[y + 1]);
-							twod[x][y] = teamNumbers[y + 1];
+							Debugger.d(this.getClass(), "Adding to 2d array: " + teamNumbers[x]);
+							twod[x][y] = teamNumbers[x];
 						}
 					} else {
 						if (x == 0) {
