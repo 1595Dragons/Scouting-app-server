@@ -19,3 +19,4 @@ hs_err_pid*
 *.csv
 .DS_Store
 scouting-data.db
+config.json
