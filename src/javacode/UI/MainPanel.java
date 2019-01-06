@@ -25,6 +25,8 @@ public class MainPanel {
 	private static Label macAddressHeader, console;
 	private static Button startScouting, viewData;
 
+	private TeamNumberDialog dialog = new TeamNumberDialog();
+
 	public static Stage stage;
 
 	public static ArrayList<Label> connectedDevices = new ArrayList<Label>();
@@ -107,49 +109,30 @@ public class MainPanel {
 		System.err.println(String.format("Error: %s\n%s", e.getMessage(), sw.toString()));
 		console.setText(String.format("%s\n%s", e.getMessage(), sw.toString()));
 	}
-	
-	
+
 	private class startScouting implements EventHandler<ActionEvent> {
 
 		public void handle(ActionEvent event) {
-			TeamNumberDialog dialog = new TeamNumberDialog();
 
-			try {
-				// Check if the window is visible (for creation reasons)
-				if (!dialog.getIsVisible()) {
+			// Check if the window is visible (for creation reasons)
+			if (!dialog.getStage().isShowing()) {
 
-					// Make a new window
-					// https://stackoverflow.com/questions/15041760/javafx-open-new-window
-					dialog.setStage(new Stage());
+				// https://stackoverflow.com/questions/15041760/javafx-open-new-window
+				// Set the scene to the FMXL layout
+				dialog.getStage().setScene(dialog.createTeamNumberDialog());
+				dialog.getStage().setTitle("Enter team number");
+				dialog.getStage().setResizable(false);
 
-					// Set it so when its closed, it will set the visibility to false
-					dialog.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {
-						@Override
-						public void handle(WindowEvent event) {
-							dialog.setIsVisible(false);
-						}
-
-					});
-
-					// Set the scene to the FMXL layout
-					dialog.getStage().setScene(dialog.createTeamNumberDialog());
-					dialog.getStage().setTitle("Enter team number");
-					dialog.getStage().setResizable(false);
-
-					// Show the stage, and update the visibility
-					dialog.getStage().show();
-					dialog.setIsVisible(true);
-				}
-
-				// Be sure to bring the window to front
-				dialog.getStage().toFront();
-			} catch (IOException e) {
-				MainPanel.logError(e);
+				// Show the stage, and update the visibility
+				dialog.getStage().show();
 			}
+
+			// Be sure to bring the window to front
+			dialog.getStage().toFront();
 		}
-		
+
 	}
-	
+
 	private class viewDataHandler implements EventHandler<ActionEvent> {
 
 		@Override
@@ -187,6 +170,6 @@ public class MainPanel {
 			// Be sure to bring the window to front
 			window.getStage().toFront();
 		}
-		
+
 	}
 }
