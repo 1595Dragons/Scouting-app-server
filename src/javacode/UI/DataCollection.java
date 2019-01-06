@@ -9,12 +9,9 @@ import javacode.Core.Debugger;
 import javacode.Core.Match.Autonomous;
 import javacode.Core.Match.Endgame;
 import javacode.Core.Match.TeleOp;
-import javacode.Core.NodeHelper;
 import javacode.FileManager.Database;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -76,52 +73,48 @@ public class DataCollection {
 			stage.close();
 		});
 
-		((Button) buttons.getChildren().get(1)).setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				VBox content = (VBox) (contentpane.getContent());
+		((Button) buttons.getChildren().get(1)).setOnAction((event) -> {
+			VBox content = (VBox) (contentpane.getContent());
 
-				// Create an array of all the nodes
-				ArrayList<Node> Nodes = new ArrayList<Node>(), validNodes = new ArrayList<Node>();
-				Nodes = new NodeHelper().getAllNodes(content.getChildrenUnmodifiable());
-				for (Node node : Nodes) {
-					if (node.getId() != null) {
-						Debugger.d(getClass(), String.format("Registered node for submission: (%s) %s", node.getClass(),
-								node.getId()));
-						validNodes.add(node);
+			// Create an array of all the nodes
+			ArrayList<Node> validNodes = new ArrayList<Node>();
+			for (int i = 0; i < content.getChildren().size(); i++) {
+				if (content.getChildren().get(i).getId() != null) {
+					Debugger.d(getClass(), String.format("Registered node for submission: (%s) %s",
+							content.getChildren().get(i).getClass(), content.getChildren().get(i).getId()));
+					validNodes.add(content.getChildren().get(i));
 
-					}
 				}
-
-				// Create a string 2d array for the data, the first array is the name, the
-				// second is the value
-				String[][] data = new String[validNodes.size()][2];
-
-				for (int index = 0; index < data.length; index++) {
-					Node node = validNodes.get(index);
-
-					// Apply the name
-					data[index][0] = node.getId();
-
-					// Apply the value
-					if (node instanceof CheckBox) {
-						data[index][1] = ((CheckBox) node).isSelected() ? "1" : "0";
-					} else if (node instanceof Spinner) {
-						data[index][1] = (String) Integer.toString(((Spinner<Integer>) node).getValue());
-					} else if (node instanceof RadioButton) {
-						data[index][1] = ((RadioButton) node).isSelected() ? "1" : "0";
-					} else if (node instanceof TextArea) {
-						data[index][1] = String.format("\"%s\"", ((TextArea) node).getText());
-					} else {
-						Debugger.d(this.getClass(), "Unknown class for node " + node.getId());
-					}
-				}
-
-				// Update the database
-				new Database().updateDatabase(teamNumber, data);
-
-				stage.close();
 			}
+
+			// Create a string 2d array for the data, the first array is the name, the
+			// second is the value
+			String[][] data = new String[validNodes.size()][2];
+
+			for (int index = 0; index < data.length; index++) {
+				Node node = validNodes.get(index);
+
+				// Apply the name
+				data[index][0] = node.getId();
+
+				// Apply the value
+				if (node instanceof CheckBox) {
+					data[index][1] = ((CheckBox) node).isSelected() ? "1" : "0";
+				} else if (node instanceof Spinner) {
+					data[index][1] = (String) Integer.toString(((Spinner<Integer>) node).getValue());
+				} else if (node instanceof RadioButton) {
+					data[index][1] = ((RadioButton) node).isSelected() ? "1" : "0";
+				} else if (node instanceof TextArea) {
+					data[index][1] = String.format("\"%s\"", ((TextArea) node).getText());
+				} else {
+					Debugger.d(this.getClass(), "Unknown class for node " + node.getId());
+				}
+			}
+
+			// Update the database
+			new Database().updateDatabase(teamNumber, data);
+
+			stage.close();
 		});
 
 		Scene scene = new Scene(root);
@@ -160,11 +153,11 @@ public class DataCollection {
 				javax.json.JsonObject checkBoxes = autonomous.value.get(0).asJsonObject();
 				String[] keys = checkBoxes.keySet().toArray(new String[checkBoxes.size()]);
 				for (int index = 0; index < checkBoxes.size(); index++) {
-					// Get the current key at the index, and get the object value. 
+					// Get the current key at the index, and get the object value.
 					// This is the name of the radio button, and if this checked
 					String key = keys[index];
 					boolean checked = Boolean.parseBoolean(checkBoxes.get(key).toString());
-					pane.getChildren().add(this.createRadioButton(key, checked, 15, group, new Insets(5,0,5,0)));
+					pane.getChildren().add(this.createRadioButton(key, checked, 15, group, new Insets(5, 0, 5, 0)));
 				}
 				break;
 			case Number:
@@ -179,7 +172,8 @@ public class DataCollection {
 								Integer.parseInt(autonomous.value.get(0).toString()), new Insets(5, 0, 5, 0)));
 				break;
 			case Text:
-				pane.getChildren().add(this.createTextField(autonomous.name, autonomous.value.get(0).toString(), 15, new Insets(5, 0, 5, 0)));
+				pane.getChildren().add(this.createTextField(autonomous.name, autonomous.value.get(0).toString(), 15,
+						new Insets(5, 0, 5, 0)));
 				break;
 			default:
 				Debugger.d(this.getClass(), "Unknown datatype for " + autonomous.name);
@@ -211,11 +205,11 @@ public class DataCollection {
 				javax.json.JsonObject checkBoxes = teleop.value.get(0).asJsonObject();
 				String[] keys = checkBoxes.keySet().toArray(new String[checkBoxes.size()]);
 				for (int index = 0; index < checkBoxes.size(); index++) {
-					// Get the current key at the index, and get the object value. 
+					// Get the current key at the index, and get the object value.
 					// This is the name of the radio button, and if this checked
 					String key = keys[index];
 					boolean checked = Boolean.parseBoolean(checkBoxes.get(key).toString());
-					pane.getChildren().add(this.createRadioButton(key, checked, 15, group, new Insets(5,0,5,0)));
+					pane.getChildren().add(this.createRadioButton(key, checked, 15, group, new Insets(5, 0, 5, 0)));
 				}
 				break;
 			case Number:
@@ -230,7 +224,8 @@ public class DataCollection {
 								Integer.parseInt(teleop.value.get(0).toString()), new Insets(5, 0, 5, 0)));
 				break;
 			case Text:
-				pane.getChildren().add(this.createTextField(teleop.name, teleop.value.get(0).toString(), 15, new Insets(5, 0, 5, 0)));
+				pane.getChildren().add(
+						this.createTextField(teleop.name, teleop.value.get(0).toString(), 15, new Insets(5, 0, 5, 0)));
 				break;
 			default:
 				Debugger.d(this.getClass(), "Unknown datatype for " + teleop.name);
@@ -262,11 +257,11 @@ public class DataCollection {
 				javax.json.JsonObject checkBoxes = endgame.value.get(0).asJsonObject();
 				String[] keys = checkBoxes.keySet().toArray(new String[checkBoxes.size()]);
 				for (int index = 0; index < checkBoxes.size(); index++) {
-					// Get the current key at the index, and get the object value. 
+					// Get the current key at the index, and get the object value.
 					// This is the name of the radio button, and if this checked
 					String key = keys[index];
 					boolean checked = Boolean.parseBoolean(checkBoxes.get(key).toString());
-					pane.getChildren().add(this.createRadioButton(key, checked, 15, group, new Insets(5,0,5,0)));
+					pane.getChildren().add(this.createRadioButton(key, checked, 15, group, new Insets(5, 0, 5, 0)));
 				}
 				break;
 			case Number:
@@ -281,7 +276,8 @@ public class DataCollection {
 								Integer.parseInt(endgame.value.get(0).toString()), new Insets(5, 0, 5, 0)));
 				break;
 			case Text:
-				pane.getChildren().add(this.createTextField(endgame.name, endgame.value.get(0).toString(), 15, new Insets(5, 0, 5, 0)));
+				pane.getChildren().add(this.createTextField(endgame.name, endgame.value.get(0).toString(), 15,
+						new Insets(5, 0, 5, 0)));
 				break;
 			default:
 				Debugger.d(this.getClass(), "Unknown datatype for " + endgame.name);
@@ -353,8 +349,9 @@ public class DataCollection {
 		VBox.setMargin(spinner, insets);
 		return spinner;
 	}
-	
-	private RadioButton createRadioButton(String id, boolean isSelected, int fontSize, ToggleGroup togglegroup, Insets insets) {
+
+	private RadioButton createRadioButton(String id, boolean isSelected, int fontSize, ToggleGroup togglegroup,
+			Insets insets) {
 		RadioButton button = new RadioButton(id);
 		button.setSelected(isSelected);
 		button.setFont(new Font("Arial", fontSize));

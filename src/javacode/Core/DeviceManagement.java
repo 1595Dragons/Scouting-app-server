@@ -11,9 +11,11 @@ import javafx.scene.control.Label;
 
 public class DeviceManagement {
 
+	MainPanel mainPanel = new MainPanel();
+	
 	public void deviceConnected(String deviceName) {
 		Debugger.d(getClass(), "Device connected: " + deviceName);
-		for (Label deviceText : MainPanel.connectedDevices) {
+		for (Label deviceText : mainPanel.connectedDevices) {
 			if (deviceText.getText().equals("None")) {
 				deviceText.setText(deviceName);
 				break;
@@ -23,7 +25,7 @@ public class DeviceManagement {
 
 	public void deviceDisconnected(String deviceName) {
 		Debugger.d(getClass(), "Device disconnected: " + deviceName);
-		for (Label deviceText : MainPanel.connectedDevices) {
+		for (Label deviceText : mainPanel.connectedDevices) {
 			if (deviceText.getText().equals(deviceName)) {
 				deviceText.setText("None");
 				break;
@@ -32,7 +34,7 @@ public class DeviceManagement {
 	}
 
 	public void reset() {
-		for (Label deviceText : MainPanel.connectedDevices) {
+		for (Label deviceText : mainPanel.connectedDevices) {
 			deviceText.setText("None");
 		}
 	}

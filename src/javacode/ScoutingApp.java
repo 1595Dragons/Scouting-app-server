@@ -80,7 +80,7 @@ public class ScoutingApp extends Application {
 		
 		// Check if the database is valid
 		if (!database.validateDatabase()) {
-			mainPanel.log("Database is invalid, creating new database", true);
+			MainPanel.log("Database is invalid, creating new database", true);
 			try {
 				database.createDatabase();
 			} catch (IOException | SQLException e) {
@@ -104,7 +104,7 @@ public class ScoutingApp extends Application {
 				// Create a UUID for SPP, and then create the URL
 				UUID uuid = new UUID("1101", true);
 				String connectionString = "btspp://localhost:" + uuid + ";name=DragonSPPServer";
-				mainPanel.log("Connection URL: " + connectionString, false);
+				MainPanel.log("Connection URL: " + connectionString, false);
 
 				try {
 					streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
@@ -118,7 +118,7 @@ public class ScoutingApp extends Application {
 				MainPanel.logError(e);
 			}
 		} else {
-			mainPanel.log("Bluetooth not enabled", true);
+			MainPanel.log("Bluetooth not enabled", true);
 		}
 
 	}

@@ -49,8 +49,6 @@ public class Bluetooth {
 		// Wait for client connection
 		public void run() {
 
-			MainPanel debug = new MainPanel();
-
 			if (connection != null) {
 				synchronized (connection) {
 
@@ -77,7 +75,7 @@ public class Bluetooth {
 							try {
 								lineRead = bufferedReader.readLine();
 								if (lineRead == null) {
-									debug.log(String.format("%s (%s) has disconnected", client.getFriendlyName(false),
+									MainPanel.log(String.format("%s (%s) has disconnected", client.getFriendlyName(false),
 											client.getBluetoothAddress()), false);
 								}
 							} catch (IOException e) {
@@ -116,7 +114,7 @@ public class Bluetooth {
 					}
 				}
 			} else {
-				debug.log("Bluetooth connection is null!\nCannot run on null stream", true);
+				MainPanel.log("Bluetooth connection is null!\nCannot run on null stream", true);
 			}
 		}
 	}

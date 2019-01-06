@@ -4,25 +4,21 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import javacode.Core.Debugger;
-import javacode.Core.NodeHelper;
 import javacode.FileManager.Database;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -31,6 +27,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -38,14 +35,9 @@ import javafx.util.Callback;
 
 public class ViewData {
 
-	private static boolean isVisible = false;
-	private static Stage stage;
+	private Stage stage = new Stage();
 
-	private Label SQLReturn;
-	private Button ExecuteSQL;
-	private TextField SQLField;
-
-	public Scene ViewDataScene() throws IOException {
+	public Scene ViewDataScene() {
 
 		TabPane root = null;
 
@@ -58,130 +50,87 @@ public class ViewData {
 			root = FXMLLoader.load(path);
 		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
 		}
 
-		if (root != null) {
+		final Tab rawDataTab = root.getTabs().get(0), calculatedDataTab = root.getTabs().get(1),
+				executeSQLTab = root.getTabs().get(2);
+		final HBox submitSQLArea = ((HBox) ((VBox) executeSQLTab.getContent()).getChildren().get(0));
 
-			ArrayList<Node> Nodes = new NodeHelper().getAllNodesFromParent(root);
-			for (Node node : Nodes) {
-				if (node.getId() != null) {
-					if (node.getId().equals("sqlQuery")) {
-						SQLField = (TextField) node;
-					} else if (node.getId().equals("execute")) {
-						ExecuteSQL = (Button) node;
-					} else if (node.getId().equals("returnedSQL")) {
-						SQLReturn = (Label) node;
-					} else {
-						Debugger.d(getClass(),
-								String.format("Unused node: (type %s) %s", node.getClass().getName(), node.getId()));
-					}
+		final TextField SQLField = ((TextField) submitSQLArea.getChildren().get(0));
+		final Label SQLReturn = ((Label) ((ScrollPane) ((VBox) executeSQLTab.getContent()).getChildren().get(1))
+				.getContent());
+
+		root.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+			@Override
+			public void changed(ObservableValue<? extends Tab> observable, Tab oldTab, Tab newTab) {
+				if (newTab.equals(rawDataTab)) {
+					Debugger.d(this.getClass(), "Raw data tab is selected");
+					generateRawDataTable((BorderPane) rawDataTab.getContent());
+				} else if (newTab.equals(calculatedDataTab)) {
+					Debugger.d(this.getClass(), "Calculated data tab is selected");
+					generateCalculatedDataTable((BorderPane) calculatedDataTab.getContent());
+				}
+
+				if (oldTab.equals(rawDataTab)) {
+					Debugger.d(this.getClass(), "Raw data tab is not selected");
+					unloadDataTable((BorderPane) rawDataTab.getContent());
+				} else if (oldTab.equals(calculatedDataTab)) {
+					Debugger.d(this.getClass(), "Calculated data tab is selected");
+					unloadDataTable((BorderPane) calculatedDataTab.getContent());
 				}
 			}
+		});
 
-			final Tab rawDataTab = root.getTabs().get(0), calculatedDataTab = root.getTabs().get(1);
+		// Get the refresh button for the raw data tab
+		((Button) (((HBox) ((BorderPane) rawDataTab.getContent()).getBottom()).getChildren().get(1)))
+				.setOnAction((event) -> {
+					// Refresh the table
+					Debugger.d(this.getClass(), "Refreshing raw data");
+					unloadDataTable((BorderPane) rawDataTab.getContent());
+					generateRawDataTable((BorderPane) rawDataTab.getContent());
+				});
 
-			root.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
-				@Override
-				public void changed(ObservableValue<? extends Tab> observable, Tab oldTab, Tab newTab) {
-					if (newTab.equals(rawDataTab)) {
-						Debugger.d(this.getClass(), "Raw data tab is selected");
-						generateRawDataTable((BorderPane) rawDataTab.getContent());
-					} else if (newTab.equals(calculatedDataTab)) {
-						Debugger.d(this.getClass(), "Calculated data tab is selected");
-						generateCalculatedDataTable((BorderPane) calculatedDataTab.getContent());
-					}
-
-					if (oldTab.equals(rawDataTab)) {
-						Debugger.d(this.getClass(), "Raw data tab is not selected");
-						unloadDataTable((BorderPane) rawDataTab.getContent());
-					} else if (oldTab.equals(calculatedDataTab)) {
-						Debugger.d(this.getClass(), "Calculated data tab is selected");
-						unloadDataTable((BorderPane) calculatedDataTab.getContent());
-					}
-				}
-			});
-
-			// Get the refresh button for the raw data tab
-			((Button) (((HBox) ((BorderPane) rawDataTab.getContent()).getBottom()).getChildren().get(1)))
-					.setOnAction(new EventHandler<ActionEvent>() {
-						@Override
-						public void handle(ActionEvent event) {
-							// Refresh the table
-							Debugger.d(this.getClass(), "Refreshing raw data");
-							unloadDataTable((BorderPane) rawDataTab.getContent());
-							generateRawDataTable((BorderPane) rawDataTab.getContent());
-						}
-					});
-
-			// Get the export button
-			((Button) (((HBox) ((BorderPane) rawDataTab.getContent()).getBottom()).getChildren().get(0)))
-					.setOnAction(new EventHandler<ActionEvent>() {
-						@Override
-						public void handle(ActionEvent event) {
-							FileChooser destination = new FileChooser();
-							destination.setInitialFileName("scouting-data.csv");
-							destination.setSelectedExtensionFilter(new ExtensionFilter("*.csv", "*.csv"));
-							destination.setInitialDirectory(new File(System.getProperty("user.dir")));
-							File csv = destination.showSaveDialog(ViewData.stage);
-							if (csv != null) {
-								Debugger.d(this.getClass(), "Chosen file location: " + csv.getAbsolutePath());
-								new Database().exportToCSV(csv);
-							}
-						}
-					});
-
-			// Get the refresh button for the calculated data tab
-			((Button) ((BorderPane) calculatedDataTab.getContent()).getBottom())
-					.setOnAction(new EventHandler<ActionEvent>() {
-						@Override
-						public void handle(ActionEvent event) {
-							// Refresh the table
-							Debugger.d(this.getClass(), "Refreshing raw data");
-							unloadDataTable((BorderPane) calculatedDataTab.getContent());
-							generateCalculatedDataTable((BorderPane) calculatedDataTab.getContent());
-						}
-					});
-
-			if (ExecuteSQL != null && SQLField != null && SQLReturn != null) {
-				ExecuteSQL.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent arg0) {
-						Database sql = new Database();
-						try {
-							String result = sql.executeSQL(SQLField.getText());
-							SQLReturn.setText(result);
-						} catch (SQLException e) {
-							SQLReturn.setText(e.getMessage());
-							return;
-						}
+		// Get the export button
+		((Button) (((HBox) ((BorderPane) rawDataTab.getContent()).getBottom()).getChildren().get(0)))
+				.setOnAction((event) -> {
+					FileChooser destination = new FileChooser();
+					destination.setInitialFileName("scouting-data.csv");
+					destination.setSelectedExtensionFilter(new ExtensionFilter("*.csv", "*.csv"));
+					destination.setInitialDirectory(new File(System.getProperty("user.dir")));
+					File csv = destination.showSaveDialog(stage);
+					if (csv != null) {
+						Debugger.d(this.getClass(), "Chosen file location: " + csv.getAbsolutePath());
+						new Database().exportToCSV(csv);
 					}
 				});
+
+		// Get the refresh button for the calculated data tab
+		((Button) ((BorderPane) calculatedDataTab.getContent()).getBottom()).setOnAction((event) -> {
+			// Refresh the table
+			Debugger.d(this.getClass(), "Refreshing raw data");
+			unloadDataTable((BorderPane) calculatedDataTab.getContent());
+			generateCalculatedDataTable((BorderPane) calculatedDataTab.getContent());
+		});
+
+		((Button) submitSQLArea.getChildren().get(1)).setOnAction((event) -> {
+			Database sql = new Database();
+			try {
+				String result = sql.executeSQL(SQLField.getText());
+				SQLReturn.setText(result);
+			} catch (SQLException e) {
+				SQLReturn.setText(e.getMessage());
+				return;
 			}
+		});
 
-			Scene scene = new Scene(root);
-			return scene;
+		Scene scene = new Scene(root);
+		return scene;
 
-		} else {
-			throw new IOException("Cannot view data dialog FXML");
-		}
 	}
 
 	public Stage getStage() {
 		return stage;
-	}
-
-	public void setStage(Stage stage) {
-		ViewData.stage = stage;
-	}
-
-	public boolean getIsVisible() {
-		Debugger.d(getClass(), "Is view data dialog visible: " + isVisible);
-		return isVisible;
-	}
-
-	public void setIsVisible(boolean value) {
-		Debugger.d(getClass(), "Setting view data dialog visibility: " + value);
-		isVisible = value;
 	}
 
 	private void generateRawDataTable(BorderPane pane) {
