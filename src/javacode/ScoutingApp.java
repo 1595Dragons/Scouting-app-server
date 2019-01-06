@@ -3,63 +3,41 @@ package javacode;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.UUID;
-import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnectionNotifier;
 
 import javacode.Core.Bluetooth;
 import javacode.Core.Debugger;
 import javacode.Core.DeviceManagement;
-import javacode.Core.Updater;
 import javacode.FileManager.Config;
 import javacode.FileManager.Database;
 import javacode.UI.MainPanel;
-import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
-public class ScoutingApp extends Application {
+public class ScoutingApp extends javafx.application.Application {
 
 	public static boolean debug;
 	public static StreamConnectionNotifier streamConnNotifier = null;
 	public static boolean stopRequested = false;
-	
+
 	public static Config config = new Config();
 
 	@Override
-	public void start(Stage primaryWindow) {
-		
-		// Check for update
-		if (Updater.updateAvalible()) {
-			Updater.showUpdatePrompt();
-		}
-		
+	public void start(javafx.stage.Stage primaryWindow) {
 
 		// Setup the main panel for the user
 		MainPanel mainPanel = new MainPanel();
 
-		try {
-			primaryWindow.setScene(mainPanel.loadMainPanel());
-			primaryWindow.setTitle("1595 Scouting app");
-			primaryWindow.setOnCloseRequest(new EventHandler<WindowEvent>() {
-				@Override
-				public void handle(WindowEvent event) {
-					stopRequested = true;
-				}
-			});
-			primaryWindow.show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		primaryWindow.setScene(mainPanel.loadMainPanel());
+		primaryWindow.setTitle("1595 Scouting app");
+		primaryWindow.setOnCloseRequest((event) -> stopRequested = true);
+		primaryWindow.show();
 
 		// Check for valid config
 		try {
 			config.validateConfig();
-		} catch (IOException e1) {
+		} catch (IOException e) {
 			// If config validation fails, just return
-			MainPanel.logError(e1);
+			MainPanel.logError(e);
 			return;
 		}
 
@@ -67,17 +45,17 @@ public class ScoutingApp extends Application {
 		Database database = new Database();
 		boolean databaseExists = database.databaseExists(true);
 		Debugger.d(getClass(), "Database exists: " + databaseExists);
-		
-		
+
 		// If no database exists, create one
 		if (!databaseExists) {
 			try {
 				database.createDatabase();
 			} catch (IOException | SQLException e) {
 				MainPanel.logError(e);
+				return;
 			}
 		}
-		
+
 		// Check if the database is valid
 		if (!database.validateDatabase()) {
 			MainPanel.log("Database is invalid, creating new database", true);
@@ -87,15 +65,17 @@ public class ScoutingApp extends Application {
 				MainPanel.logError(e);
 				return;
 			}
-			
+
 		}
-		
+
 		// Check if bluetooth is possible
 		Bluetooth bluetooth = new Bluetooth();
 
 		if (bluetooth.isEnabled()) {
 
-			new DeviceManagement().reset();
+			DeviceManagement devices = new DeviceManagement();
+
+			devices.reset();
 			Debugger.d(getClass(), "Finsihed resetting device names");
 
 			try {
@@ -107,14 +87,15 @@ public class ScoutingApp extends Application {
 				MainPanel.log("Connection URL: " + connectionString, false);
 
 				try {
-					streamConnNotifier = (StreamConnectionNotifier) Connector.open(connectionString);
+					streamConnNotifier = (StreamConnectionNotifier) javax.microedition.io.Connector
+							.open(connectionString);
 				} catch (IOException e) {
 					MainPanel.logError(e);
 				}
 
-				new DeviceManagement().new HandleIncommingDevices().start();
+				devices.new HandleIncommingDevices().start();
 
-			} catch (BluetoothStateException e) {
+			} catch (javax.bluetooth.BluetoothStateException e) {
 				MainPanel.logError(e);
 			}
 		} else {

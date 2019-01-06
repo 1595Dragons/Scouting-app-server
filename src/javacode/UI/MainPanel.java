@@ -1,19 +1,12 @@
 package javacode.UI;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URL;
 import java.util.ArrayList;
 
-import javacode.Core.Debugger;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class MainPanel {
@@ -25,18 +18,18 @@ public class MainPanel {
 
 	public ArrayList<Label> connectedDevices = new ArrayList<Label>();
 
-	public Scene loadMainPanel() throws IOException {
+	public Scene loadMainPanel() {
 
-		VBox root = null;
+		javafx.scene.layout.VBox root = null;
 
 		// Get the path of the main panel's FXML file
-		URL path = getClass().getClassLoader().getResource("javacode/fxml/MainPanel.fxml");
-		Debugger.d(getClass(), "Path: " + path.toString());
+		java.net.URL path = getClass().getClassLoader().getResource("javacode/fxml/MainPanel.fxml");
+		javacode.Core.Debugger.d(getClass(), "Path: " + path.toString());
 
 		// Load the FXML from the layout file
 		try {
-			root = FXMLLoader.load(path);
-		} catch (IOException e) {
+			root = javafx.fxml.FXMLLoader.load(path);
+		} catch (java.io.IOException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -45,7 +38,7 @@ public class MainPanel {
 		macAddressHeader = (Label) root.getChildren().get(0);
 
 		// Assign the 'console'
-		console = ((Label) ((ScrollPane) root.getChildren().get(2)).getContent());
+		console = ((Label) ((javafx.scene.control.ScrollPane) root.getChildren().get(2)).getContent());
 
 		// Setup the device headers
 		HBox deviceBank = (HBox) root.getChildren().get(4);
@@ -113,7 +106,7 @@ public class MainPanel {
 
 	public static void logError(Exception e) {
 		StringWriter sw = new StringWriter();
-		e.printStackTrace(new PrintWriter(sw));
+		e.printStackTrace(new java.io.PrintWriter(sw));
 		console.setTextFill(Color.RED);
 		System.err.println(String.format("Error: %s\n%s", e.getMessage(), sw.toString()));
 		console.setText(String.format("%s\n%s", e.getMessage(), sw.toString()));

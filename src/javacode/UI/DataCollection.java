@@ -1,21 +1,11 @@
 package javacode.UI;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import javacode.ScoutingApp;
 import javacode.Core.Debugger;
-import javacode.Core.Match.Autonomous;
-import javacode.Core.Match.Endgame;
-import javacode.Core.Match.TeleOp;
-import javacode.FileManager.Database;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -47,12 +37,12 @@ public class DataCollection {
 		VBox root = null;
 
 		// Get the path of the main panel's FXML file
-		URL path = getClass().getClassLoader().getResource("javacode/fxml/DataPage.fxml");
+		java.net.URL path = getClass().getClassLoader().getResource("javacode/fxml/DataPage.fxml");
 		Debugger.d(getClass(), "Path: " + path.toString());
 
 		try {
-			root = FXMLLoader.load(path);
-		} catch (IOException e) {
+			root = javafx.fxml.FXMLLoader.load(path);
+		} catch (java.io.IOException e) {
 			MainPanel.logError(e);
 			return null;
 		}
@@ -69,9 +59,8 @@ public class DataCollection {
 
 		this.generateFromConfig(contentpane);
 
-		((Button) buttons.getChildren().get(0)).setOnAction((event) -> {
-			stage.close();
-		});
+		// Setup the cancel button
+		((Button) buttons.getChildren().get(0)).setOnAction((event) -> stage.close());
 
 		((Button) buttons.getChildren().get(1)).setOnAction((event) -> {
 			VBox content = (VBox) (contentpane.getContent());
@@ -101,7 +90,9 @@ public class DataCollection {
 				if (node instanceof CheckBox) {
 					data[index][1] = ((CheckBox) node).isSelected() ? "1" : "0";
 				} else if (node instanceof Spinner) {
-					data[index][1] = (String) Integer.toString(((Spinner<Integer>) node).getValue());
+					@SuppressWarnings("unchecked")
+					Spinner<Integer> spinner = (Spinner<Integer>) node;
+					data[index][1] = (String) Integer.toString(spinner.getValue());
 				} else if (node instanceof RadioButton) {
 					data[index][1] = ((RadioButton) node).isSelected() ? "1" : "0";
 				} else if (node instanceof TextArea) {
@@ -114,7 +105,7 @@ public class DataCollection {
 			}
 
 			// Update the database
-			new Database().updateDatabase(teamNumber, data);
+			new javacode.FileManager.Database().updateDatabase(teamNumber, data);
 
 			stage.close();
 		});
@@ -136,7 +127,7 @@ public class DataCollection {
 		pane.getChildren().add(this.createLabel("Autonomous:", 20, new Insets(5, 0, 5, 0)));
 
 		// Get the autonomous fields from the config
-		for (Autonomous autonomous : ScoutingApp.config.matchData.autonomousData) {
+		for (javacode.Core.Match.Autonomous autonomous : ScoutingApp.config.matchData.autonomousData) {
 
 			switch (autonomous.datatype) {
 			case Boolean:
@@ -188,7 +179,7 @@ public class DataCollection {
 		pane.getChildren().add(this.createLabel("TeleOp:", 20, new Insets(20, 0, 5, 0)));
 
 		// Get the teleop fields from the config
-		for (TeleOp teleop : ScoutingApp.config.matchData.teleopData) {
+		for (javacode.Core.Match.TeleOp teleop : ScoutingApp.config.matchData.teleopData) {
 
 			switch (teleop.datatype) {
 			case Boolean:
@@ -240,7 +231,7 @@ public class DataCollection {
 		pane.getChildren().add(this.createLabel("End game:", 20, new Insets(20, 0, 5, 0)));
 
 		// Get the endgame fields from the config
-		for (Endgame endgame : ScoutingApp.config.matchData.endgameData) {
+		for (javacode.Core.Match.Endgame endgame : ScoutingApp.config.matchData.endgameData) {
 
 			switch (endgame.datatype) {
 			case Boolean:
@@ -294,7 +285,7 @@ public class DataCollection {
 		// Now add the comment box
 		TextArea comments = new TextArea();
 		comments.setFont(new Font("Arial", 15));
-		comments.setCursor(Cursor.TEXT);
+		comments.setCursor(javafx.scene.Cursor.TEXT);
 		comments.setWrapText(true);
 		comments.setStyle("-fx-background-color: WHITE;");
 		comments.setPromptText("Enter comments here");
@@ -339,12 +330,9 @@ public class DataCollection {
 		spinner.setMinHeight(Double.NEGATIVE_INFINITY);
 		spinner.setMinWidth(Double.NEGATIVE_INFINITY);
 		// https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx
-		spinner.getEditor().textProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if (!newValue.matches("\\d*")) {
-					spinner.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
-				}
+		spinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.matches("\\d*")) {
+				spinner.getEditor().setText(newValue.replaceAll("[^\\d]", ""));
 			}
 		});
 		spinner.setId(id);

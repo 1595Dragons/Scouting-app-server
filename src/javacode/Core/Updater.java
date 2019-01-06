@@ -26,6 +26,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
+@Deprecated
 public class Updater {
 	/**
 	 * The URL of the version file.

@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -44,7 +42,7 @@ public class Database {
 
 		// Execute the query
 		try {
-			executeSQL(query);
+			this.executeSQL(query);
 			MainPanel.log("Successfully written data for team " + teamNumber, false);
 		} catch (SQLException e) {
 			MainPanel.logError(e);
@@ -160,52 +158,7 @@ public class Database {
 		return exists;
 	}
 
-	public String executeSQL(String query) throws SQLException {
-		Debugger.d(getClass(), "Executing query: " + query);
-
-		// Create the return variable
-		String result = "";
-
-		// Get the database connection
-		Connection databaseConnection = null;
-
-		try {
-			databaseConnection = this.getDatabaseConnection();
-		} catch (ClassNotFoundException e) {
-			MainPanel.logError(e);
-			return null;
-		}
-
-		// Execute the following only if the database connection isn't null
-		if (databaseConnection != null) {
-
-			// Prepare the query to prevent SQL injection attacks
-			PreparedStatement SQLStatement = databaseConnection.prepareStatement(query);
-
-			// If the prepared statement isn't null, go ahead and execute it
-			if (SQLStatement != null) {
-
-				if (query.toUpperCase().startsWith("SELECT")) {
-					ResultSet resultset = SQLStatement.executeQuery();
-
-					result = resultSetToString(resultset);
-				} else {
-					SQLStatement.execute();
-				}
-
-				// Close the statement at the end, to free up resources
-				SQLStatement.close();
-
-			}
-			// Close the database connection
-			databaseConnection.close();
-		}
-		// Return the result of the execution
-		Debugger.d(getClass(), "Result of execution: " + result);
-		return result;
-	}
-
-	public ResultSet executeResult(String query) throws SQLException {
+	public ResultSet executeSQL(String query) throws SQLException {
 		Debugger.d(getClass(), "Executing query: " + query);
 
 		// Create the return variable
@@ -225,7 +178,7 @@ public class Database {
 		if (databaseConnection != null) {
 
 			// Prepare the query to prevent SQL injection attacks
-			PreparedStatement SQLStatement = databaseConnection.prepareStatement(query);
+			java.sql.PreparedStatement SQLStatement = databaseConnection.prepareStatement(query);
 
 			// If the prepared statement isn't null, go ahead and execute it
 			if (SQLStatement != null) {
@@ -292,6 +245,9 @@ public class Database {
 				currentHeaderNames[i - 1] = result.getMetaData().getColumnName(i);
 				Debugger.d(this.getClass(), "Current header name: " + currentHeaderNames[i - 1]);
 			}
+
+			// Close the result when done
+			result.close();
 
 			// Get the correct headers
 			ArrayList<String> correctHeaderNames = new ArrayList<String>();
@@ -360,41 +316,49 @@ public class Database {
 		// Load the SQLite library drivers
 		Debugger.d(getClass(), "SQLite driver: " + Class.forName("org.sqlite.JDBC"));
 
-		return DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
+		return java.sql.DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
 	}
 
-	public static String resultSetToString(ResultSet resultset) throws SQLException {
+	public static String resultSetToString(ResultSet resultset) {
 		String result = "";
 
 		// Get the result as a string
 		// https://coderwall.com/p/609ppa/printing-the-result-of-resultset
-		ResultSetMetaData meta = resultset.getMetaData();
+		try {
+			ResultSetMetaData meta = resultset.getMetaData();
 
-		// Get the number of columns
-		final int columns = meta.getColumnCount();
+			// Get the number of columns
+			final int columns = meta.getColumnCount();
 
-		// Get the headers
-		for (int i = 1; i <= columns; i++) {
-			result += meta.getColumnName(i) + "\t|\t";
-		}
-
-		// Add a new line
-		result += "\n";
-
-		// Run through each row
-		while (resultset.next()) {
-			// Iterator over all appropriate columns, SQL starts at 1 though... REEEEEEEEEEE
+			// Get the headers
 			for (int i = 1; i <= columns; i++) {
-				result += resultset.getString(i);
-				if (i != columns) {
-					result += "\t|\t";
-				} else {
-					result += "\n";
+				result += meta.getColumnName(i) + "\t|\t";
+			}
+
+			// Add a new line
+			result += "\n";
+
+			// Run through each row
+			while (resultset.next()) {
+				// Iterator over all appropriate columns, SQL starts at 1 though... REEEEEEEEEEE
+				for (int i = 1; i <= columns; i++) {
+					result += resultset.getString(i);
+					if (i != columns) {
+						result += "\t|\t";
+					} else {
+						result += "\n";
+					}
 				}
 			}
-		}
 
-		return result;
+			resultset.close();
+
+			return result;
+
+		} catch (SQLException e) {
+			MainPanel.logError(e);
+			return "";
+		}
 	}
 
 	public void exportToCSV(File file) {
@@ -402,7 +366,7 @@ public class Database {
 
 		// Get everything out of the database
 		try {
-			ResultSet result = this.executeResult("SELECT * FROM data");
+			ResultSet result = this.executeSQL("SELECT * FROM data");
 
 			ResultSetMetaData meta = result.getMetaData();
 

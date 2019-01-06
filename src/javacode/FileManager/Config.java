@@ -1,22 +1,14 @@
 package javacode.FileManager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonReader;
 import javax.json.stream.JsonParsingException;
 
-import javacode.ScoutingApp;
 import javacode.Core.Debugger;
 import javacode.Core.Match;
-import javacode.Core.Match.Autonomous;
-import javacode.Core.Match.Endgame;
-import javacode.Core.Match.TeleOp;
 import javacode.UI.MainPanel;
 
 /**
@@ -83,10 +75,10 @@ public class Config {
 
 	private void loadConfig() throws JsonParsingException {
 
-		JsonReader reader = null;
+		javax.json.JsonReader reader = null;
 		try {
-			reader = Json.createReader(new FileReader(configLocation));
-		} catch (FileNotFoundException e) {
+			reader = javax.json.Json.createReader(new java.io.FileReader(configLocation));
+		} catch (java.io.FileNotFoundException e) {
 			MainPanel.logError(e);
 		}
 
@@ -116,16 +108,16 @@ public class Config {
 		;
 
 		// Validation, only for debug mode though
-		if (ScoutingApp.debug) {
-			for (Autonomous autoCheck : this.matchData.autonomousData) {
+		if (javacode.ScoutingApp.debug) {
+			for (javacode.Core.Match.Autonomous autoCheck : this.matchData.autonomousData) {
 				Debugger.d(this.getClass(), "Loaded autonomous name: " + autoCheck.name);
 			}
 
-			for (TeleOp teleCheck : this.matchData.teleopData) {
+			for (javacode.Core.Match.TeleOp teleCheck : this.matchData.teleopData) {
 				Debugger.d(this.getClass(), "Loaded teleop name: " + teleCheck.name);
 			}
 
-			for (Endgame endgameCheck : this.matchData.endgameData) {
+			for (javacode.Core.Match.Endgame endgameCheck : this.matchData.endgameData) {
 				Debugger.d(this.getClass(), "Loaded endgame name: " + endgameCheck.name);
 			}
 		}
