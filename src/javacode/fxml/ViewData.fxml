@@ -3,11 +3,12 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -16,11 +17,51 @@
   <tabs>
     <Tab closable="false" text="Raw data">
          <content>
-            <TableView id="table" fx:id="table" prefHeight="404.0" prefWidth="826.0" />
+            <BorderPane id="rawDataPane" fx:id="rawDataPane">
+               <bottom>
+                  <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button id="convert" fx:id="convert" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Convert to .csv" textAlignment="CENTER">
+                           <HBox.margin>
+                              <Insets bottom="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Arial" size="15.0" />
+                           </font>
+                        </Button>
+                        <Button id="refreshRawData" fx:id="refreshRawData" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Refresh" textAlignment="CENTER">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Arial" size="15.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </bottom>
+               <center>
+                  <ProgressIndicator BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
          </content></Tab>
     <Tab closable="false" text="Calculated Data">
          <content>
-            <TableView id="averages" fx:id="averages" prefHeight="200.0" prefWidth="200.0" />
+            <BorderPane>
+               <bottom>
+                  <Button id="refreshCalculatedData" fx:id="refreshCalculatedData" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Refresh" textAlignment="CENTER" BorderPane.alignment="BOTTOM_RIGHT">
+                     <BorderPane.margin>
+                        <Insets bottom="5.0" right="5.0" top="5.0" />
+                     </BorderPane.margin>
+                     <font>
+                        <Font name="Arial" size="15.0" />
+                     </font>
+                  </Button>
+               </bottom>
+               <center>
+                  <ProgressIndicator BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
          </content></Tab>
       <Tab closable="false" text="Execute SQL">
          <content>

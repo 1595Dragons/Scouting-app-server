@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -19,7 +20,9 @@ public class NodeHelper {
 				Nodes.addAll(getAllNodes(((HBox) node).getChildrenUnmodifiable()));
 			} else if (node instanceof VBox) {
 				Nodes.addAll(getAllNodes(((VBox) node).getChildrenUnmodifiable()));
-			} else if (node instanceof javafx.scene.control.ScrollPane) {
+			} else if (node instanceof BorderPane) {
+				Nodes.addAll(getAllNodes(((BorderPane) node).getChildrenUnmodifiable()));
+			} else if (node instanceof ScrollPane) {
 				Node ScrollPaneNode = ((ScrollPane) node).getContent();
 				if (ScrollPaneNode instanceof HBox) {
 					Nodes.addAll(getAllNodes(((HBox) ScrollPaneNode).getChildrenUnmodifiable()));
@@ -50,7 +53,7 @@ public class NodeHelper {
 						Nodes.addAll(getAllNodes(((HBox) node).getChildrenUnmodifiable()));
 					} else if (node instanceof VBox) {
 						Nodes.addAll(getAllNodes(((VBox) node).getChildrenUnmodifiable()));
-					} else if (node instanceof javafx.scene.control.ScrollPane) {
+					} else if (node instanceof ScrollPane) {
 						Node ScrollPaneNode = ((ScrollPane) node).getContent();
 						if (ScrollPaneNode instanceof HBox) {
 							Nodes.addAll(getAllNodes(((HBox) ScrollPaneNode).getChildrenUnmodifiable()));
@@ -59,6 +62,8 @@ public class NodeHelper {
 						} else {
 							Nodes.add(ScrollPaneNode);
 						}
+					} else if (node instanceof TabPane) {
+						Nodes.addAll(getAllNodes(((TabPane) node).getChildrenUnmodifiable()));
 					} else {
 						Nodes.add(node);
 					}

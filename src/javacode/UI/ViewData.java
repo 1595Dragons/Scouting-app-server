@@ -10,6 +10,7 @@ import javacode.Core.Debugger;
 import javacode.Core.NodeHelper;
 import javacode.FileManager.Database;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,14 +18,18 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -39,7 +44,7 @@ public class ViewData {
 
 	public Scene ViewDataScene() throws IOException {
 
-		Parent root = null;
+		TabPane root = null;
 
 		// Get the path of the main panel's FXML file
 		URL path = getClass().getClassLoader().getResource("javacode/fxml/ViewData.fxml");
@@ -54,9 +59,6 @@ public class ViewData {
 
 		if (root != null) {
 
-			// Get a table view object for the raw data
-			TableView<String[]> rawDataTable = null, calculatedDataTable = null;
-
 			ArrayList<Node> Nodes = new NodeHelper().getAllNodesFromParent(root);
 			for (Node node : Nodes) {
 				if (node.getId() != null) {
@@ -66,10 +68,6 @@ public class ViewData {
 						ExecuteSQL = (Button) node;
 					} else if (node.getId().equals("returnedSQL")) {
 						SQLReturn = (Label) node;
-					} else if (node.getId().equals("table")) {
-						rawDataTable = (TableView<String[]>) node;
-					} else if (node.getId().equals("averages")) {
-						calculatedDataTable = (TableView<String[]>) node;
 					} else {
 						Debugger.d(getClass(),
 								String.format("Unused node: (type %s) %s", node.getClass().getName(), node.getId()));
@@ -77,10 +75,52 @@ public class ViewData {
 				}
 			}
 
-			if (rawDataTable != null) {
-				this.setupRawDataView(rawDataTable);
-			}
-			this.setupCalculatedDataView(calculatedDataTable);
+			final Tab rawDataTab = root.getTabs().get(0), calculatedDataTab = root.getTabs().get(1);
+
+			root.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+				@Override
+				public void changed(ObservableValue<? extends Tab> observable, Tab oldTab, Tab newTab) {
+					if (newTab.equals(rawDataTab)) {
+						Debugger.d(this.getClass(), "Raw data tab is selected");
+						generateRawDataTable((BorderPane) rawDataTab.getContent());
+					} else if (newTab.equals(calculatedDataTab)) {
+						Debugger.d(this.getClass(), "Calculated data tab is selected");
+						generateCalculatedDataTable((BorderPane) calculatedDataTab.getContent());
+					}
+
+					if (oldTab.equals(rawDataTab)) {
+						Debugger.d(this.getClass(), "Raw data tab is not selected");
+						unloadDataTable((BorderPane) rawDataTab.getContent());
+					} else if (oldTab.equals(calculatedDataTab)) {
+						Debugger.d(this.getClass(), "Calculated data tab is selected");
+						unloadDataTable((BorderPane) calculatedDataTab.getContent());
+					}
+				}
+			});
+
+			// Get the refresh button for the raw data tab
+			((Button) (((HBox) ((BorderPane) rawDataTab.getContent()).getBottom()).getChildren().get(1)))
+					.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							// Refresh the table
+							Debugger.d(this.getClass(), "Refreshing raw data");
+							unloadDataTable((BorderPane) rawDataTab.getContent());
+							generateRawDataTable((BorderPane) rawDataTab.getContent());
+						}
+					});
+
+			// Get the refresh button for the calculated data tab
+			((Button) ((BorderPane) calculatedDataTab.getContent()).getBottom())
+					.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							// Refresh the table
+							Debugger.d(this.getClass(), "Refreshing raw data");
+							unloadDataTable((BorderPane) calculatedDataTab.getContent());
+							generateCalculatedDataTable((BorderPane) calculatedDataTab.getContent());
+						}
+					});
 
 			if (ExecuteSQL != null && SQLField != null && SQLReturn != null) {
 				ExecuteSQL.setOnAction(new EventHandler<ActionEvent>() {
@@ -124,8 +164,9 @@ public class ViewData {
 		isVisible = value;
 	}
 
-	private void setupRawDataView(TableView<String[]> table) {
-		// TODO: Auto create the table view to replace the loading icon
+	private void generateRawDataTable(BorderPane pane) {
+		TableView<String[]> table = new TableView<>();
+
 		Database db = new Database();
 
 		// Load all the data from the database
@@ -182,9 +223,12 @@ public class ViewData {
 
 		table.setItems(data);
 
+		pane.setCenter(table);
+
 	}
 
-	private void setupCalculatedDataView(TableView<String[]> table) {
+	private void generateCalculatedDataTable(BorderPane pane) {
+		TableView<String[]> table = new TableView<>();
 
 		Database db = new Database();
 
@@ -274,9 +318,16 @@ public class ViewData {
 			Debugger.d(this.getClass(), "Creating table column: " + col.getText());
 			table.getColumns().add(col);
 		}
-		
+
 		table.setItems(data);
+
+		pane.setCenter(table);
 
 	}
 
+	private void unloadDataTable(BorderPane pane) {
+		ProgressIndicator loading = new ProgressIndicator();
+		loading.setProgress(-1);
+		pane.setCenter(loading);
+	}
 }
