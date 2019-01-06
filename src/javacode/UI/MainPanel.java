@@ -26,6 +26,7 @@ public class MainPanel {
 	private static Button startScouting, viewData;
 
 	private TeamNumberDialog dialog = new TeamNumberDialog();
+	private ViewData window = new ViewData();
 
 	public static Stage stage;
 
@@ -137,7 +138,6 @@ public class MainPanel {
 
 		@Override
 		public void handle(ActionEvent event) {
-			ViewData window = new ViewData();
 
 			if (!window.getIsVisible()) {
 
