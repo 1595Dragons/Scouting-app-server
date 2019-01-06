@@ -1,27 +1,26 @@
 {
 	"Autonomous" : {
-		"Has auto" : ["Boolean", false],
-		"Number of cubes placed on switch" : ["Number", 0, 0, 25, 1],
-		"Nuber of cubes placed on scale" : ["Number", 0, 0, 25, 1]
+		"Sandstorm" : ["BooleanGroup", {
+			"Doesn't cross HAB line" : true,
+			"Uses autonomous code" : false,
+			"Uses cameras" : false
+		}],
+		"Number of hatch panels placed" : ["Number", 0, 0, 20, 1],
+		"Nuber of cargo placed" : ["Number", 0, 0, 20, 1]
 	},
 
 	"TeleOp" : {
-		"Number of cubes placed on switch" : ["Number", 0, 0, 25, 1],
-		"Nuber of cubes placed on scale" : ["Number", 0, 0, 25, 1],
-		"Number of cubes placed in exchange" : ["Number", 0, 0, 25, 1]
+		"Number of hatch panels placed" : ["Number", 0, 0, 20, 1],
+		"Nuber of cargo placed" : ["Number", 0, 0, 20, 1]
 	},
 
 	"Endgame" : {
-		"Climbing:" : ["BooleanGroup", {
-			"Cannot climb" : true,
-			"Can single climb on side" : false,
-			"Can single climb on the center" : false,
-			"Can double climb on the side" : false,
-			"Can double climb on the center" : false,
-			"Can triple climb on the side" : false,
-			"Can triple climb on the center" : false,
-			"Single ramp climb" : false,
-			"Double ramp climb" : false
+		"HAB Zone" : ["BooleanGroup", {
+			"Robot doesnt return" : true,
+			"Robot docks on platform" : false,
+			"Robot climbs on level 1" : false,
+			"Robot climbs on level 2" : false,
+			"Robot climbs on level 3" : false
 		}]
 	}
 }

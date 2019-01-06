@@ -9,7 +9,6 @@ import java.util.Arrays;
 import javacode.Core.Debugger;
 import javacode.Core.NodeHelper;
 import javacode.FileManager.Database;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -56,7 +55,7 @@ public class ViewData {
 		if (root != null) {
 
 			// Get a table view object for the raw data
-			TableView<String[]> rawDataTable = null;
+			TableView<String[]> rawDataTable = null, calculatedDataTable = null;
 
 			ArrayList<Node> Nodes = new NodeHelper().getAllNodesFromParent(root);
 			for (Node node : Nodes) {
@@ -69,6 +68,8 @@ public class ViewData {
 						SQLReturn = (Label) node;
 					} else if (node.getId().equals("table")) {
 						rawDataTable = (TableView<String[]>) node;
+					} else if (node.getId().equals("averages")) {
+						calculatedDataTable = (TableView<String[]>) node;
 					} else {
 						Debugger.d(getClass(),
 								String.format("Unused node: (type %s) %s", node.getClass().getName(), node.getId()));
@@ -79,7 +80,7 @@ public class ViewData {
 			if (rawDataTable != null) {
 				this.setupRawDataView(rawDataTable);
 			}
-			this.setupCalculatedDataView();
+			this.setupCalculatedDataView(calculatedDataTable);
 
 			if (ExecuteSQL != null && SQLField != null && SQLReturn != null) {
 				ExecuteSQL.setOnAction(new EventHandler<ActionEvent>() {
@@ -124,8 +125,6 @@ public class ViewData {
 	}
 
 	private void setupRawDataView(TableView<String[]> table) {
-		// TODO
-
 		Database db = new Database();
 
 		// Load all the data from the database
@@ -141,8 +140,6 @@ public class ViewData {
 		table.getColumns().clear();
 
 		// Then create a 2d array of the data
-		// TODO: Flip X and Y
-
 		String rows[] = result.split("\n");
 		Debugger.d(this.getClass(), "Rows: " + Arrays.toString(rows));
 		Debugger.d(this.getClass(), "Row value: " + rows.length);
@@ -154,7 +151,13 @@ public class ViewData {
 		// Setup the content of the 2d array
 		for (int x = 0; x < twod.length; x++) {
 			for (int y = 0; y < twod[0].length; y++) {
-				twod[x][y] = rows[x].replace("\t|\t", "<>").split("<>")[y];
+				try {
+					String str = rows[x].replace("\t|\t", "<>").split("<>")[y];
+					Debugger.d(this.getClass(), "Adding to 2d array: " + str);
+					twod[x][y] = str;
+				} catch (ArrayIndexOutOfBoundsException e) {
+					Debugger.d(this.getClass(), "May be blank!\n" + e.getMessage());
+				}
 			}
 		}
 
@@ -180,8 +183,100 @@ public class ViewData {
 
 	}
 
-	private void setupCalculatedDataView() {
+	private void setupCalculatedDataView(TableView<String[]> table) {
 		// TODO
+
+		Database db = new Database();
+
+		// Get a list of team numbers from the database
+		String result = "";
+		try {
+			result = db.executeSQL("SELECT DISTINCT \"Team number\" FROM data ORDER BY \"Team number\" ASC");
+		} catch (SQLException e) {
+			MainPanel.logError(e);
+		}
+
+		// Load all the data from the database
+		String rawResult = "";
+		try {
+			rawResult = db.executeSQL("SELECT * FROM data");
+		} catch (SQLException e) {
+			MainPanel.logError(e);
+		}
+
+		String[] teamNumbers = result.split("\n");
+		// Just know that for for looks, they will now start at 1 to skip the header
+		Debugger.d(this.getClass(), "Team numbers: " + Arrays.toString(teamNumbers));
+
+		// Dynamically create table headers
+		// First clear the current headers
+		table.getColumns().clear();
+
+		// Create a 2d array for the averages
+		String rows[] = rawResult.split("\n");
+		Debugger.d(this.getClass(), "Rows: " + Arrays.toString(rows));
+		Debugger.d(this.getClass(), "Row value: " + rows.length);
+		String columns[] = rows[0].replace("\t|\t", "<>").split("<>");
+		Debugger.d(this.getClass(), "Columns: " + Arrays.toString(columns));
+		Debugger.d(this.getClass(), "Column value: " + columns.length);
+		String[][] twod = new String[teamNumbers.length][columns.length - 1];
+
+		// Setup the content of the 2d array
+		for (int x = 0; x < twod.length; x++) {
+			for (int y = 0; y < twod[0].length; y++) {
+				try {
+					if (y == 0) {
+						if (x == 0) {
+							String str = rows[x].replace("\t|\t", "<>").split("<>")[y];
+							Debugger.d(this.getClass(), "Adding to 2d array: " + str);
+							twod[x][y] = str;
+						} else {
+							Debugger.d(this.getClass(), "Adding to 2d array: " + teamNumbers[y + 1]);
+							twod[x][y] = teamNumbers[y + 1];
+						}
+					} else {
+						if (x == 0) {
+							String str = rows[x].replace("\t|\t", "<>").split("<>")[y] + " (Average)";
+							Debugger.d(this.getClass(), "Adding to 2d array: " + str);
+							twod[x][y] = str;
+						} else {
+							try {
+								String query = "SELECT avg(\"" + columns[y] + "\") FROM data WHERE \"Team number\"="
+										+ teamNumbers[x];
+								String str = db.executeSQL(query).split("\n")[1];
+								Debugger.d(this.getClass(), "Adding to 2d array: " + str);
+								twod[x][y] = str;
+							} catch (SQLException e) {
+								Debugger.d(this.getClass(), "May be blank!\n" + e.getMessage());
+							}
+						}
+					}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					Debugger.d(this.getClass(), "May be blank!\n" + e.getMessage());
+				}
+			}
+		}
+
+		// https://stackoverflow.com/questions/20769723/populate-tableview-with-two-dimensional-array
+		ObservableList<String[]> data = FXCollections.observableArrayList();
+		data.addAll(Arrays.asList(twod));
+		data.remove(0);// remove titles from data
+		for (int i = 0; i < columns.length - 1; i++) {
+			TableColumn<String[], String> col = new TableColumn<String[], String>(twod[0][i]);
+			final int colNo = i;
+			col.setCellValueFactory(new Callback<CellDataFeatures<String[], String>, ObservableValue<String>>() {
+				@Override
+				public ObservableValue<String> call(CellDataFeatures<String[], String> p) {
+					return new SimpleStringProperty((p.getValue()[colNo]));
+				}
+			});
+			col.setMaxWidth(Double.MAX_VALUE);
+			Debugger.d(this.getClass(), "Creating table column: " + col.getText());
+			table.getColumns().add(col);
+		}
+		
+		table.setItems(data);
+
 	}
 
 }
