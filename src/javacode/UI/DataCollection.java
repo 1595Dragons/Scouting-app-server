@@ -22,7 +22,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -34,6 +33,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -41,130 +41,104 @@ import javafx.stage.Stage;
 public class DataCollection {
 
 	private int teamNumber;
-	private Button Submit, Cancel;
 
-	private static Stage stage;
+	private Stage stage = new Stage();
 
 	public DataCollection(int number) {
 		this.teamNumber = number;
 	}
 
-	public Scene createDataCollectionPage() throws IOException {
+	public Scene createDataCollectionPage() {
+		VBox root = null;
+
 		// Get the path of the main panel's FXML file
 		URL path = getClass().getClassLoader().getResource("javacode/fxml/DataPage.fxml");
 		Debugger.d(getClass(), "Path: " + path.toString());
 
-		// Load the FXML from the layout file
-		final Parent root = FXMLLoader.load(path);
+		try {
+			root = FXMLLoader.load(path);
+		} catch (IOException e) {
+			MainPanel.logError(e);
+			return null;
+		}
 
-		// Only proceed if root is not null
-		if (root != null) {
+		// Set the team number at the top to be that which the user is scouting
+		((Label) root.getChildren().get(0)).setText("Scouting team: " + this.teamNumber);
+		
+		// Get the scrollable pane that will house all of the dynamically generated
+		// content
+		final ScrollPane contentpane = (ScrollPane) root.getChildren().get(1);
 
-			Label teamnumberheader = null;
+		// Get the bottom row that contains the 2 buttons
+		final HBox buttons = (HBox) root.getChildrenUnmodifiable().get(2);
 
-			// Create an array of all the nodes
-			ArrayList<Node> Nodes = new ArrayList<Node>();
-			Nodes = new NodeHelper().getAllNodes(root.getChildrenUnmodifiable());
-			Debugger.d(getClass(), "List of all nodes: " + Nodes.toString());
+		this.generateFromConfig(contentpane);
 
-			for (Node node : Nodes) {
-				if (node.getId() != null) {
-					if (node.getId().equals("teamNumberHeader")) {
-						teamnumberheader = (Label) node;
-						teamnumberheader.setText("Scouting team: " + this.teamNumber);
-					} else if (node.getId().equals("CancelButton")) {
-						this.Cancel = (Button) node;
-					} else if (node.getId().equals("SubmitButton")) {
-						this.Submit = (Button) node;
-					} else {
-						Debugger.d(getClass(), String.format("Unused node: (%s) %s", node.getClass(), node.getId()));
+		((Button) buttons.getChildren().get(0)).setOnAction((event) -> {
+			stage.close();
+		});
+
+		((Button) buttons.getChildren().get(1)).setOnAction(new EventHandler<ActionEvent>() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public void handle(ActionEvent arg0) {
+				VBox content = (VBox) (contentpane.getContent());
+
+				// Create an array of all the nodes
+				ArrayList<Node> Nodes = new ArrayList<Node>(), validNodes = new ArrayList<Node>();
+				Nodes = new NodeHelper().getAllNodes(content.getChildrenUnmodifiable());
+				for (Node node : Nodes) {
+					if (node.getId() != null) {
+						Debugger.d(getClass(), String.format("Registered node for submission: (%s) %s", node.getClass(),
+								node.getId()));
+						validNodes.add(node);
+
 					}
 				}
-			}
 
-			this.generateFromConfig(root);
+				// Create a string 2d array for the data, the first array is the name, the
+				// second is the value
+				String[][] data = new String[validNodes.size()][2];
 
-			if (this.Cancel != null) {
-				this.Cancel.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent arg0) {
-						getStage().close();
+				for (int index = 0; index < validNodes.size(); index++) {
+					Node node = validNodes.get(index);
+
+					// Apply the name
+					data[index][0] = node.getId();
+
+					// Apply the value
+					if (node instanceof CheckBox) {
+						data[index][1] = ((CheckBox) node).isSelected() ? "1" : "0";
+					} else if (node instanceof Spinner) {
+						data[index][1] = (String) Integer.toString(((Spinner<Integer>) node).getValue());
+					} else if (node instanceof RadioButton) {
+						data[index][1] = ((RadioButton) node).isSelected() ? "1" : "0";
+					} else if (node instanceof TextArea) {
+						data[index][1] = String.format("\"%s\"", ((TextArea) node).getText());
+					} else {
+						Debugger.d(this.getClass(), "Unknown class for node " + node.getId());
 					}
-				});
+				}
+
+				// Update the database
+				new Database().updateDatabase(teamNumber, data);
+
+				stage.close();
 			}
+		});
 
-			if (this.Submit != null) {
-				this.Submit.setOnAction(new EventHandler<ActionEvent>() {
-					@SuppressWarnings("unchecked")
-					@Override
-					public void handle(ActionEvent arg0) {
-						VBox content = (VBox) ((ScrollPane) root.getChildrenUnmodifiable().get(1)).getContent();
-
-						// Create an array of all the nodes
-						ArrayList<Node> Nodes = new ArrayList<Node>(), validNodes = new ArrayList<Node>();
-						Nodes = new NodeHelper().getAllNodes(content.getChildrenUnmodifiable());
-						for (Node node : Nodes) {
-							if (node.getId() != null) {
-								Debugger.d(getClass(), String.format("Registered node for submission: (%s) %s",
-										node.getClass(), node.getId()));
-								validNodes.add(node);
-
-							}
-						}
-
-						// Create a string 2d array for the data, the first array is the name, the
-						// second is the value
-						String[][] data = new String[validNodes.size()][2];
-
-						for (int index = 0; index < validNodes.size(); index++) {
-							Node node = validNodes.get(index);
-
-							// Apply the name
-							data[index][0] = node.getId();
-
-							// Apply the value
-							if (node instanceof CheckBox) {
-								data[index][1] = ((CheckBox) node).isSelected() ? "1" : "0";
-							} else if (node instanceof Spinner) {
-								data[index][1] = (String) Integer.toString(((Spinner<Integer>) node).getValue());
-							} else if (node instanceof RadioButton) {
-								data[index][1] = ((RadioButton) node).isSelected() ? "1" : "0";
-							} else if (node instanceof TextArea) {
-								data[index][1] = String.format("\"%s\"", ((TextArea) node).getText());
-							} else {
-								Debugger.d(this.getClass(), "Unknown class for node " + node.getId());
-							}
-						}
-
-						// Update the database
-						new Database().updateDatabase(teamNumber, data);
-						;
-
-						getStage().close();
-					}
-				});
-			}
-
-			Scene scene = new Scene(root);
-			return scene;
-
-		} else {
-			throw new IOException("Cannot load team number dialog FXML");
-		}
+		Scene scene = new Scene(root);
+		return scene;
 	}
 
 	public Stage getStage() {
-		return stage;
+		return this.stage;
 	}
 
-	public void setStage(Stage stage) {
-		DataCollection.stage = stage;
-	}
-
-	private void generateFromConfig(Parent root) {
+	private void generateFromConfig(ScrollPane scrollpane) {
 
 		// Get the VBox that will house all of the dynamically loaded data
-		VBox pane = (VBox) ((ScrollPane) root.getChildrenUnmodifiable().get(1)).getContent();
+		VBox pane = (VBox) (scrollpane.getContent());
 
 		// Create the autonomous header label
 		Label autonomousHeader = new Label("Autonomous:");

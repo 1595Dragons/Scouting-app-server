@@ -10,7 +10,7 @@
 
 <VBox alignment="TOP_CENTER" cache="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label id="teamNumberHeader" fx:id="teamNumberHeader" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Scouting team: 0000">
+      <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="Scouting team: 0000">
          <font>
             <Font name="Arial" size="30.0" />
          </font>
@@ -20,7 +20,7 @@
       </Label>
       <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <content>
-            <VBox id="DataContence" fx:id="DataContence" alignment="CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+            <VBox alignment="CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
          </content>
          <VBox.margin>
             <Insets bottom="10.0" top="10.0" />
@@ -31,7 +31,7 @@
       </ScrollPane>
       <HBox alignment="BOTTOM_CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
          <children>
-            <Button id="CancelButton" fx:id="CancelButton" cancelButton="true" contentDisplay="RIGHT" mnemonicParsing="false" text="Cancel">
+            <Button cancelButton="true" contentDisplay="RIGHT" mnemonicParsing="false" text="Cancel">
                <font>
                   <Font name="Arial" size="15.0" />
                </font>
@@ -39,7 +39,7 @@
                   <Insets right="5.0" />
                </HBox.margin>
             </Button>
-            <Button id="SubmitButton" fx:id="SubmitButton" defaultButton="true" mnemonicParsing="false" text="Submit">
+            <Button defaultButton="true" mnemonicParsing="false" text="Submit">
                <font>
                   <Font name="Arial" size="15.0" />
                </font>

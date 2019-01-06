@@ -31,7 +31,8 @@ public class TeamNumberDialog {
 		try {
 			root = FXMLLoader.load(path);
 		} catch (IOException e) {
-			e.printStackTrace();
+			MainPanel.logError(e);
+			return null;
 		}
 
 		// Get the bottom row that contains the 2 buttons
@@ -48,33 +49,20 @@ public class TeamNumberDialog {
 					teamNumber = Integer.parseInt(teamNumberInput.getText());
 				} catch (NumberFormatException InvalidNumber) {
 					return;
-				} catch (Exception e) {
-					MainPanel.logError(e);
-					return;
 				}
 
-				try {
-					DataCollection data = new DataCollection(teamNumber);
-					Stage stage = new Stage();
-					data.setStage(stage);
-					stage.setScene(data.createDataCollectionPage());
-					stage.setTitle("Data collection");
-					stage.show();
-				} catch (IOException e) {
-					MainPanel.logError(e);
-					return;
-				}
+				DataCollection data = new DataCollection(teamNumber);
+				data.getStage().setScene(data.createDataCollectionPage());
+				data.getStage().setTitle("Data collection");
+				data.getStage().show();
 
 				stage.close();
 			}
 		});
 
 		// Setup the cancel button
-		((Button) buttons.getChildren().get(0)).setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				stage.close();
-			}
+		((Button) buttons.getChildren().get(0)).setOnAction((event) -> {
+			stage.close();
 		});
 
 		Scene scene = new Scene(root);
@@ -83,6 +71,6 @@ public class TeamNumberDialog {
 	}
 
 	public Stage getStage() {
-		return stage;
+		return this.stage;
 	}
 }
