@@ -6,18 +6,18 @@ import java.sql.SQLException;
 import javax.bluetooth.UUID;
 import javax.microedition.io.StreamConnectionNotifier;
 
-import javacode.Core.Bluetooth;
 import javacode.Core.Debugger;
-import javacode.Core.DeviceManagement;
 import javacode.FileManager.Config;
 import javacode.FileManager.Database;
 import javacode.UI.MainPanel;
+import javacode.Wireless.Bluetooth;
+import javacode.Wireless.DeviceManagement;
+import javacode.Wireless.HandleIncommingDevices;
 
 public class ScoutingApp extends javafx.application.Application {
 
 	public static boolean debug;
 	public static StreamConnectionNotifier streamConnNotifier = null;
-	public static boolean stopRequested = false;
 
 	public static Config config = new Config();
 
@@ -29,7 +29,6 @@ public class ScoutingApp extends javafx.application.Application {
 
 		primaryWindow.setScene(mainPanel.loadMainPanel());
 		primaryWindow.setTitle("1595 Scouting app");
-		primaryWindow.setOnCloseRequest((event) -> stopRequested = true);
 		primaryWindow.show();
 
 		// Check for valid config
@@ -68,17 +67,13 @@ public class ScoutingApp extends javafx.application.Application {
 
 		}
 
-		// Check if bluetooth is possible
-		Bluetooth bluetooth = new Bluetooth();
-
-		if (bluetooth.isEnabled()) {
-
-			DeviceManagement devices = new DeviceManagement();
-
-			devices.reset();
-			Debugger.d(getClass(), "Finsihed resetting device names");
-
+		if (Bluetooth.isEnabled()) {
 			try {
+				Bluetooth bluetooth = new Bluetooth();
+
+				DeviceManagement.reset();
+				Debugger.d(this.getClass(), "Finsihed resetting device names");
+
 				mainPanel.setMacAddress(bluetooth.getMACAddress());
 
 				// Create a UUID for SPP, and then create the URL
@@ -92,8 +87,18 @@ public class ScoutingApp extends javafx.application.Application {
 				} catch (IOException e) {
 					MainPanel.logError(e);
 				}
-
-				devices.new HandleIncommingDevices().start();
+				
+				HandleIncommingDevices wirelessHandler = new HandleIncommingDevices();
+				
+				Thread bluetoothThread = new Thread(wirelessHandler);
+				
+				primaryWindow.setOnCloseRequest((event) -> {
+					wirelessHandler.stop();
+					System.exit(0);
+				});
+				
+				bluetoothThread.start();
+				
 
 			} catch (javax.bluetooth.BluetoothStateException e) {
 				MainPanel.logError(e);

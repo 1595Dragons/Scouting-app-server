@@ -12,11 +12,10 @@ import javafx.scene.paint.Color;
 public class MainPanel {
 
 	private static Label macAddressHeader, console;
+	public static ArrayList<Label> connectedDevices = new ArrayList<Label>();
 
 	private TeamNumberDialog dialog = new TeamNumberDialog();
 	private ViewData window = new ViewData();
-
-	public ArrayList<Label> connectedDevices = new ArrayList<Label>();
 
 	public Scene loadMainPanel() {
 

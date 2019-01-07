@@ -1,4 +1,4 @@
-package javacode.Core;
+package javacode.Wireless;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,32 +10,30 @@ import javax.bluetooth.LocalDevice;
 import javax.bluetooth.RemoteDevice;
 import javax.microedition.io.StreamConnection;
 
+import javacode.Core.Debugger;
 import javacode.UI.MainPanel;
 
 public class Bluetooth {
-
+	
 	private LocalDevice server;
-
-	public boolean isEnabled() {
+	
+	public Bluetooth() throws BluetoothStateException {
+		this.server =  LocalDevice.getLocalDevice();
+	}
+	
+	public static boolean isEnabled() {
 		try {
-			Debugger.d(getClass(), "Bluetooth is on: " + Boolean.toString(LocalDevice.isPowerOn()));
-			return LocalDevice.isPowerOn();
+			boolean isOn =  LocalDevice.isPowerOn();
+			Debugger.d(Bluetooth.class, "Bluetooth is on: " + isOn);
+			return isOn;
 		} catch (Exception e) {
 			MainPanel.logError(e);
 			return false;
 		}
 	}
 
-	public String getMACAddress() throws BluetoothStateException {
-		if (isEnabled()) {
-			if (server != null) {
-				return server.getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase();
-			} else {
-				throw new BluetoothStateException("Bluetooth object is null");
-			}
-		} else {
-			throw new BluetoothStateException("Bluetooth is not turned on");
-		}
+	public String getMACAddress() {
+		return this.server.getBluetoothAddress().replaceAll("..(?!$)", "$0:").toUpperCase();
 	}
 
 	public class SSPServer extends Thread {
@@ -63,6 +61,7 @@ public class Bluetooth {
 						InputStream inputStream = null;
 						try {
 							inputStream = connection.openInputStream();
+							
 						} catch (IOException e) {
 							MainPanel.logError(e);
 						}
