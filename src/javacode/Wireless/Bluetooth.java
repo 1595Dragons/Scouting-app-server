@@ -22,12 +22,17 @@ public class Bluetooth {
 	}
 	
 	public static boolean isEnabled() {
-		try {
-			boolean isOn =  LocalDevice.isPowerOn();
-			Debugger.d(Bluetooth.class, "Bluetooth is on: " + isOn);
-			return isOn;
-		} catch (Exception e) {
-			MainPanel.logError(e);
+		// First, check if the operating system is windows
+		if (System.getProperty("os.name").startsWith("Windows")) {
+			try {
+				boolean isOn = LocalDevice.isPowerOn();
+				Debugger.d(Bluetooth.class, "Bluetooth is on: " + isOn);
+				return isOn;
+			} catch (Exception e) {
+				MainPanel.logError(e);
+				return false;
+			}
+		} else {
 			return false;
 		}
 	}
