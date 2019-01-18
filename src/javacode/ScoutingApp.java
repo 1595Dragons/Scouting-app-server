@@ -1,18 +1,17 @@
 package javacode;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
-import javax.bluetooth.UUID;
-import javax.microedition.io.StreamConnectionNotifier;
-
 import javacode.Core.Debugger;
 import javacode.FileManager.Config;
 import javacode.FileManager.Database;
 import javacode.UI.MainPanel;
 import javacode.Wireless.Bluetooth;
-import javacode.Wireless.DeviceManagement;
 import javacode.Wireless.HandleIncommingDevices;
+import javafx.scene.control.Label;
+
+import javax.bluetooth.UUID;
+import javax.microedition.io.StreamConnectionNotifier;
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class ScoutingApp extends javafx.application.Application {
 
@@ -21,7 +20,6 @@ public class ScoutingApp extends javafx.application.Application {
 
 	public static Config config = new Config();
 
-	@Override
 	public void start(javafx.stage.Stage primaryWindow) {
 
 		// Setup the main panel for the user
@@ -71,8 +69,11 @@ public class ScoutingApp extends javafx.application.Application {
 			try {
 				Bluetooth bluetooth = new Bluetooth();
 
-				DeviceManagement.reset();
-				Debugger.d(this.getClass(), "Finsihed resetting device names");
+				// Reset the device names
+				for (Label deviceText : MainPanel.connectedDevices) {
+					deviceText.setText("None");
+				}
+				Debugger.d(this.getClass(), "Finished resetting device names");
 
 				mainPanel.setMacAddress(bluetooth.getMACAddress());
 
@@ -89,15 +90,13 @@ public class ScoutingApp extends javafx.application.Application {
 				}
 				
 				HandleIncommingDevices wirelessHandler = new HandleIncommingDevices();
-				
-				Thread bluetoothThread = new Thread(wirelessHandler);
-				
+
 				primaryWindow.setOnCloseRequest((event) -> {
 					wirelessHandler.stop();
 					System.exit(0);
 				});
-				
-				bluetoothThread.start();
+
+				wirelessHandler.run();
 				
 
 			} catch (javax.bluetooth.BluetoothStateException e) {

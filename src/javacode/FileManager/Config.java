@@ -59,12 +59,11 @@ public class Config {
 
 		String conf = "{\n\t\"Autonomous\" : {\n\t\t\"Do the thing\" : [\"Boolean\", false]\n\t},\n\t"
 				+ "\"TeleOp\" : {\n\t\t\"Get the points\" : [\"Number\", 0, 0, 25, 1],\n\t\t\"Win\" : [\"Number\", 0, 0, 25, 1]\n\t},\n\t"
-				+ "\"Endgame\" : {\n\t\t\"Info\" : [\"Text\", \"See the readme for config documentatiuon\"]\n\t}\n}";
+				+ "\"Endgame\" : {\n\t\t\"Info\" : [\"Text\", \"See the readme for config documentation\"]\n\t}\n}";
 
 		// Write example config data to the config file
-		FileWriter writer = null;
 		try {
-			writer = new FileWriter(config);
+			FileWriter writer = new FileWriter(config);
 			writer.write(conf);
 			writer.flush();
 			writer.close();
@@ -80,6 +79,7 @@ public class Config {
 			reader = javax.json.Json.createReader(new java.io.FileReader(configLocation));
 		} catch (java.io.FileNotFoundException e) {
 			MainPanel.logError(e);
+			return;
 		}
 
 		JsonObject FullObject = reader.readObject().asJsonObject();
@@ -105,7 +105,6 @@ public class Config {
 		Debugger.d(this.getClass(), "Raw endgame json: " + rawEndGame.toString() + "\nSize: " + endgameSize);
 
 		this.matchData.endgameData = Match.matchBaseToEndgame(Match.getMatchData(rawEndGame, endgameSize));
-		;
 
 		// Validation, only for debug mode though
 		if (javacode.ScoutingApp.debug) {

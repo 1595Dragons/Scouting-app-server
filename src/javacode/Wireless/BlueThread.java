@@ -13,7 +13,7 @@ import javacode.Core.Debugger;
 import javacode.UI.MainPanel;
 import javafx.application.Platform;
 
-public class Client extends Thread {
+public class BlueThread extends Thread {
 
 	public String name;
 	
@@ -22,9 +22,8 @@ public class Client extends Thread {
 	private BufferedReader input;
 	private BufferedWriter output;
 	private StreamConnection connection;
-	private volatile boolean stopRequested = false;
 	
-	public Client(StreamConnection connection) throws IOException {
+	public BlueThread(StreamConnection connection) throws IOException {
 		this.connection = connection;
 		this.input = new BufferedReader(new InputStreamReader(this.connection.openInputStream()));
 		this.output = new BufferedWriter(new OutputStreamWriter(this.connection.openOutputStream()));
@@ -32,10 +31,10 @@ public class Client extends Thread {
 	}
 
 	public void run() {
-		DeviceManagement.deviceConnected(this.name);
+		MainPanel.addConnectedDevices(this.name);
 		// TODO: Send the phone the config file
 		
-		while (connection != null && !stopRequested) {
+		while (connection != null) {
 			String in = null;
 		
 			try {
@@ -45,16 +44,16 @@ public class Client extends Thread {
 			} catch (IOException e) {
 				Platform.runLater(() -> MainPanel.logError(e));
 			}
-			
-			if (in != null || in != "") {
+
+			if (in != null && !in.equals("")) {
 				Debugger.d(this.getClass(), "Input: " + in);
 			}
-			
+
 			// TODO: Ping the device
 			
 		}
-		
-		DeviceManagement.deviceDisconnected(this.name);
+
+		Platform.runLater(() -> MainPanel.removeConnectedDevices(this.name));
 		
 		try {
 			this.output.flush();

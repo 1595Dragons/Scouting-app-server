@@ -3,6 +3,7 @@ package javacode.UI;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
+import javacode.Core.Debugger;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,6 +33,8 @@ public class MainPanel {
 			e.printStackTrace();
 			return null;
 		}
+
+		// TODO: On close have popup box making sure you want to close. If true, request all connected devices to leave
 
 		// Assign the MAC address
 		macAddressHeader = (Label) root.getChildren().get(0);
@@ -109,5 +112,25 @@ public class MainPanel {
 		console.setTextFill(Color.RED);
 		System.err.println(String.format("Error: %s\n%s", e.getMessage(), sw.toString()));
 		console.setText(String.format("%s\n%s", e.getMessage(), sw.toString()));
+	}
+
+	public static void addConnectedDevices(String deviceName) {
+		Debugger.d(MainPanel.class, "Device connected: " + deviceName);
+		for (Label deviceText : MainPanel.connectedDevices) {
+			if (deviceText.getText().equals("None")) {
+				deviceText.setText(deviceName);
+				break;
+			}
+		}
+	}
+
+	public static void removeConnectedDevices(String deviceName) {
+		Debugger.d(MainPanel.class, "Device disconnected: " + deviceName);
+		for (Label deviceText : MainPanel.connectedDevices) {
+			if (deviceText.getText().equals(deviceName)) {
+				deviceText.setText("None");
+				break;
+			}
+		}
 	}
 }
