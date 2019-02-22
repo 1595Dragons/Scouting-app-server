@@ -10,8 +10,10 @@ import javax.bluetooth.RemoteDevice;
 import javax.microedition.io.StreamConnection;
 
 import javacode.Core.Debugger;
+import javacode.ScoutingApp;
 import javacode.UI.MainPanel;
 import javafx.application.Platform;
+import sun.applet.Main;
 
 public class BlueThread extends Thread {
 
@@ -33,7 +35,14 @@ public class BlueThread extends Thread {
 	public void run() {
 		MainPanel.addConnectedDevices(this.name);
 		// TODO: Send the phone the config file
-		
+		Request config = new Request(Request.Requests.CONFIG, ScoutingApp.config.getConfigAsJson());
+		try {
+			output.write(String.format("%s:%s", config.requests.name(), config.data.toString()));
+			output.flush();
+		} catch (IOException e) {
+			Platform.runLater(() -> MainPanel.logError(e));
+		}
+
 		while (connection != null) {
 			String in = null;
 		

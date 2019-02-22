@@ -4,6 +4,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 
 import javacode.Core.Debugger;
+import javacode.ScoutingApp;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,7 +13,8 @@ import javafx.scene.paint.Color;
 
 public class MainPanel {
 
-	private static Label macAddressHeader, console;
+	private Label macAddressHeader;
+	private static Label console;
 	public static ArrayList<Label> connectedDevices = new ArrayList<Label>();
 
 	private TeamNumberDialog dialog = new TeamNumberDialog();
@@ -40,7 +42,7 @@ public class MainPanel {
 		macAddressHeader = (Label) root.getChildren().get(0);
 
 		// Assign the 'console'
-		console = ((Label) ((javafx.scene.control.ScrollPane) root.getChildren().get(2)).getContent());
+		MainPanel.console = ((Label) ((javafx.scene.control.ScrollPane) root.getChildren().get(2)).getContent());
 
 		// Setup the device headers
 		HBox deviceBank = (HBox) root.getChildren().get(4);
@@ -98,24 +100,25 @@ public class MainPanel {
 
 	public static void log(String message, boolean error) {
 		if (error) {
-			console.setTextFill(Color.RED);
+			MainPanel.console.setTextFill(Color.RED);
 			System.err.println(message);
 		} else {
-			console.setTextFill(Color.BLACK);
+			MainPanel.console.setTextFill(Color.BLACK);
 		}
-		console.setText(message);
+		MainPanel.console.setText(message);
 	}
 
 	public static void logError(Exception e) {
 		StringWriter sw = new StringWriter();
 		e.printStackTrace(new java.io.PrintWriter(sw));
-		console.setTextFill(Color.RED);
+		MainPanel.console.setTextFill(Color.RED);
 		System.err.println(String.format("Error: %s\n%s", e.getMessage(), sw.toString()));
-		console.setText(String.format("%s\n%s", e.getMessage(), sw.toString()));
+		MainPanel.console.setText(String.format("%s\n%s", e.getMessage(), sw.toString()));
 	}
 
 	public static void addConnectedDevices(String deviceName) {
 		Debugger.d(MainPanel.class, "Device connected: " + deviceName);
+		MainPanel.log(String.format("%s connected", deviceName), false);
 		for (Label deviceText : MainPanel.connectedDevices) {
 			if (deviceText.getText().equals("None")) {
 				deviceText.setText(deviceName);
@@ -126,6 +129,7 @@ public class MainPanel {
 
 	public static void removeConnectedDevices(String deviceName) {
 		Debugger.d(MainPanel.class, "Device disconnected: " + deviceName);
+		MainPanel.log(String.format("%s disconnected", deviceName), false);
 		for (Label deviceText : MainPanel.connectedDevices) {
 			if (deviceText.getText().equals(deviceName)) {
 				deviceText.setText("None");

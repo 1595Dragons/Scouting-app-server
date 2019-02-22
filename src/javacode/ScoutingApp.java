@@ -2,8 +2,8 @@ package javacode;
 
 import javacode.Core.Debugger;
 import javacode.FileManager.Config;
-import javacode.FileManager.Database;
 import javacode.UI.MainPanel;
+import javacode.UI.ScoutingAppGUI;
 import javacode.Wireless.Bluetooth;
 import javacode.Wireless.HandleIncommingDevices;
 import javafx.scene.control.Label;
@@ -11,102 +11,12 @@ import javafx.scene.control.Label;
 import javax.bluetooth.UUID;
 import javax.microedition.io.StreamConnectionNotifier;
 import java.io.IOException;
-import java.sql.SQLException;
 
-public class ScoutingApp extends javafx.application.Application {
+public class ScoutingApp {
 
 	public static boolean debug;
-	public static StreamConnectionNotifier streamConnNotifier = null;
 
 	public static Config config = new Config();
-
-	public void start(javafx.stage.Stage primaryWindow) {
-
-		// Setup the main panel for the user
-		MainPanel mainPanel = new MainPanel();
-
-		primaryWindow.setScene(mainPanel.loadMainPanel());
-		primaryWindow.setTitle("1595 Scouting app");
-		primaryWindow.show();
-
-		// Check for valid config
-		try {
-			config.validateConfig();
-		} catch (IOException e) {
-			// If config validation fails, just return
-			MainPanel.logError(e);
-			return;
-		}
-
-		// Check if the database exists
-		Database database = new Database();
-		boolean databaseExists = database.databaseExists(true);
-		Debugger.d(getClass(), "Database exists: " + databaseExists);
-
-		// If no database exists, create one
-		if (!databaseExists) {
-			try {
-				database.createDatabase();
-			} catch (IOException | SQLException e) {
-				MainPanel.logError(e);
-				return;
-			}
-		}
-
-		// Check if the database is valid
-		if (!database.validateDatabase()) {
-			MainPanel.log("Database is invalid, creating new database", true);
-			try {
-				database.createDatabase();
-			} catch (IOException | SQLException e) {
-				MainPanel.logError(e);
-				return;
-			}
-
-		}
-
-		if (Bluetooth.isEnabled()) {
-			try {
-				Bluetooth bluetooth = new Bluetooth();
-
-				// Reset the device names
-				for (Label deviceText : MainPanel.connectedDevices) {
-					deviceText.setText("None");
-				}
-				Debugger.d(this.getClass(), "Finished resetting device names");
-
-				mainPanel.setMacAddress(bluetooth.getMACAddress());
-
-				// Create a UUID for SPP, and then create the URL
-				UUID uuid = new UUID("1101", true);
-				String connectionString = "btspp://localhost:" + uuid + ";name=DragonSPPServer";
-				MainPanel.log("Connection URL: " + connectionString, false);
-
-				try {
-					streamConnNotifier = (StreamConnectionNotifier) javax.microedition.io.Connector
-							.open(connectionString);
-				} catch (IOException e) {
-					MainPanel.logError(e);
-				}
-				
-				HandleIncommingDevices wirelessHandler = new HandleIncommingDevices();
-
-				primaryWindow.setOnCloseRequest((event) -> {
-					wirelessHandler.stop();
-					System.exit(0);
-				});
-
-				wirelessHandler.run();
-				
-
-			} catch (javax.bluetooth.BluetoothStateException e) {
-				MainPanel.logError(e);
-			}
-		} else {
-			MainPanel.log("Bluetooth not enabled", true);
-		}
-
-	}
 
 	public static void main(String[] args) {
 
@@ -126,6 +36,59 @@ public class ScoutingApp extends javafx.application.Application {
 
 		Debugger.d(ScoutingApp.class, "Debugging enabled: " + debug);
 
-		launch(args);
+		// TODO Run the GUI stuff on a new thread
+		new Thread(new ScoutingAppGUI()).run();
+
+		// TODO Run the bluetooth stuff on a new thread
+
+		if (Bluetooth.isEnabled()) {
+			/*
+			try {
+				Bluetooth bluetooth = new Bluetooth();
+
+				// Reset the device names
+				for (Label deviceText : ScoutingApp.mainPanel.connectedDevices) {
+					deviceText.setText("None");
+				}
+				Debugger.d(this.getClass(), "Finished resetting device names");
+
+				mainPanel.setMacAddress(bluetooth.getMACAddress());
+				Debugger.d(this.getClass(), "Set MAC address to: " + bluetooth.getMACAddress());
+
+				// Create a UUID for SPP, and then create the URL
+				UUID uuid = new UUID("1101", true);
+				String connectionString = "btspp://localhost:" + uuid + ";name=DragonSPPServer";
+				MainPanel.log("Connection URL: " + connectionString, false);
+				Debugger.d(this.getClass(), "Connection URL: " + connectionString);
+
+				try {
+					final HandleIncommingDevices handler = new HandleIncommingDevices((StreamConnectionNotifier) javax.microedition.io.Connector
+							.open(connectionString));
+
+					Debugger.d(this.getClass(), "Successfully created stream connection notifier");
+
+					primaryWindow.setOnCloseRequest((event) -> {
+						// TODO Disconnect all devices
+						handler.close();
+						System.exit(0);
+					});
+
+					MainPanel.log("Listening for connected devices", false);
+					Debugger.d(this.getClass(), "Foo");
+
+					handler.run();
+				} catch (IOException e) {
+					MainPanel.logError(e);
+				}
+
+			} catch (javax.bluetooth.BluetoothStateException e) {
+				MainPanel.logError(e);
+			}
+			*/
+		} else {
+			MainPanel.log("Bluetooth not enabled", true);
+		}
+
 	}
+
 }

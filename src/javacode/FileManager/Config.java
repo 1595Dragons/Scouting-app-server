@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.json.stream.JsonParsingException;
 
 import javacode.Core.Debugger;
@@ -74,9 +76,9 @@ public class Config {
 
 	private void loadConfig() throws JsonParsingException {
 
-		javax.json.JsonReader reader = null;
+		JsonReader reader = null;
 		try {
-			reader = javax.json.Json.createReader(new java.io.FileReader(configLocation));
+			reader = Json.createReader(new java.io.FileReader(configLocation));
 		} catch (java.io.FileNotFoundException e) {
 			MainPanel.logError(e);
 			return;
@@ -120,5 +122,24 @@ public class Config {
 				Debugger.d(this.getClass(), "Loaded endgame name: " + endgameCheck.name);
 			}
 		}
+	}
+
+	public JsonObject getConfigAsJson() {
+
+		JsonReader reader = null;
+		try {
+			reader = Json.createReader(new java.io.FileReader(configLocation));
+		} catch (java.io.FileNotFoundException e) {
+			MainPanel.logError(e);
+			return null;
+		}
+
+		JsonObject FullObject = reader.readObject().asJsonObject();
+		Debugger.d(this.getClass(), "Full Json: " + FullObject.toString());
+
+		// Close the reader
+		reader.close();
+
+		return FullObject;
 	}
 }
