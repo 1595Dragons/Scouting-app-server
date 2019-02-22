@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javax.microedition.io.StreamConnectionNotifier;
 import java.io.IOException;
 
+@Deprecated
 public class HandleIncommingDevices implements Runnable {
 
 	private final StreamConnectionNotifier notifier;
@@ -20,11 +21,7 @@ public class HandleIncommingDevices implements Runnable {
 
 				// Check if receiving a connection
 				// On connection, open it, and pass it to a newly created thread
-
-				System.out.println("Loop");
-
 				javax.microedition.io.StreamConnection connection;
-
 				try {
 					connection = notifier.acceptAndOpen();
 					/*
