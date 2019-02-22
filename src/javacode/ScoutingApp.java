@@ -65,10 +65,7 @@ public class ScoutingApp extends javafx.application.Application {
 			}
 		}
 
-		// TODO Run the bluetooth stuff on a new thread
-
 		if (Bluetooth.isEnabled()) {
-
 			try {
 				Bluetooth bluetooth = new Bluetooth();
 
@@ -78,7 +75,7 @@ public class ScoutingApp extends javafx.application.Application {
 				}
 				Debugger.d(this.getClass(), "Finished resetting device names");
 
-				mainPanel.setMacAddress(bluetooth.getMACAddress());
+				ScoutingApp.mainPanel.setMacAddress(bluetooth.getMACAddress());
 				Debugger.d(this.getClass(), "Set MAC address to: " + bluetooth.getMACAddress());
 
 				// Create a UUID for SPP, and then create the URL
@@ -92,8 +89,7 @@ public class ScoutingApp extends javafx.application.Application {
 							.open(connectionString);
 					new Thread(() -> {
 						Debugger.d(this.getClass(), "Successfully created stream connection notifier");
-						MainPanel.log("Listening for connected devices", false);
-						Debugger.d(this.getClass(), "Foo");
+						Platform.runLater(() -> MainPanel.log("Listening for connected devices", false));
 						synchronized (notifier) {
 							while (true) {
 								// Check if receiving a connection

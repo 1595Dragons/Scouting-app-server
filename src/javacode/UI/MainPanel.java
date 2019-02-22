@@ -13,8 +13,7 @@ import javafx.scene.paint.Color;
 
 public class MainPanel {
 
-	private Label macAddressHeader;
-	private static Label console;
+	private static Label macAddressHeader, console;
 	public static ArrayList<Label> connectedDevices = new ArrayList<Label>();
 
 	private TeamNumberDialog dialog = new TeamNumberDialog();
@@ -95,7 +94,7 @@ public class MainPanel {
 	}
 
 	public void setMacAddress(String address) {
-		macAddressHeader.setText(String.format("MAC Address: %s", address));
+		MainPanel.macAddressHeader.setText(String.format("MAC Address: %s", address));
 	}
 
 	public static void log(String message, boolean error) {
