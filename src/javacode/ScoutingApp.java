@@ -99,7 +99,7 @@ public class ScoutingApp extends javafx.application.Application {
 									connection = notifier.acceptAndOpen();
 									if (connection != null) {
 										// Start the SPP server for that device
-										new BlueThread(connection).run();
+										new BlueThread(connection).start();
 									}
 
 								} catch (java.io.IOException e) {

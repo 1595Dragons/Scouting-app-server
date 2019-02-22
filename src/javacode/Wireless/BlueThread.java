@@ -33,15 +33,10 @@ public class BlueThread extends Thread {
 	}
 
 	public void run() {
-		MainPanel.addConnectedDevices(this.name);
+		Platform.runLater(()->MainPanel.addConnectedDevices(this.name));
 		// TODO: Send the phone the config file
 		Request config = new Request(Request.Requests.CONFIG, ScoutingApp.config.getConfigAsJson());
-		try {
-			output.write(String.format("%s:%s", config.requests.name(), config.data.toString()));
-			output.flush();
-		} catch (IOException e) {
-			Platform.runLater(() -> MainPanel.logError(e));
-		}
+		this.sendData(config);
 
 		while (connection != null) {
 			String in = null;
@@ -69,6 +64,15 @@ public class BlueThread extends Thread {
 			this.output.close();
 			this.input.close();
 			this.connection.close();
+		} catch (IOException e) {
+			Platform.runLater(() -> MainPanel.logError(e));
+		}
+	}
+
+	private void sendData(Request request) {
+		try {
+			output.write(String.format("%s:%s", request.requests.name(), request.data.toString()));
+			output.flush();
 		} catch (IOException e) {
 			Platform.runLater(() -> MainPanel.logError(e));
 		}
