@@ -37,7 +37,10 @@ public class BlueThread extends Thread {
 				in = input.readLine();
 				Debugger.d(this.getClass(), "In: " + in);
 			} catch (IOException e) {
-				Platform.runLater(() -> MainPanel.logError(e));
+				// Check if the connection wasn't closed
+				if (!e.toString().contains("An established connection was aborted by the software in your host machine.")) {
+					Platform.runLater(() -> MainPanel.logError(e));
+				}
 			}
 
 			if (in != null && !in.equals("")) {
@@ -54,13 +57,15 @@ public class BlueThread extends Thread {
 						this.sendData(new Request(Request.Requests.CONFIG, javacode.ScoutingApp.config.getConfigAsJson()));
 						break;
 					case DATA:
-						Platform.runLater(() -> MainPanel.log("Received data from device " + this.name + "\n" + object.getString(Request.Requests.DATA.name()), false));
+						Platform.runLater(() -> MainPanel.log("Received data from device " + this.name + "\n" + object.get(Request.Requests.DATA.name()).toString(), false));
+						// TODO Parse data from device
+
 						break;
 					case REQUEST_PING:
 						break;
 					case REQUEST_CLOSE:
 						try {
-							this.close(true);
+							this.close(false);
 						} catch (IOException e) {
 							Platform.runLater(() -> MainPanel.logError(e));
 						}
@@ -74,13 +79,15 @@ public class BlueThread extends Thread {
 		try {
 			this.close(false);
 		} catch (IOException e) {
-			Platform.runLater(() -> MainPanel.logError(e));
+			if (!e.toString().equals("java.io.IOException: Stream closed")) {
+				Platform.runLater(() -> MainPanel.logError(e));
+			}
 		}
 	}
 
 	private void sendData(Request request) {
 		try {
-			String data = String.format("{\"%s\":%s}", request.requests.name(), request.data.toString());
+			String data = String.format("{\"%s\":%s}\n", request.requests.name(), request.data.toString());
 			Debugger.d(this.getClass(), "Sending data: " + data);
 			this.output.write(data.getBytes());
 			this.output.flush();
@@ -103,6 +110,7 @@ public class BlueThread extends Thread {
 
 	private void close(boolean isRequested) throws IOException {
 		Platform.runLater(() -> MainPanel.log("Disconnecting device " + this.name, false));
+		Platform.runLater(() -> MainPanel.removeConnectedDevices(this.name));
 		if (isRequested) {
 			this.sendData(new Request(Request.Requests.REQUEST_CLOSE, null));
 		}
@@ -110,7 +118,7 @@ public class BlueThread extends Thread {
 		this.output.close();
 		this.input.close();
 		this.connection.close();
-		Platform.runLater(() -> MainPanel.removeConnectedDevices(this.name));
+		this.connection = null;
 	}
 
 }
