@@ -1,16 +1,13 @@
 package javacode.Wireless;
 
 import javacode.Core.Debugger;
-import javacode.ScoutingApp;
 import javacode.UI.MainPanel;
 import javafx.application.Platform;
 
-import javax.bluetooth.RemoteDevice;
-import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonReader;
 import javax.microedition.io.StreamConnection;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 public class BlueThread extends Thread {
 
@@ -19,29 +16,26 @@ public class BlueThread extends Thread {
 	public int latency;
 
 	private BufferedReader input;
-	private OutputStream output;
+	private java.io.OutputStream output;
 	private StreamConnection connection;
 
 	public BlueThread(StreamConnection connection) throws IOException {
 		this.connection = connection;
-		this.input = new BufferedReader(new InputStreamReader(this.connection.openInputStream()));
+		this.input = new BufferedReader(new java.io.InputStreamReader(this.connection.openInputStream()));
 		this.output = this.connection.openOutputStream();
-		this.name = RemoteDevice.getRemoteDevice(this.connection).getFriendlyName(false);
+		this.name = javax.bluetooth.RemoteDevice.getRemoteDevice(this.connection).getFriendlyName(false);
 	}
 
 	public void run() {
 		Platform.runLater(() -> MainPanel.addConnectedDevices(this.name));
 		// Send the config to the phone
-		this.sendData(new Request(Request.Requests.CONFIG, ScoutingApp.config.getConfigAsJson()));
-		Debugger.d(this.getClass(), "Sent data" + ScoutingApp.config.getConfigAsJson().toString());
+		this.sendData(new Request(Request.Requests.CONFIG, javacode.ScoutingApp.config.getConfigAsJson()));
 		while (this.connection != null) {
 
 			String in = null;
 			try {
-				if (input.ready()) {
-					in = input.readLine();
-					Debugger.d(this.getClass(), "In: " + in);
-				}
+				in = input.readLine();
+				Debugger.d(this.getClass(), "In: " + in);
 			} catch (IOException e) {
 				Platform.runLater(() -> MainPanel.logError(e));
 			}
@@ -51,13 +45,13 @@ public class BlueThread extends Thread {
 
 				// Parse input
 				// https://stackoverflow.com/questions/25948000/how-to-convert-string-to-jsonobject
-				JsonReader jsonReader = Json.createReader(new StringReader(in));
-				JsonObject object = jsonReader.readObject();
+				javax.json.JsonReader jsonReader = javax.json.Json.createReader(new java.io.StringReader(in));
+				JsonObject object = jsonReader.read().asJsonObject();
 				jsonReader.close();
 				switch (this.parseRequest(object)) {
 					case CONFIG:
 						// Resend the config
-						this.sendData(new Request(Request.Requests.CONFIG, ScoutingApp.config.getConfigAsJson()));
+						this.sendData(new Request(Request.Requests.CONFIG, javacode.ScoutingApp.config.getConfigAsJson()));
 						break;
 					case DATA:
 						Platform.runLater(() -> MainPanel.log("Received data from device " + this.name + "\n" + object.getString(Request.Requests.DATA.name()), false));
@@ -86,7 +80,9 @@ public class BlueThread extends Thread {
 
 	private void sendData(Request request) {
 		try {
-			this.output.write(String.format("{\"%s\":%s}", request.requests.name(), request.data.toString()).getBytes());
+			String data = String.format("{\"%s\":%s}", request.requests.name(), request.data.toString());
+			Debugger.d(this.getClass(), "Sending data: " + data);
+			this.output.write(data.getBytes());
 			this.output.flush();
 		} catch (IOException e) {
 			Platform.runLater(() -> MainPanel.logError(e));
