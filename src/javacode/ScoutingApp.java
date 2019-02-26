@@ -1,6 +1,7 @@
 package javacode;
 
 import javacode.Core.Debugger;
+import javacode.Core.DeviceCatalog;
 import javacode.FileManager.Config;
 import javacode.FileManager.Database;
 import javacode.UI.MainPanel;
@@ -69,12 +70,6 @@ public class ScoutingApp extends javafx.application.Application {
 			try {
 				Bluetooth bluetooth = new Bluetooth();
 
-				// Reset the device names
-				for (Label deviceText : MainPanel.connectedDevices) {
-					deviceText.setText("None");
-				}
-				Debugger.d(this.getClass(), "Finished resetting device names");
-
 				ScoutingApp.mainPanel.setMacAddress(bluetooth.getMACAddress());
 				Debugger.d(this.getClass(), "Set MAC address to: " + bluetooth.getMACAddress());
 
@@ -110,7 +105,11 @@ public class ScoutingApp extends javafx.application.Application {
 					}).start();
 
 					primaryWindow.setOnCloseRequest((event) -> {
-						// TODO Disconnect all devices
+						for (DeviceCatalog device : MainPanel.Devices) {
+							if (!device.getName().equals("None")) {
+								MainPanel.disconnectDevice(device.getName());
+							}
+						}
 						System.exit(0);
 					});
 

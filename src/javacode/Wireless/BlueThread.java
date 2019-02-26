@@ -25,7 +25,7 @@ public class BlueThread extends Thread {
 	}
 
 	public void run() {
-		Platform.runLater(() -> MainPanel.addConnectedDevices(this.name));
+		Platform.runLater(() -> MainPanel.connectDevice(this));
 		// Send the config to the phone
 		this.sendData(new Request(Request.Requests.CONFIG, javacode.ScoutingApp.config.getConfigAsJson()));
 		while (this.connection != null) {
@@ -151,9 +151,9 @@ public class BlueThread extends Thread {
 		Platform.runLater(() -> new javacode.FileManager.Database().updateDatabase(teamNumber, data));
 	}
 
-	private void close(boolean isRequested) throws IOException {
+	public void close(boolean isRequested) throws IOException {
 		Platform.runLater(() -> MainPanel.log("Disconnecting device " + this.name, false));
-		Platform.runLater(() -> MainPanel.removeConnectedDevices(this.name));
+		Platform.runLater(() -> MainPanel.disconnectDevice(this.name));
 		if (isRequested) {
 			this.sendData(new Request(Request.Requests.REQUEST_CLOSE, null));
 		}

@@ -1,35 +1,35 @@
 package javacode.UI;
 
-import java.io.StringWriter;
-import java.util.ArrayList;
-
 import javacode.Core.Debugger;
-import javacode.ScoutingApp;
+import javacode.Core.DeviceCatalog;
+import javacode.Wireless.BlueThread;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+
+import java.io.StringWriter;
+import java.util.ArrayList;
 
 public class MainPanel {
 
 	private static Label macAddressHeader, console;
-	@Deprecated
-	public static ArrayList<Label> connectedDevices = new ArrayList<>();
 
-	public static ArrayList<HBox> deviceField = new ArrayList<>();
+	public static ArrayList<DeviceCatalog> Devices = new ArrayList<>();
 
 	private TeamNumberDialog dialog = new TeamNumberDialog();
 	private ViewData window = new ViewData();
 
 	public Scene loadMainPanel() {
 
-		javafx.scene.layout.VBox root = null;
+		javafx.scene.layout.VBox root;
 
 		// Get the path of the main panel's FXML file
 		java.net.URL path = getClass().getClassLoader().getResource("javacode/fxml/MainPanel.fxml");
 
-		// If the path is null, dont load
+		// If the path is null, don't load
 		if (path == null) {
 			return null;
 		}
@@ -43,18 +43,20 @@ public class MainPanel {
 			return null;
 		}
 
-		// TODO: On close have popup box making sure you want to close. If true, request all connected devices to leave
-
 		// Assign the MAC address
 		macAddressHeader = (Label) root.getChildren().get(0);
 
 		// Assign the 'console'
 		MainPanel.console = ((Label) ((javafx.scene.control.ScrollPane) root.getChildren().get(2)).getContent());
 
-		// Setup the device headers
+		// Setup the bluetooth device stuff
 		HBox deviceBank = (HBox) root.getChildren().get(4);
 		for (int i = 0; i < deviceBank.getChildren().size(); i++) {
-			connectedDevices.add(i, (Label) deviceBank.getChildren().get(i));
+			VBox container = (VBox) deviceBank.getChildren().get(i);
+			Label deviceName = (Label) container.getChildren().get(0);
+			Label latencyLabel = (Label) container.getChildren().get(1);
+			Button disconnectButton = (Button) container.getChildren().get(2);
+			MainPanel.Devices.add(new DeviceCatalog(deviceName, latencyLabel, disconnectButton));
 		}
 
 		// Get the buttons to scout/view data
@@ -122,31 +124,37 @@ public class MainPanel {
 		MainPanel.console.setText(String.format("%s\n%s", e.toString(), sw.toString()));
 	}
 
-	public static void addConnectedDevices(String deviceName) {
-		Debugger.d(MainPanel.class, "Device connected: " + deviceName);
-		MainPanel.log(String.format("%s connected", deviceName), false);
-		// TODO: Add the name (done), latency field, and enable the disconnect button
-		for (Label deviceText : MainPanel.connectedDevices) {
-			if (deviceText.getText().equals("None")) {
-				deviceText.setText(deviceName);
+	public static void connectDevice(BlueThread deviceThread) {
+		Debugger.d(MainPanel.class, "Device connected: " + deviceThread.name);
+		MainPanel.log(String.format("%s connected", deviceThread.name), false);
+		for (DeviceCatalog device : MainPanel.Devices) {
+			if (device.getName().equals("None")) {
+				device.setName(deviceThread.name);
+				device.setupDisconnectButton(deviceThread);
 				break;
 			}
 		}
 	}
 
-	public static void removeConnectedDevices(String deviceName) {
+	public static void disconnectDevice(String deviceName) {
 		Debugger.d(MainPanel.class, "Device disconnected: " + deviceName);
 		MainPanel.log(String.format("%s disconnected", deviceName), false);
-		// TODO Change the name to none (done), hide the latency field, and disable the disconnect button
-		for (Label deviceText : MainPanel.connectedDevices) {
-			if (deviceText.getText().equals(deviceName)) {
-				deviceText.setText("None");
+		for (DeviceCatalog device : MainPanel.Devices) {
+			if (device.getName().equals(deviceName)) {
+				device.setName("None");
+				device.setLatency(0);
+				device.disableDisconnectButton();
 				break;
 			}
 		}
 	}
 
 	public static void updatePing(String deviceName, int latency) {
-		// TODO
+		for (DeviceCatalog device : MainPanel.Devices) {
+			if (device.getName().equals(deviceName)) {
+				device.setLatency(latency);
+				break;
+			}
+		}
 	}
 }
