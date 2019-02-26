@@ -92,7 +92,7 @@ public class DataCollection {
 				} else if (node instanceof Spinner) {
 					@SuppressWarnings("unchecked")
 					Spinner<Integer> spinner = (Spinner<Integer>) node;
-					data[index][1] = (String) Integer.toString(spinner.getValue());
+					data[index][1] = Integer.toString(spinner.getValue());
 				} else if (node instanceof RadioButton) {
 					data[index][1] = ((RadioButton) node).isSelected() ? "1" : "0";
 				} else if (node instanceof TextArea) {
@@ -100,7 +100,7 @@ public class DataCollection {
 				} else if (node instanceof TextField) {
 					data[index][1] = String.format("\"%s\"", ((TextField) node).getText());
 				} else {
-					Debugger.d(this.getClass(), "Unknown class for node " + node.getId() + "\n" + node.getClass());
+					MainPanel.log("Unknown class for node " + node.getId() + "\n" + node.getClass(), true);
 				}
 			}
 

@@ -35,7 +35,6 @@ public class BlueThread extends Thread {
 			String in = null;
 			try {
 				in = input.readLine();
-				Debugger.d(this.getClass(), "In: " + in);
 			} catch (IOException e) {
 				// Check if the connection wasn't closed
 				if (!e.toString().contains("An established connection was aborted by the software in your host machine.")) {
@@ -43,33 +42,44 @@ public class BlueThread extends Thread {
 				}
 			}
 
-			if (in != null && !in.equals("")) {
-				Debugger.d(this.getClass(), "Input: " + in);
+			if (in != null) {
+				if (!in.equals("")) {
+					Debugger.d(this.getClass(), "Input: " + in);
 
-				// Parse input
-				// https://stackoverflow.com/questions/25948000/how-to-convert-string-to-jsonobject
-				javax.json.JsonReader jsonReader = javax.json.Json.createReader(new java.io.StringReader(in));
-				JsonObject object = jsonReader.read().asJsonObject();
-				jsonReader.close();
-				switch (this.parseRequest(object)) {
-					case CONFIG:
-						// Resend the config
-						this.sendData(new Request(Request.Requests.CONFIG, javacode.ScoutingApp.config.getConfigAsJson()));
-						break;
-					case DATA:
-						Platform.runLater(() -> MainPanel.log("Received data from device " + this.name + "\n" + object.get(Request.Requests.DATA.name()).toString(), false));
-						// TODO Parse data from device
-
-						break;
-					case REQUEST_PING:
-						break;
-					case REQUEST_CLOSE:
-						try {
-							this.close(false);
-						} catch (IOException e) {
-							Platform.runLater(() -> MainPanel.logError(e));
-						}
-						break;
+					// Parse input
+					// https://stackoverflow.com/questions/25948000/how-to-convert-string-to-jsonobject
+					javax.json.JsonReader jsonReader = javax.json.Json.createReader(new java.io.StringReader(in));
+					JsonObject object = jsonReader.read().asJsonObject();
+					jsonReader.close();
+					switch (this.parseRequest(object)) {
+						case CONFIG:
+							// Resend the config
+							this.sendData(new Request(Request.Requests.CONFIG, javacode.ScoutingApp.config.getConfigAsJson()));
+							break;
+						case DATA:
+							Platform.runLater(() -> MainPanel.log("Received data from device " + this.name + "\n" + object.get(Request.Requests.DATA.name()).toString(), false));
+							// Pass the data to the database
+							this.addData(object.getJsonObject(Request.Requests.DATA.name()).toString());
+							break;
+						case REQUEST_PING:
+							break;
+						case REQUEST_CLOSE:
+							try {
+								this.close(false);
+							} catch (IOException e) {
+								Platform.runLater(() -> MainPanel.logError(e));
+							}
+							break;
+					}
+				}
+			} else {
+				// If the stream is null, consider it a broken pipe, and close it.
+				try {
+					this.close(false);
+				} catch (IOException e) {
+					if (!e.toString().equals("java.io.IOException: Stream closed")) {
+						Platform.runLater(() -> MainPanel.logError(e));
+					}
 				}
 			}
 
@@ -106,6 +116,41 @@ public class BlueThread extends Thread {
 		} else {
 			return Request.Requests.DATA;
 		}
+	}
+
+	private void addData(String remoteData) {
+		// Replace all the special JSON BS
+		remoteData = remoteData.replaceAll("[{}]", "");
+		Debugger.d(this.getClass(), "Remote data: " + remoteData);
+
+		// Split the data at the comma
+		String[] lines = remoteData.split(",");
+
+		// Create a 2d array for the data, with the first being the name, and the second being the entry
+		String[][] data = new String[lines.length - 1][2];
+
+		// Get the team number for a later argument
+		int thisMustEventuallyBeFinal = 0;
+
+		// Loop through the rest of the data and add the entries
+		for (int index = 0; index <= data.length; index++) {
+			String[] entries = lines[index].split(":");
+
+			// Get the team number first
+			if (index == 0) {
+				thisMustEventuallyBeFinal = Integer.parseInt(entries[1]);
+			} else {
+				// Set the header (replace extra quotes)
+				data[index-1][0] = entries[0].replace("\"","");
+
+				// For the second be sure to check for null
+				data[index-1][1] = entries[1] != null ? entries[1] : "";
+			}
+		}
+
+		// Add all that to the database
+		final int teamNumber = thisMustEventuallyBeFinal;
+		Platform.runLater(() -> new javacode.FileManager.Database().updateDatabase(teamNumber, data));
 	}
 
 	private void close(boolean isRequested) throws IOException {
