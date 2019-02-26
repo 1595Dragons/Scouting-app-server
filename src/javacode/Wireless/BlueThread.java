@@ -13,8 +13,6 @@ public class BlueThread extends Thread {
 
 	public String name;
 
-	public int latency;
-
 	private BufferedReader input;
 	private java.io.OutputStream output;
 	private StreamConnection connection;
@@ -141,10 +139,10 @@ public class BlueThread extends Thread {
 				thisMustEventuallyBeFinal = Integer.parseInt(entries[1]);
 			} else {
 				// Set the header (replace extra quotes)
-				data[index-1][0] = entries[0].replace("\"","");
+				data[index - 1][0] = entries[0].replace("\"", "");
 
 				// For the second be sure to check for null
-				data[index-1][1] = entries[1] != null ? entries[1] : "";
+				data[index - 1][1] = entries[1] != null ? entries[1] : "";
 			}
 		}
 

@@ -1,5 +1,15 @@
 package javacode.FileManager;
 
+import javacode.Core.Debugger;
+import javacode.Core.Match;
+import javacode.Core.Match.Autonomous;
+import javacode.Core.Match.Endgame;
+import javacode.Core.Match.TeleOp;
+import javacode.Core.MatchBase.DataType;
+import javacode.ScoutingApp;
+import javacode.UI.MainPanel;
+
+import javax.json.JsonObject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,35 +20,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.json.JsonObject;
-
-import javacode.ScoutingApp;
-import javacode.Core.Debugger;
-import javacode.Core.Match;
-import javacode.Core.Match.Autonomous;
-import javacode.Core.Match.Endgame;
-import javacode.Core.Match.TeleOp;
-import javacode.Core.MatchBase.DataType;
-import javacode.UI.MainPanel;
-
 public class Database {
 
 	private String databaseFile = System.getProperty("user.dir") + "/scouting-data.db";
 
 	public void updateDatabase(int teamNumber, String[][] data) {
 		// Get the headers from the data, and their values
-		String headers = "", values = "";
-		for (int index = 0; index < data.length; index++) {
+		StringBuilder headers = new StringBuilder(), values = new StringBuilder();
+		for (String[] datum : data) {
 			for (int value = 0; value < 2; value++) {
 				if (value == 0) {
-					headers += "\", \"" + data[index][value];
+					headers.append(String.format("\", \"%s", datum[value]));
 				} else {
-					values += ", " + data[index][value];
+					values.append(String.format(", %s", datum[value]));
 				}
 			}
 		}
 
-		String query = String.format("INSERT INTO data (\"Team number%s\") VALUES (%s%s)", headers, teamNumber, values);
+		String query = String.format("INSERT INTO data (\"Team number%s\") VALUES (%s%s)", headers.toString(), teamNumber, values.toString());
 
 		// Execute the query
 		try {
@@ -61,68 +60,74 @@ public class Database {
 		}
 
 		// Create the new file.
-		database.createNewFile();
+		Debugger.d(this.getClass(), "New database successfully created: " + database.createNewFile());
 
 		// Once the database file has been created, setup the SQL table
 		// Create the query to execute on the SQL database
 		// Get table headers and types of storage from the config file
-		String query = "CREATE TABLE data (\"Team number\" INT NOT NULL";
+		StringBuilder query = new StringBuilder("CREATE TABLE data (\"Team number\" INT NOT NULL");
 
 		Match data = ScoutingApp.config.matchData;
 		for (Autonomous autonomous : data.autonomousData) {
 
-			// Check if the datatype is a boolean group
+			// Check if the data-type is a boolean group
 			if (autonomous.datatype.equals(DataType.BooleanGroup)) {
-				// Get the checkboxes from the value of the datatype
+				// Get the checkboxes from the value of the data-type
 				JsonObject checkBoxes = autonomous.value.get(0).asJsonObject();
+
+				//noinspection ToArrayCallWithZeroLengthArrayArgument
 				String[] keys = checkBoxes.keySet().toArray(new String[checkBoxes.size()]);
 				for (int index = 0; index < checkBoxes.size(); index++) {
-					query += ", \"" + keys[index] + "\" INT NOT NULL";
+					query.append(String.format(", \"%s\" INT NOT NULL", keys[index]));
 				}
 			} else {
-				query += ", \"" + autonomous.name + "\" ";
-				// If the datatype is text, make the type text, otherwise its an int
-				query += autonomous.datatype == DataType.Text ? "TEXT NOT NULL" : "INT NOT NULL";
+				query.append(String.format(", \"%s\" ", autonomous.name));
+				// If the data-type is text, make the type text, otherwise its an int
+				query.append(autonomous.datatype == DataType.Text ? "TEXT NOT NULL" : "INT NOT NULL");
 			}
 
 		}
 
 		for (TeleOp teleop : data.teleopData) {
-			// Check if the datatype is a boolean group
+			// Check if the data-type is a boolean group
 			if (teleop.datatype.equals(DataType.BooleanGroup)) {
 				JsonObject checkBoxes = teleop.value.get(0).asJsonObject();
+
+				//noinspection ToArrayCallWithZeroLengthArrayArgument
 				String[] keys = checkBoxes.keySet().toArray(new String[checkBoxes.size()]);
 				for (int index = 0; index < checkBoxes.size(); index++) {
-					query += ", \"" + keys[index] + "\" INT NOT NULL";
+					query.append(String.format(", \"%s\" INT NOT NULL", keys[index]));
 				}
 			} else {
-				query += ", \"" + teleop.name + "\" ";
-				// If the datatype is text, make the type text, otherwise its an int
-				query += teleop.datatype == DataType.Text ? "TEXT NOT NULL" : "INT NOT NULL";
+				query.append(String.format(", \"%s\" ", teleop.name));
+				// If the data-type is text, make the type text, otherwise its an int
+				query.append(teleop.datatype == DataType.Text ? "TEXT NOT NULL" : "INT NOT NULL");
 			}
 		}
 
 		for (Endgame endgame : data.endgameData) {
-			// Check if the datatype is a boolean group
+			// Check if the data-type is a boolean group
 			if (endgame.datatype.equals(DataType.BooleanGroup)) {
 				JsonObject checkBoxes = endgame.value.get(0).asJsonObject();
+
+				//noinspection ToArrayCallWithZeroLengthArrayArgument
 				String[] keys = checkBoxes.keySet().toArray(new String[checkBoxes.size()]);
 				for (int index = 0; index < checkBoxes.size(); index++) {
-					query += ", \"" + keys[index] + "\" INT NOT NULL";
+					query.append(String.format(", \"%s\" INT NOT NULL", keys[index]));
 				}
 			} else {
-				query += ", \"" + endgame.name + "\" ";
-				// If the datatype is text, make the type text, otherwise its an int
-				query += endgame.datatype == DataType.Text ? "TEXT NOT NULL" : "INT NOT NULL";
+				query.append(String.format(", \"%s\" ", endgame.name));
+				// If the data-type is text, make the type text, otherwise its an int
+				query.append(endgame.datatype == DataType.Text ? "TEXT NOT NULL" : "INT NOT NULL");
 			}
 		}
 
-		query += ", Comments TEXT)";
+		query.append(", Comments TEXT)");
 
 		Debugger.d(this.getClass(), "Creation query: " + query);
 
 		// Execute the query
-		this.executeSQL(query);
+		this.executeSQL(query.toString());
 
 	}
 
@@ -147,7 +152,6 @@ public class Database {
 				} catch (IOException | SQLException e) {
 					// If there's an error, return false, and log the error
 					MainPanel.logError(e);
-					exists = false;
 				}
 			}
 		} else {
@@ -165,7 +169,7 @@ public class Database {
 		ResultSet result = null;
 
 		// Get the database connection
-		Connection databaseConnection = null;
+		Connection databaseConnection;
 
 		try {
 			databaseConnection = this.getDatabaseConnection();
@@ -197,24 +201,32 @@ public class Database {
 	private void deprecateDatabase() {
 		final File directory = new File(System.getProperty("user.dir"));
 
-		ArrayList<File> fileArray = new ArrayList<File>();
+		ArrayList<File> fileArray = new ArrayList<>();
 
-		for (final File file : directory.listFiles()) {
+		File[] files = directory.listFiles();
+
+		// If there are no files, just return now
+		if (files == null) {
+			return;
+		}
+
+		for (final File file : files) {
 			if (file.isFile() && file.getName().endsWith(".db") && file.getName().startsWith("scouting-data")) {
 				fileArray.add(file);
 				Debugger.d(this.getClass(), "Found database: " + file.getName());
 			}
 		}
 
+		//noinspection ForLoopReplaceableByForEach
 		for (int i = 0; i < fileArray.size(); i++) {
 			int oldNumber = 0;
 			try {
 				oldNumber = Integer.parseInt(fileArray.get(i).getName().replaceAll("\\D+", ""));
-			} catch (Exception e) {
-				oldNumber = 0;
+			} catch (Exception ignored) {
 			}
 			Debugger.d(this.getClass(), "Changing database number from " + (oldNumber) + " to " + (oldNumber + 1));
-			fileArray.get(i).renameTo(new File(directory + "/scouting-data" + (oldNumber + 1) + ".db"));
+			Debugger.d(this.getClass(), "File successfully renamed: " + fileArray.get(i).renameTo(new File(directory + "/scouting-data" + (oldNumber + 1) + ".db")));
+
 		}
 
 	}
@@ -224,10 +236,10 @@ public class Database {
 		// Get database headers
 		String getHeaderQuery = "SELECT * FROM data";
 
-		ResultSet result = null;
+		ResultSet result;
 		try {
 
-			Connection databaseConnection = null;
+			Connection databaseConnection;
 			try {
 				databaseConnection = this.getDatabaseConnection();
 			} catch (ClassNotFoundException e) {
@@ -250,7 +262,7 @@ public class Database {
 			result.close();
 
 			// Get the correct headers
-			ArrayList<String> correctHeaderNames = new ArrayList<String>();
+			ArrayList<String> correctHeaderNames = new ArrayList<>();
 			correctHeaderNames.add("Team number");
 
 			Match data = ScoutingApp.config.matchData;
@@ -312,15 +324,14 @@ public class Database {
 	}
 
 	private Connection getDatabaseConnection() throws ClassNotFoundException, SQLException {
-
 		// Load the SQLite library drivers
+		//noinspection SpellCheckingInspection
 		Debugger.d(getClass(), "SQLite driver: " + Class.forName("org.sqlite.JDBC"));
-
 		return java.sql.DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
 	}
 
 	public static String resultSetToString(ResultSet resultset) {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 
 		// Get the result as a string
 		// https://coderwall.com/p/609ppa/printing-the-result-of-resultset
@@ -332,28 +343,28 @@ public class Database {
 
 			// Get the headers
 			for (int i = 1; i <= columns; i++) {
-				result += meta.getColumnName(i) + "\t|\t";
+				result.append(String.format("%s\t|\t", meta.getColumnName(i)));
 			}
 
 			// Add a new line
-			result += "\n";
+			result.append("\n");
 
 			// Run through each row
 			while (resultset.next()) {
 				// Iterator over all appropriate columns, SQL starts at 1 though... REEEEEEEEEEE
 				for (int i = 1; i <= columns; i++) {
-					result += resultset.getString(i);
+					result.append(resultset.getString(i));
 					if (i != columns) {
-						result += "\t|\t";
+						result.append("\t|\t");
 					} else {
-						result += "\n";
+						result.append("\n");
 					}
 				}
 			}
 
 			resultset.close();
 
-			return result;
+			return result.toString();
 
 		} catch (SQLException e) {
 			MainPanel.logError(e);
@@ -362,7 +373,7 @@ public class Database {
 	}
 
 	public void exportToCSV(File file) {
-		String out = "";
+		StringBuilder out = new StringBuilder();
 
 		// Get everything out of the database
 		try {
@@ -375,21 +386,21 @@ public class Database {
 
 			// Get the headers
 			for (int i = 1; i <= columns; i++) {
-				out += meta.getColumnName(i).replace(",", "，") + ",";
+				out.append(String.format("%s,", meta.getColumnName(i).replace(",", "，")));
 			}
 
 			// Add a new line
-			out += "\n";
+			out.append("\n");
 
 			// Run through each row
 			while (result.next()) {
 				// Iterator over all appropriate columns, SQL starts at 1 though... REEEEEEEEEEE
 				for (int i = 1; i <= columns; i++) {
-					out += result.getString(i);
+					out.append(result.getString(i));
 					if (i != columns) {
-						out += ",";
+						out.append(",");
 					} else {
-						out += "\n";
+						out.append("\n");
 					}
 				}
 			}
@@ -401,14 +412,14 @@ public class Database {
 		try {
 			// Write the out string to a file
 			FileWriter fw = new FileWriter(file);
-			fw.write(out);
+			fw.write(out.toString());
 			fw.flush();
 			fw.close();
 		} catch (IOException e) {
 			MainPanel.logError(e);
 		}
 
-		MainPanel.log("Succsessfully exported data", false);
+		MainPanel.log("Successfully exported data", false);
 
 	}
 

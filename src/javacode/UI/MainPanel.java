@@ -14,7 +14,10 @@ import javafx.scene.paint.Color;
 public class MainPanel {
 
 	private static Label macAddressHeader, console;
-	public static ArrayList<Label> connectedDevices = new ArrayList<Label>();
+	@Deprecated
+	public static ArrayList<Label> connectedDevices = new ArrayList<>();
+
+	public static ArrayList<HBox> deviceField = new ArrayList<>();
 
 	private TeamNumberDialog dialog = new TeamNumberDialog();
 	private ViewData window = new ViewData();
@@ -25,6 +28,11 @@ public class MainPanel {
 
 		// Get the path of the main panel's FXML file
 		java.net.URL path = getClass().getClassLoader().getResource("javacode/fxml/MainPanel.fxml");
+
+		// If the path is null, dont load
+		if (path == null) {
+			return null;
+		}
 		javacode.Core.Debugger.d(getClass(), "Path: " + path.toString());
 
 		// Load the FXML from the layout file
@@ -88,8 +96,7 @@ public class MainPanel {
 			window.getStage().toFront();
 		});
 
-		Scene scene = new Scene(root);
-		return scene;
+		return new Scene(root);
 
 	}
 
@@ -111,13 +118,14 @@ public class MainPanel {
 		StringWriter sw = new StringWriter();
 		e.printStackTrace(new java.io.PrintWriter(sw));
 		MainPanel.console.setTextFill(Color.RED);
-		System.err.println(String.format("Error: %s\n%s", e.getMessage(), sw.toString()));
-		MainPanel.console.setText(String.format("%s\n%s", e.getMessage(), sw.toString()));
+		System.err.println(String.format("Error: %s\n%s", e.toString(), sw.toString()));
+		MainPanel.console.setText(String.format("%s\n%s", e.toString(), sw.toString()));
 	}
 
 	public static void addConnectedDevices(String deviceName) {
 		Debugger.d(MainPanel.class, "Device connected: " + deviceName);
 		MainPanel.log(String.format("%s connected", deviceName), false);
+		// TODO: Add the name (done), latency field, and enable the disconnect button
 		for (Label deviceText : MainPanel.connectedDevices) {
 			if (deviceText.getText().equals("None")) {
 				deviceText.setText(deviceName);
@@ -129,11 +137,16 @@ public class MainPanel {
 	public static void removeConnectedDevices(String deviceName) {
 		Debugger.d(MainPanel.class, "Device disconnected: " + deviceName);
 		MainPanel.log(String.format("%s disconnected", deviceName), false);
+		// TODO Change the name to none (done), hide the latency field, and disable the disconnect button
 		for (Label deviceText : MainPanel.connectedDevices) {
 			if (deviceText.getText().equals(deviceName)) {
 				deviceText.setText("None");
 				break;
 			}
 		}
+	}
+
+	public static void updatePing(String deviceName, int latency) {
+		// TODO
 	}
 }
