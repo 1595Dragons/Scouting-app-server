@@ -142,7 +142,7 @@ public class MainPanel {
 		for (DeviceCatalog device : MainPanel.Devices) {
 			if (device.getName().equals(deviceName)) {
 				device.setName("None");
-				device.setLatency(0);
+				device.setLatency(-1);
 				device.disableDisconnectButton();
 				break;
 			}

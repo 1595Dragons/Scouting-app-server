@@ -9,6 +9,7 @@ import javax.json.JsonObject;
 import javax.microedition.io.StreamConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Calendar;
 
 public class BlueThread extends Thread {
 
@@ -175,15 +176,24 @@ public class BlueThread extends Thread {
 	}
 
 	private int calculatePing(String pingData) {
-		long now = System.currentTimeMillis() % 1000;
+		// Get the time in MS since midnight
+		Calendar c = Calendar.getInstance();
+		long now = c.getTimeInMillis();
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		long passed = now - c.getTimeInMillis();
+		long secondsPassed = passed / 1000;
+
 		Debugger.d(this.getClass(), pingData);
 
 		// Split the string at the colon, and get just get the digits
 		int old = Integer.parseInt(pingData.split(":")[1].replace("}", ""));
 
-		Debugger.d(this.getClass(), "Timedelta: " + (now - old));
+		Debugger.d(this.getClass(), "Timedelta: " + (secondsPassed - old));
 
-		return Math.abs(Integer.parseInt(Long.toString(now - old)));
+		return Math.abs(Integer.parseInt(Long.toString(secondsPassed - old)));
 	}
 
 }
