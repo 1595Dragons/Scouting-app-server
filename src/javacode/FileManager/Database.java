@@ -396,7 +396,7 @@ public class Database {
 			while (result.next()) {
 				// Iterator over all appropriate columns, SQL starts at 1 though... REEEEEEEEEEE
 				for (int i = 1; i <= columns; i++) {
-					out.append(result.getString(i));
+					out.append(result.getString(i).replace(",", "，"));
 					if (i != columns) {
 						out.append(",");
 					} else {

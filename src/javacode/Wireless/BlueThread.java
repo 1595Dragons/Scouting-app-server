@@ -9,6 +9,8 @@ import javax.json.JsonObject;
 import javax.microedition.io.StreamConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class BlueThread extends Thread {
@@ -145,15 +147,23 @@ public class BlueThread extends Thread {
 		for (int index = 0; index <= data.length; index++) {
 			String[] entries = lines[index].split(":");
 
+			Debugger.d(this.getClass(), "Entries: " + Arrays.toString(entries));
+
 			// Get the team number first
 			if (index == 0) {
 				thisMustEventuallyBeFinal = Integer.parseInt(entries[1]);
+				Debugger.d(this.getClass(), "Team number: " + thisMustEventuallyBeFinal);
 			} else {
+
+				Debugger.d(this.getClass(), "Parsing data: " + Arrays.toString(data[index - 1]));
+
 				// Set the header (replace extra quotes)
 				data[index - 1][0] = entries[0].replace("\"", "");
 
 				// For the second be sure to check for null
-				data[index - 1][1] = entries[1] != null ? entries[1] : "";
+				String d = entries[1] != null ? entries[1] : "";
+				d = d.replace("，", ",").replace(";", ":"); // Put back commas and colons
+				data[index - 1][1] = d;
 			}
 		}
 
