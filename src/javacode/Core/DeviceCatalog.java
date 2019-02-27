@@ -39,9 +39,9 @@ public class DeviceCatalog {
 
 	public void setLatency(int latency) {
 		if (latency == 0) {
-			this.latencyLabel.setText("--- ms ping");
+			Platform.runLater(() -> this.latencyLabel.setText("--- ms ping"));
 		} else {
-			this.latencyLabel.setText(String.format("%s ms ping", Integer.toString(latency)));
+			Platform.runLater(() -> this.latencyLabel.setText(String.format("%s ms ping", Integer.toString(latency))));
 		}
 	}
 

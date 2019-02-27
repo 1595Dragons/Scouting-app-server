@@ -4,6 +4,7 @@ import javacode.Core.Debugger;
 import javacode.UI.MainPanel;
 import javafx.application.Platform;
 
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.microedition.io.StreamConnection;
 import java.io.BufferedReader;
@@ -28,6 +29,7 @@ public class BlueThread extends Thread {
 		Platform.runLater(() -> MainPanel.connectDevice(this));
 		// Send the config to the phone
 		this.sendData(new Request(Request.Requests.CONFIG, javacode.ScoutingApp.config.getConfigAsJson()));
+		this.sendData(new Request(Request.Requests.REQUEST_PING, null));
 		while (this.connection != null) {
 
 			String in = null;
@@ -35,7 +37,7 @@ public class BlueThread extends Thread {
 				in = input.readLine();
 			} catch (IOException e) {
 				// Check if the connection wasn't closed
-				if (!e.toString().contains("An established connection was aborted by the software in your host machine.")) {
+				if (!(e.toString().contains("An established connection was aborted by the software in your host machine.") || e.toString().equals("java.io.IOException: Stream closed"))) {
 					Platform.runLater(() -> MainPanel.logError(e));
 				}
 			}
@@ -60,6 +62,10 @@ public class BlueThread extends Thread {
 							this.addData(object.getJsonObject(Request.Requests.DATA.name()).toString());
 							break;
 						case REQUEST_PING:
+							MainPanel.updatePing(this.name, this.calculatePing(object.get(Request.Requests.REQUEST_PING.name()).toString()));
+
+							// Re-ping the device
+							this.sendData(new Request(Request.Requests.REQUEST_PING, null));
 							break;
 						case REQUEST_CLOSE:
 							try {
@@ -81,7 +87,7 @@ public class BlueThread extends Thread {
 				}
 			}
 
-			// TODO: Ping the device
+			Thread.yield();
 		}
 
 		try {
@@ -94,13 +100,17 @@ public class BlueThread extends Thread {
 	}
 
 	private void sendData(Request request) {
+		// Check to make sure the data being sent isn't null
+		request.data = request.data == null ? request.data = Json.createObjectBuilder().build() : request.data;
 		try {
 			String data = String.format("{\"%s\":%s}\n", request.requests.name(), request.data.toString());
 			Debugger.d(this.getClass(), "Sending data: " + data);
 			this.output.write(data.getBytes());
 			this.output.flush();
 		} catch (IOException e) {
-			Platform.runLater(() -> MainPanel.logError(e));
+			if (!e.toString().equals("java.io.IOException: Stream closed")) {
+				Platform.runLater(() -> MainPanel.logError(e));
+			}
 		}
 	}
 
@@ -162,6 +172,18 @@ public class BlueThread extends Thread {
 		this.input.close();
 		this.connection.close();
 		this.connection = null;
+	}
+
+	private int calculatePing(String pingData) {
+		long now = System.currentTimeMillis() % 1000;
+		Debugger.d(this.getClass(), pingData);
+
+		// Split the string at the colon, and get just get the digits
+		int old = Integer.parseInt(pingData.split(":")[1].replace("}", ""));
+
+		Debugger.d(this.getClass(), "Timedelta: " + (now - old));
+
+		return Math.abs(Integer.parseInt(Long.toString(now - old)));
 	}
 
 }
