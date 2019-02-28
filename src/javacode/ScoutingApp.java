@@ -8,7 +8,6 @@ import javacode.UI.MainPanel;
 import javacode.Wireless.BlueThread;
 import javacode.Wireless.Bluetooth;
 import javafx.application.Platform;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import javax.bluetooth.BluetoothStateException;
@@ -23,7 +22,7 @@ public class ScoutingApp extends javafx.application.Application {
 
 	public static Config config = new Config();
 
-	public static MainPanel mainPanel = new MainPanel();
+	private static MainPanel mainPanel = new MainPanel();
 
 	public void start(Stage primaryWindow) {
 
