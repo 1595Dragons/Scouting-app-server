@@ -1,5 +1,6 @@
 package javacode.UI;
 
+import javacode.Core.Debugger;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -44,7 +45,17 @@ public class TeamNumberDialog {
 			DataCollection data = new DataCollection(teamNumber);
 			data.getStage().setScene(data.createDataCollectionPage());
 			data.getStage().setTitle("Data collection");
+
 			data.getStage().show();
+
+			// Check if the current height is too long
+			double screenHeight = java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+			Debugger.d(this.getClass(), "Built height: " + data.getStage().getHeight());
+			Debugger.d(this.getClass(), "Screen height: " + screenHeight);
+			if (data.getStage().getHeight() > (screenHeight*.6d)) {
+				data.getStage().setHeight(screenHeight*.5d);
+				data.getStage().centerOnScreen();
+			}
 
 			stage.close();
 		});

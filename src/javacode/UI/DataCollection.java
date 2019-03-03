@@ -110,8 +110,7 @@ public class DataCollection {
 			stage.close();
 		});
 
-		Scene scene = new Scene(root);
-		return scene;
+		return new Scene(root);
 	}
 
 	public Stage getStage() {
