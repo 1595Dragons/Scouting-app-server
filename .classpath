@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="3rd party libs/bluecove-2.1.0.jar"/>
-	<classpathentry kind="lib" path="3rd party libs/jgoodies-forms-1.8.0.jar" sourcepath="3rd party libs/jgoodies-forms-1.8.0.jar"/>
-	<classpathentry kind="lib" path="3rd party libs/sqlite-jdbc-3.23.1.jar"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
