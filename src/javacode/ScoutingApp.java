@@ -1,7 +1,7 @@
 package javacode;
 
 import javacode.Core.Debugger;
-import javacode.Core.DeviceCatalog;
+import javacode.Wireless.DeviceCatalog;
 import javacode.FileManager.Config;
 import javacode.FileManager.Database;
 import javacode.UI.MainPanel;

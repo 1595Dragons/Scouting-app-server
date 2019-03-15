@@ -1,7 +1,7 @@
 package javacode.UI;
 
 import javacode.Core.Debugger;
-import javacode.Core.DeviceCatalog;
+import javacode.Wireless.DeviceCatalog;
 import javacode.Wireless.BlueThread;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

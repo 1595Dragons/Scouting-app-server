@@ -2,6 +2,7 @@ package javacode.UI;
 
 import java.util.ArrayList;
 
+import javacode.Match.Match;
 import javacode.ScoutingApp;
 import javacode.Core.Debugger;
 import javafx.geometry.Insets;
@@ -126,7 +127,7 @@ public class DataCollection {
 		pane.getChildren().add(this.createLabel("Autonomous:", 20, new Insets(5, 0, 5, 0)));
 
 		// Get the autonomous fields from the config
-		for (javacode.Core.Match.Autonomous autonomous : ScoutingApp.config.matchData.autonomousData) {
+		for (Match.Autonomous autonomous : ScoutingApp.config.matchData.autonomousData) {
 
 			switch (autonomous.datatype) {
 			case Boolean:
@@ -178,7 +179,7 @@ public class DataCollection {
 		pane.getChildren().add(this.createLabel("TeleOp:", 20, new Insets(20, 0, 5, 0)));
 
 		// Get the teleop fields from the config
-		for (javacode.Core.Match.TeleOp teleop : ScoutingApp.config.matchData.teleopData) {
+		for (Match.TeleOp teleop : ScoutingApp.config.matchData.teleopData) {
 
 			switch (teleop.datatype) {
 			case Boolean:
@@ -230,7 +231,7 @@ public class DataCollection {
 		pane.getChildren().add(this.createLabel("End game:", 20, new Insets(20, 0, 5, 0)));
 
 		// Get the endgame fields from the config
-		for (javacode.Core.Match.Endgame endgame : ScoutingApp.config.matchData.endgameData) {
+		for (Match.Endgame endgame : ScoutingApp.config.matchData.endgameData) {
 
 			switch (endgame.datatype) {
 			case Boolean:

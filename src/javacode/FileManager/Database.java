@@ -1,11 +1,11 @@
 package javacode.FileManager;
 
 import javacode.Core.Debugger;
-import javacode.Core.Match;
-import javacode.Core.Match.Autonomous;
-import javacode.Core.Match.Endgame;
-import javacode.Core.Match.TeleOp;
-import javacode.Core.MatchBase.DataType;
+import javacode.Match.Match;
+import javacode.Match.Match.Autonomous;
+import javacode.Match.Match.Endgame;
+import javacode.Match.Match.TeleOp;
+import javacode.Match.MatchBase.DataType;
 import javacode.ScoutingApp;
 import javacode.UI.MainPanel;
 
@@ -24,6 +24,11 @@ public class Database {
 
 	private String databaseFile = System.getProperty("user.dir") + "/scouting-data.db";
 
+	/**
+	 * TODO Documentation
+	 * @param teamNumber
+	 * @param data
+	 */
 	public void updateDatabase(int teamNumber, String[][] data) {
 		// Get the headers from the data, and their values
 		StringBuilder headers = new StringBuilder(), values = new StringBuilder();
@@ -49,6 +54,11 @@ public class Database {
 
 	}
 
+	/**
+	 * TODO Documentation
+	 * @throws IOException
+	 * @throws SQLException
+	 */
 	public void createDatabase() throws IOException, SQLException {
 
 		// Create an object for the physical database file on disk
@@ -131,6 +141,11 @@ public class Database {
 
 	}
 
+	/**
+	 * TODO Documentation
+	 * @param autoCreate
+	 * @return
+	 */
 	public boolean databaseExists(boolean autoCreate) {
 
 		// Create a variable to be returned
@@ -162,6 +177,12 @@ public class Database {
 		return exists;
 	}
 
+	/**
+	 * TODO Documentation
+	 * @param query
+	 * @return
+	 * @throws SQLException
+	 */
 	public ResultSet executeSQL(String query) throws SQLException {
 		Debugger.d(getClass(), "Executing query: " + query);
 
@@ -198,7 +219,11 @@ public class Database {
 		return result;
 	}
 
-	private void deprecateDatabase() {
+	/**
+	 * TODO Documentation
+	 * @throws IOException
+	 */
+	private void deprecateDatabase() throws IOException {
 		final File directory = new File(System.getProperty("user.dir"));
 
 		ArrayList<File> fileArray = new ArrayList<>();
@@ -217,20 +242,30 @@ public class Database {
 			}
 		}
 
-		//noinspection ForLoopReplaceableByForEach
-		for (int i = 0; i < fileArray.size(); i++) {
+		for (File oldFile : fileArray) {
 			int oldNumber = 0;
 			try {
-				oldNumber = Integer.parseInt(fileArray.get(i).getName().replaceAll("\\D+", ""));
+				oldNumber = Integer.parseInt(oldFile.getName().replaceAll("\\D+", ""));
 			} catch (Exception ignored) {
 			}
-			Debugger.d(this.getClass(), "Changing database number from " + (oldNumber) + " to " + (oldNumber + 1));
-			Debugger.d(this.getClass(), "File successfully renamed: " + fileArray.get(i).renameTo(new File(directory + "/scouting-data" + (oldNumber + 1) + ".db")));
+
+			// Create a new file name
+			File newFileName = new File(directory + "/scouting-data" + (oldNumber + 1) + ".db");
+			Debugger.d(this.getClass(), "Changing database number from " + oldFile.getAbsolutePath() + " to " + newFileName.getAbsolutePath());
+			boolean renameSuccess = oldFile.renameTo(newFileName);
+			Debugger.d(this.getClass(), "File successfully renamed: " + renameSuccess);
+			if (!renameSuccess) {
+				throw new IOException("Cannot rename old database. Please rename it and then relaunch the app.");
+			}
 
 		}
 
 	}
 
+	/**
+	 * TODO Documentation
+	 * @return
+	 */
 	public boolean validateDatabase() {
 
 		// Get database headers
@@ -323,6 +358,12 @@ public class Database {
 		}
 	}
 
+	/**
+	 * TODO Documentation
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	private Connection getDatabaseConnection() throws ClassNotFoundException, SQLException {
 		// Load the SQLite library drivers
 		//noinspection SpellCheckingInspection
@@ -330,6 +371,11 @@ public class Database {
 		return java.sql.DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
 	}
 
+	/**
+	 * TODO Documentation
+	 * @param resultset
+	 * @return
+	 */
 	public static String resultSetToString(ResultSet resultset) {
 		StringBuilder result = new StringBuilder();
 
@@ -372,6 +418,10 @@ public class Database {
 		}
 	}
 
+	/**
+	 * TODO Documentation
+	 * @param file
+	 */
 	public void exportToCSV(File file) {
 		StringBuilder out = new StringBuilder();
 
@@ -419,8 +469,8 @@ public class Database {
 			MainPanel.logError(e);
 		}
 
+		// Report success
 		MainPanel.log("Successfully exported data", false);
-
 	}
 
 }

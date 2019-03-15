@@ -10,21 +10,31 @@ import javax.json.JsonReader;
 import javax.json.stream.JsonParsingException;
 
 import javacode.Core.Debugger;
-import javacode.Core.Match;
+import javacode.Match.Match;
 import javacode.UI.MainPanel;
 
 /**
  * Manages the config file for dynamically creating the database, and data
  * collection page.
- * 
  */
 public class Config {
 
+	/**
+	 * The config file location (the current app directory).
+	 */
 	private static final String configLocation = System.getProperty("user.dir") + "/config.json";
 
+	/**
+	 * Match object for all the data collected in a match.
+	 */
 	public Match matchData = new Match();
 
-	public boolean validateConfig() throws IOException {
+	/**
+	 * Method that validates the config file.
+	 *
+	 * @throws IOException Thrown when there is some sort of error while validating.
+	 */
+	public void validateConfig() throws IOException {
 
 		File config = new File(configLocation);
 
@@ -41,22 +51,28 @@ public class Config {
 		try {
 			this.loadConfig();
 		} catch (JsonParsingException e) {
-			throw new IOException("Invlaid config (See the README on config documentaiton): " + e.getMessage());
+			throw new IOException("Invalid config (See the README on config documentation): " + e.getMessage());
 		}
-
-		return true;
 	}
 
+	/**
+	 * Creates and populates a new config file.
+	 */
 	private void createNewConfig() {
 
 		File config = new File(configLocation);
 
 		// Create the empty file
+		boolean creationSuccess;
 		try {
-			config.createNewFile();
+			creationSuccess = config.createNewFile();
 		} catch (IOException e) {
 			MainPanel.logError(e);
 			return;
+		}
+
+		if (!creationSuccess) {
+			MainPanel.log("Unable to create a new config file", true);
 		}
 
 		String conf = "{\n\t\"Autonomous\" : {\n\t\t\"Do the thing\" : [\"Boolean\", false]\n\t},\n\t"
@@ -74,9 +90,13 @@ public class Config {
 		}
 	}
 
+	/**
+	 *
+	 * @throws JsonParsingException
+	 */
 	private void loadConfig() throws JsonParsingException {
 
-		JsonReader reader = null;
+		JsonReader reader;
 		try {
 			reader = Json.createReader(new java.io.FileReader(configLocation));
 		} catch (java.io.FileNotFoundException e) {
@@ -110,23 +130,27 @@ public class Config {
 
 		// Validation, only for debug mode though
 		if (javacode.ScoutingApp.debug) {
-			for (javacode.Core.Match.Autonomous autoCheck : this.matchData.autonomousData) {
+			for (Match.Autonomous autoCheck : this.matchData.autonomousData) {
 				Debugger.d(this.getClass(), "Loaded autonomous name: " + autoCheck.name);
 			}
 
-			for (javacode.Core.Match.TeleOp teleCheck : this.matchData.teleopData) {
+			for (Match.TeleOp teleCheck : this.matchData.teleopData) {
 				Debugger.d(this.getClass(), "Loaded teleop name: " + teleCheck.name);
 			}
 
-			for (javacode.Core.Match.Endgame endgameCheck : this.matchData.endgameData) {
+			for (Match.Endgame endgameCheck : this.matchData.endgameData) {
 				Debugger.d(this.getClass(), "Loaded endgame name: " + endgameCheck.name);
 			}
 		}
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public JsonObject getConfigAsJson() {
 
-		JsonReader reader = null;
+		JsonReader reader;
 		try {
 			reader = Json.createReader(new java.io.FileReader(configLocation));
 		} catch (java.io.FileNotFoundException e) {

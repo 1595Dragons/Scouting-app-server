@@ -1,4 +1,4 @@
-package javacode.Core;
+package javacode.Wireless;
 
 import javacode.UI.MainPanel;
 import javacode.Wireless.BlueThread;

@@ -1,4 +1,4 @@
-package javacode.Core;
+package javacode.Match;
 
 public class MatchBase {
 
