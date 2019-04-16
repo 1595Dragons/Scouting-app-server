@@ -25,9 +25,10 @@ public class Database {
 	private String databaseFile = System.getProperty("user.dir") + "/scouting-data.db";
 
 	/**
-	 * TODO Documentation
-	 * @param teamNumber
-	 * @param data
+	 * Adds data to the database based on team number.
+	 *
+	 * @param teamNumber The number of the team to add data about.
+	 * @param data       The data for the team.
 	 */
 	public void updateDatabase(int teamNumber, String[][] data) {
 		// Get the headers from the data, and their values
@@ -56,6 +57,7 @@ public class Database {
 
 	/**
 	 * TODO Documentation
+	 *
 	 * @throws IOException
 	 * @throws SQLException
 	 */
@@ -143,6 +145,7 @@ public class Database {
 
 	/**
 	 * TODO Documentation
+	 *
 	 * @param autoCreate
 	 * @return
 	 */
@@ -179,6 +182,7 @@ public class Database {
 
 	/**
 	 * TODO Documentation
+	 *
 	 * @param query
 	 * @return
 	 * @throws SQLException
@@ -221,6 +225,7 @@ public class Database {
 
 	/**
 	 * TODO Documentation
+	 *
 	 * @throws IOException
 	 */
 	private void deprecateDatabase() throws IOException {
@@ -264,6 +269,7 @@ public class Database {
 
 	/**
 	 * TODO Documentation
+	 *
 	 * @return
 	 */
 	public boolean validateDatabase() {
@@ -360,6 +366,7 @@ public class Database {
 
 	/**
 	 * TODO Documentation
+	 *
 	 * @return
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
@@ -373,6 +380,7 @@ public class Database {
 
 	/**
 	 * TODO Documentation
+	 *
 	 * @param resultset
 	 * @return
 	 */
@@ -420,6 +428,7 @@ public class Database {
 
 	/**
 	 * TODO Documentation
+	 *
 	 * @param file
 	 */
 	public void exportToCSV(File file) {

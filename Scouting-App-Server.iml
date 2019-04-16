@@ -146,5 +146,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="excel-io-1.0" level="project" />
+    <orderEntry type="library" name="hr.com.vgv:excel-io:1.0" level="project" />
   </component>
 </module>
